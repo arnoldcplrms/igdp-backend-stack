@@ -1,0 +1,30 @@
+// src/common/pipes/zod-validation.pipe.ts
+import {
+  PipeTransform,
+  Injectable,
+  ArgumentMetadata,
+  BadRequestException,
+} from '@nestjs/common';
+import { z, ZodError } from 'zod';
+
+@Injectable()
+export class ZodValidationPipe implements PipeTransform {
+  constructor(private schema: z.ZodTypeAny) {}
+
+  transform(value: any, metadata: ArgumentMetadata) {
+    try {
+      return this.schema.parse(value);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        throw new BadRequestException({
+          message: 'Validation failed',
+          errors: error.issues.map((err) => ({
+            path: err.path.join('.'),
+            message: err.message,
+          })),
+        });
+      }
+      throw new BadRequestException('Validation failed');
+    }
+  }
+}
