@@ -6,7 +6,6 @@ import {
   Param,
   Delete,
   Query,
-  UsePipes,
   Put,
 } from '@nestjs/common';
 import { SchoolService } from './school.service';
@@ -24,8 +23,10 @@ export class SchoolController {
   constructor(private readonly schoolService: SchoolService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createSchoolSchema))
-  create(@Body() createSchoolDto: CreateSchoolDto) {
+  create(
+    @Body(new ZodValidationPipe(createSchoolSchema))
+    createSchoolDto: CreateSchoolDto,
+  ) {
     return this.schoolService.create(createSchoolDto);
   }
 
