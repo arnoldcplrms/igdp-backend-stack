@@ -14,9 +14,9 @@ import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 import {
   createSchoolSchema,
   updateSchoolSchema,
-  type CreateSchoolDto,
-  type UpdateSchoolDto,
-} from './dto/school.dto';
+  CreateSchoolDto,
+  UpdateSchoolDto,
+} from './school.dto';
 
 @Controller('school')
 export class SchoolController {
@@ -31,8 +31,8 @@ export class SchoolController {
   }
 
   @Get()
-  find(@Query('name') name: string) {
-    return this.schoolService.find(name);
+  findByName(@Query('name') name: string) {
+    return this.schoolService.findByName(name);
   }
 
   @Put(':id')
@@ -47,5 +47,10 @@ export class SchoolController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.schoolService.remove(+id);
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.schoolService.findById(+id);
   }
 }

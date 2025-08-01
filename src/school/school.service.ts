@@ -1,44 +1,29 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from 'src/database/prisma.service';
-import { CreateSchoolDto, SchoolDTO, UpdateSchoolDto } from './dto/school.dto';
+import { CreateSchoolDto, SchoolDTO, UpdateSchoolDto } from './school.dto';
+import { SchoolRepository } from './school.repository';
 
 @Injectable()
 export class SchoolService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private schoolRepo: SchoolRepository) {}
 
   create(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
-    return this.prisma.school.create({
-      data: {
-        name: createSchoolDto.name,
-        address: createSchoolDto.address,
-        updatedAt: new Date(),
-      },
-    });
+    return this.schoolRepo.createSchool(createSchoolDto);
   }
 
-  find(name?: string): Promise<SchoolDTO[]> {
-    return this.prisma.school.findMany({
-      where: {
-        name: name ? { contains: name, mode: 'insensitive' } : undefined,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      take: 10,
-    });
+  findByName(name?: string): Promise<SchoolDTO[]> {
+    return this.schoolRepo.findSchoolByName(name);
   }
 
   update(id: number, updateSchoolDto: UpdateSchoolDto) {
-    return this.prisma.school.update({
-      where: { id },
-      data: updateSchoolDto,
-    });
+    return this.schoolRepo.updateSchool(id, updateSchoolDto);
   }
 
   remove(id: number) {
-    return this.prisma.school.delete({
-      where: { id },
-    });
+    return this.schoolRepo.removeSchool(id);
+  }
+
+  findById(id: number): Promise<SchoolDTO | null> {
+    return this.schoolRepo.findSchoolById(id);
   }
 }

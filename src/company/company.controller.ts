@@ -14,7 +14,7 @@ import {
   updateCompanySchema,
   type CreateCompanyDto,
   type UpdateCompanyDto,
-} from './dto/company.dto';
+} from './company.dto';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('company')
@@ -30,8 +30,8 @@ export class CompanyController {
   }
 
   @Get()
-  find(@Query('name') name: string) {
-    return this.companyService.find(name);
+  findByName(@Query('name') name: string) {
+    return this.companyService.findByName(name);
   }
 
   @Put(':id')
@@ -46,5 +46,10 @@ export class CompanyController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.companyService.remove(+id);
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.companyService.findById(+id);
   }
 }

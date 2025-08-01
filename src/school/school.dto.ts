@@ -1,3 +1,4 @@
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
 
 export const createSchoolSchema = z.object({
@@ -10,9 +11,9 @@ export const updateSchoolSchema = z.object({
   address: z.string().min(1).optional(),
 });
 
-export interface CreateSchoolDto extends z.infer<typeof createSchoolSchema> {}
+export class CreateSchoolDto extends ZodClass(createSchoolSchema) {}
 
-export interface SchoolDTO {
+export class SchoolDTO {
   id: number;
   name: string;
   address: string;
@@ -20,4 +21,4 @@ export interface SchoolDTO {
   updatedAt: Date;
 }
 
-export interface UpdateSchoolDto extends z.infer<typeof updateSchoolSchema> {}
+export class UpdateSchoolDto extends ZodClass(updateSchoolSchema) {}

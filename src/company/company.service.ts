@@ -1,42 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompanyDto, UpdateCompanyDto } from './dto/company.dto';
-import { PrismaService } from 'src/database/prisma.service';
+import { CreateCompanyDto, UpdateCompanyDto } from './company.dto';
+import { PrismaService } from 'src/common/database/prisma.service';
+import { CompanyRepository } from './company.repository';
 
 @Injectable()
 export class CompanyService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private companyRepo: CompanyRepository) {}
 
   create(createCompanyDto: CreateCompanyDto) {
-    return this.prisma.company.create({
-      data: {
-        name: createCompanyDto.name,
-        address: createCompanyDto.address,
-      },
-    });
+    return this.companyRepo.createCompany(createCompanyDto);
   }
 
-  find(name?: string) {
-    return this.prisma.company.findMany({
-      where: {
-        name: name ? { contains: name, mode: 'insensitive' } : undefined,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      take: 10,
-    });
+  findByName(name?: string) {
+    return this.companyRepo.findCompanyByName(name);
   }
 
   update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return this.prisma.company.update({
-      where: { id },
-      data: updateCompanyDto,
-    });
+    return this.companyRepo.updateCompany(id, updateCompanyDto);
   }
 
   remove(id: number) {
-    return this.prisma.company.delete({
-      where: { id },
-    });
+    return this.companyRepo.removeCompany(id);
+  }
+
+  findById(id: number) {
+    return this.companyRepo.findCompanyById(id);
   }
 }
