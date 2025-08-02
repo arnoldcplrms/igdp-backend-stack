@@ -18,7 +18,7 @@ export class CompanyDTO {
   name: string;
   address: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 export class UpdateCompanyDto extends ZodClass(updateCompanySchema) {}

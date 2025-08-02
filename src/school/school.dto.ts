@@ -18,7 +18,7 @@ export class SchoolDTO {
   name: string;
   address: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 export class UpdateSchoolDto extends ZodClass(updateSchoolSchema) {}

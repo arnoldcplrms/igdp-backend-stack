@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { CreateSchoolDto, UpdateSchoolDto } from './school.dto';
+import type { CreateSchoolDto, SchoolDTO, UpdateSchoolDto } from './school.dto';
 
 @Injectable()
 export class SchoolRepository {
   constructor(private prisma: PrismaService) {}
 
-  createSchool(createSchoolDto: CreateSchoolDto) {
+  createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
     return this.prisma.school.create({
       data: {
         name: createSchoolDto.name,
@@ -40,7 +40,7 @@ export class SchoolRepository {
     });
   }
 
-  findSchoolById(id: number) {
+  findSchoolById(id: number): Promise<SchoolDTO | null> {
     return this.prisma.school.findUnique({
       where: { id },
     });

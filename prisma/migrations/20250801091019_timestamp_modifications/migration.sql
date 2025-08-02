@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "public"."Company" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Manila',
+ALTER COLUMN "updatedAt" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "public"."School" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Manila',
+ALTER COLUMN "updatedAt" DROP NOT NULL;
