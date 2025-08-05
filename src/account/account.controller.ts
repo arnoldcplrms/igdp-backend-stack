@@ -29,17 +29,24 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
-  @Get()
-  findAll(
-    @Query('page') page: string,
-    @Query('pageSize') pageSize: string,
-    @Query('sort') sort: 'asc' | 'desc' = 'asc',
+  @Get('sort')
+  findSorted(
+    @Query('page') page = '1',
+    @Query('pageSize') pageSize = '10',
+    @Query('sortOrder') sort: 'asc' | 'desc' = 'asc',
+    @Query('sortBy') sortBy: string = 'lastName',
   ) {
-    return this.accountService.findAll(
+    return this.accountService.findSorted(
       parseInt(page),
       parseInt(pageSize),
       sort,
+      sortBy,
     );
+  }
+
+  @Get('search-by-name')
+  findByName(@Query('name') name: string) {
+    return this.accountService.findByName(name);
   }
 
   @Get(':id')

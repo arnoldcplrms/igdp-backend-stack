@@ -10,12 +10,17 @@ export class AccountService {
     return this.accountRepo.createAccount(createAccountDto);
   }
 
-  findAll(
+  findSorted(
     page: number = 1,
     pageSize: number = 10,
     sort: 'asc' | 'desc' = 'asc',
+    sortBy: string = 'lastName',
   ) {
-    return this.accountRepo.findManyAccounts(page, pageSize, sort);
+    return this.accountRepo.findAccountsSorted(page, pageSize, sort, sortBy);
+  }
+
+  findByName(name: string) {
+    return this.accountRepo.findAccountsByName(name);
   }
 
   findOne(id: number) {

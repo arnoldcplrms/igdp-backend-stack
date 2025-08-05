@@ -12,17 +12,24 @@ export class AccountRepository {
       data: createAccountDto as Prisma.AccountCreateInput,
     });
   }
-  findManyAccounts(
+
+  findAccountsSorted(
     page: number = 1,
     pageSize: number = 10,
     sort: 'asc' | 'desc' = 'asc',
+    sortBy: string = 'lastName',
   ) {
     const skip = (page - 1) * pageSize;
+    const orderBy: Prisma.AccountOrderByWithRelationInput = {
+      [sortBy]: sort,
+    };
+
     return this.prisma.account.findMany({
       skip,
       take: pageSize,
-      orderBy: {
-        lastName: sort,
+      orderBy,
+      include: {
+        education: true,
       },
     });
   }
