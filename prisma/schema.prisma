@@ -8,17 +8,12 @@ datasource db {
 }
 
 model School {
-  id        Int       @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   name      String
   address   String
-  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-
-  // Relations
-  account   Account @relation(fields: [accountId], references: [id])
-  accountId Int     @default(0)
-
-  @@index([accountId], name: "idx_school_account_id")
+  createdAt DateTime    @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt DateTime?   @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  education Education[]
 }
 
 model Company {
@@ -26,7 +21,7 @@ model Company {
   name      String
   address   String
   createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  updatedAt DateTime? @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 }
 
 enum Gender {
@@ -39,6 +34,30 @@ enum UserType {
   MinistryHead
   DGM
   Member
+}
+
+enum GradeYear {
+  PreSchool
+  Kindergarten
+  Grade1
+  Grade2
+  Grade3
+  Grade4
+  Grade5
+  Grade6
+  Grade7
+  Grade8
+  Grade9
+  Grade10
+  Grade11
+  Grade12
+  FirstYearCollege
+  SecondYearCollege
+  ThirdYearCollege
+  FourthYearCollege
+  FifthYearCollege
+  UnderGraduate
+  Graduated
 }
 
 model Account {
@@ -54,11 +73,27 @@ model Account {
   userType               UserType
   dGroupLeaderId         Int?
   createdAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @updatedAt @db.Timestamptz(6)
+  updatedAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader  Account?  @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers Account[] @relation("dGroupLeader")
-  school        School[]
+  dGroupLeader  Account?    @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupMembers Account[]   @relation("dGroupLeader")
+  education     Education[]
+}
+
+model Education {
+  id        Int       @id @default(autoincrement())
+  schoolId  Int
+  accountId Int
+  gradeYear GradeYear
+  course    String?   @db.VarChar(150)
+  startDate DateTime  @db.Date
+  endDate   DateTime? @db.Date
+  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  // Relations
+  school  School  @relation(fields: [schoolId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
 }

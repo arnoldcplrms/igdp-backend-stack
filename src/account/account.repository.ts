@@ -30,6 +30,9 @@ export class AccountRepository {
   findAccountById(id: number) {
     return this.prisma.account.findUnique({
       where: { id },
+      include: {
+        education: true,
+      },
     });
   }
 
