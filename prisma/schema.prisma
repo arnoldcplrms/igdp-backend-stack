@@ -15,7 +15,10 @@ model School {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
 
   // Relations
-  account Account[]
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId Int     @default(0)
+
+  @@index([accountId], name: "idx_school_account_id")
 }
 
 model Company {
@@ -49,17 +52,13 @@ model Account {
   gender                 Gender
   birthDate              DateTime @db.Date
   userType               UserType
-  schoolId               Int?
   dGroupLeaderId         Int?
   createdAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
   updatedAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @updatedAt @db.Timestamptz(6)
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  // Relations
-  school        School?   @relation(fields: [schoolId], references: [id])
   dGroupLeader  Account?  @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
   dGroupMembers Account[] @relation("dGroupLeader")
-
-  @@index([schoolId])
+  school        School[]
 }
