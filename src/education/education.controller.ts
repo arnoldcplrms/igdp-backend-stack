@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { EducationService } from './education.service';
-import { CreateEducationDto } from './dto/create-education.dto';
-import { UpdateEducationDto } from './dto/update-education.dto';
+import {
+  CreateEducationDto,
+  createEducationSchema,
+  updateAccountEducationSchema,
+  UpdateEducationDto,
+} from './education.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('education')
 export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
   @Post()
-  create(@Body() createEducationDto: CreateEducationDto) {
+  create(
+    @Body(new ZodValidationPipe(createEducationSchema))
+    createEducationDto: CreateEducationDto,
+  ) {
     return this.educationService.create(createEducationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.educationService.findAll();
+  @Get('accountId/:accountId')
+  findByAccountId(@Param('accountId') accountId: string) {
+    return this.educationService.findByAccountId(+accountId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.educationService.findOne(+id);
+  @Put(':id/accountId/:accountId')
+  update(
+    @Param('id') id: number,
+    @Param('accountId') accountId: number,
+    @Body(new ZodValidationPipe(updateAccountEducationSchema))
+    updateEducationDto: UpdateEducationDto,
+  ) {
+    return this.educationService.update(
+      Number(id),
+      Number(accountId),
+      updateEducationDto,
+    );
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEducationDto: UpdateEducationDto) {
-    return this.educationService.update(+id, updateEducationDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.educationService.remove(+id);
+  @Delete(':id/accountId/:accountId')
+  remove(@Param('id') id: number, @Param('accountId') accountId: number) {
+    return this.educationService.remove(id, accountId);
   }
 }

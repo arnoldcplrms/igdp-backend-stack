@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEducationDto } from './dto/create-education.dto';
-import { UpdateEducationDto } from './dto/update-education.dto';
-
+import { CreateEducationDto, UpdateEducationDto } from './education.dto';
+import { EducationRespository } from './education.respository';
 @Injectable()
 export class EducationService {
+  constructor(private educationRepo: EducationRespository) {}
+
   create(createEducationDto: CreateEducationDto) {
-    return 'This action adds a new education';
+    return this.educationRepo.createEducation(createEducationDto);
   }
 
-  findAll() {
-    return `This action returns all education`;
+  findByAccountId(accountId: number) {
+    return this.educationRepo.findByAccountId(accountId);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} education`;
+  update(
+    id: number,
+    accountId: number,
+    updateEducationDto: UpdateEducationDto,
+  ) {
+    return this.educationRepo.updateEducation(
+      id,
+      accountId,
+      updateEducationDto,
+    );
   }
 
-  update(id: number, updateEducationDto: UpdateEducationDto) {
-    return `This action updates a #${id} education`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} education`;
+  remove(id: number, accountId: number) {
+    return this.educationRepo.removeEducation(id, accountId);
   }
 }

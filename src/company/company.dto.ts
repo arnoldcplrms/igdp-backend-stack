@@ -13,12 +13,10 @@ export const updateCompanySchema = z.object({
 
 export class CreateCompanyDto extends ZodClass(createCompanySchema) {}
 
-export class CompanyDTO {
+export class CompanyDTO extends ZodClass(updateCompanySchema) {
   id: number;
-  name: string;
-  address: string;
   createdAt: Date;
-  updatedAt: Date | null;
+  updatedAt: Date;
 }
 
 export class UpdateCompanyDto extends ZodClass(updateCompanySchema) {}
