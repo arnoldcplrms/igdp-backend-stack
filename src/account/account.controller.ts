@@ -29,18 +29,20 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
-  @Get('sort')
+  @Get('all')
   findSorted(
     @Query('page') page = '1',
     @Query('pageSize') pageSize = '10',
     @Query('sortOrder') sort: 'asc' | 'desc' = 'asc',
     @Query('sortBy') sortBy: string = 'lastName',
+    @Query('name') name?: string,
   ) {
     return this.accountService.findSorted(
       parseInt(page),
       parseInt(pageSize),
       sort,
       sortBy,
+      name,
     );
   }
 

@@ -15,8 +15,15 @@ export class AccountService {
     pageSize: number = 10,
     sort: 'asc' | 'desc' = 'asc',
     sortBy: string = 'lastName',
+    name?: string,
   ) {
-    return this.accountRepo.findAccountsSorted(page, pageSize, sort, sortBy);
+    return this.accountRepo.findAccountsSorted(
+      page,
+      pageSize,
+      sort,
+      sortBy,
+      name,
+    );
   }
 
   findByName(name: string) {

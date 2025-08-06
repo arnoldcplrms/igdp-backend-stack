@@ -28,8 +28,20 @@ export const updateAccountSchema = z
 
 export class CreateAccountDto extends ZodClass(createAccountSchema) {}
 
-export class AccountDTO extends ZodClass(updateAccountSchema) {
-  education?: any;
+export class AccountDTO {
+  id: number;
+  firstName: string;
+  middleName?: string | null;
+  lastName: string;
+  birthDate: Date;
+  dGroupLeader?: any;
+  dGroupMembers?: number;
+}
+
+export class AccountQueryDto extends AccountDTO {
+  _count: {
+    dGroupMembers: number;
+  };
 }
 
 export class UpdateAccountDto extends ZodClass(updateAccountSchema) {}
