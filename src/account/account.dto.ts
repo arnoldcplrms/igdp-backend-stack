@@ -17,6 +17,8 @@ export const createAccountSchema = z.object({
     firstName: z.string().min(1).max(50),
     middleName: z.string().min(1).max(50).optional().nullable(),
     lastName: z.string().min(1).max(50),
+    nickName: z.string().max(50).optional().nullable(),
+    profilePicture: z.string().max(255).optional().nullable(),
     facebookLink: z.string().max(255).optional().nullable(),
     contactNumber: z.string().max(20),
     email: z.string().email().min(1).max(100),
