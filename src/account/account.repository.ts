@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   AccountDTO,
   AccountQueryDto,
@@ -12,12 +12,6 @@ import { AccountMapper } from './account.mapper';
 @Injectable()
 export class AccountRepository {
   constructor(private prisma: PrismaService) {}
-
-  createAccount(createAccountDto: CreateAccountDto) {
-    return this.prisma.account.create({
-      data: createAccountDto as Prisma.AccountCreateInput,
-    });
-  }
 
   private readonly selectObject = {
     select: {
@@ -37,6 +31,45 @@ export class AccountRepository {
       },
     },
   };
+
+  createAccount(createAccountDto: CreateAccountDto) {
+    return this.prisma.$transaction(async (prisma) => {
+      try {
+        const account = await prisma.account.create({
+          data: createAccountDto.basicInfo as Prisma.AccountCreateInput,
+        });
+
+        if (!account) {
+          throw new Error('Account creation failed');
+        }
+
+        if (createAccountDto.education && createAccountDto.education.length) {
+          await prisma.education.createMany({
+            data: createAccountDto.education.map((edu) => ({
+              ...edu,
+              schoolId: edu.schoolId,
+              accountId: account.id,
+            })),
+          });
+        }
+
+        if (createAccountDto.employment && createAccountDto.employment.length) {
+          await prisma.employment.createMany({
+            data: createAccountDto.employment.map((emp) => ({
+              ...emp,
+              companyId: emp.companyId,
+              accountId: account.id,
+            })),
+          });
+        }
+
+        return account;
+      } catch (error) {
+        Logger.error('Error creating account:', error);
+        throw error;
+      }
+    });
+  }
 
   async findAccountsSorted(
     page: number = 1,
@@ -68,7 +101,36 @@ export class AccountRepository {
     return this.prisma.account.findUnique({
       where: { id },
       include: {
-        education: true,
+        education: {
+          select: {
+            schoolId: false,
+            startDate: true,
+            endDate: true,
+            gradeYear: true,
+            course: true,
+            school: {
+              select: {
+                id: true,
+                name: true,
+                address: true,
+              },
+            },
+          },
+        },
+        employment: {
+          select: {
+            position: true,
+            startDate: true,
+            endDate: true,
+            company: {
+              select: {
+                id: true,
+                name: true,
+                address: true,
+              },
+            },
+          },
+        },
       },
     });
   }

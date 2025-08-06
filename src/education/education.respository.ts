@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { CreateEducationDto, UpdateEducationDto } from './education.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class EducationRespository {
@@ -15,6 +16,20 @@ export class EducationRespository {
   findByAccountId(accountId: number) {
     return this.prisma.education.findMany({
       where: { accountId },
+      select: {
+        schoolId: false,
+        startDate: true,
+        endDate: true,
+        gradeYear: true,
+        course: true,
+        school: {
+          select: {
+            id: true,
+            name: true,
+            address: true,
+          },
+        },
+      },
     });
   }
 

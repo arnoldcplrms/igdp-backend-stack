@@ -6,9 +6,10 @@ import { DatabaseModule } from './common/database/database.module';
 import { CompanyModule } from './company/company.module';
 import { AccountModule } from './account/account.module';
 import { EducationModule } from './education/education.module';
+import { EmploymentModule } from './employment/employment.module';
 
 @Module({
-  imports: [SchoolModule, DatabaseModule, CompanyModule, AccountModule, EducationModule],
+  imports: [SchoolModule, DatabaseModule, CompanyModule, AccountModule, EducationModule, EmploymentModule],
   controllers: [AppController],
   providers: [AppService],
 })

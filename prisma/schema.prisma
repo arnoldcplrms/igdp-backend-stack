@@ -17,11 +17,12 @@ model School {
 }
 
 model Company {
-  id        Int       @id @default(autoincrement())
-  name      String
-  address   String
-  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime? @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  id         Int          @id @default(autoincrement())
+  name       String
+  address    String
+  createdAt  DateTime     @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt  DateTime?    @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  Employment Employment[]
 }
 
 enum Gender {
@@ -65,6 +66,8 @@ model Account {
   firstName              String   @db.VarChar(50)
   middleName             String?  @db.VarChar(50)
   lastName               String   @db.VarChar(50)
+  nickname               String?  @db.VarChar(50)
+  profilePicture         String?  @db.VarChar(255)
   facebookLink           String?  @db.VarChar(255)
   contactNumber          String   @db.VarChar(20)
   email                  String   @db.VarChar(100)
@@ -77,9 +80,10 @@ model Account {
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader  Account?    @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers Account[]   @relation("dGroupLeader")
+  dGroupLeader  Account?     @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupMembers Account[]    @relation("dGroupLeader")
   education     Education[]
+  employment    Employment[]
 }
 
 model Education {
@@ -95,5 +99,20 @@ model Education {
 
   // Relations
   school  School  @relation(fields: [schoolId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model Employment {
+  id        Int       @id @default(autoincrement())
+  companyId Int
+  accountId Int
+  position  String?   @db.VarChar(100)
+  startDate DateTime  @db.Date
+  endDate   DateTime? @db.Date
+  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  // Relations
+  company Company @relation(fields: [companyId], references: [id])
   account Account @relation(fields: [accountId], references: [id])
 }
