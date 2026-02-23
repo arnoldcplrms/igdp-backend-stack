@@ -1,0 +1,1052 @@
+{
+  "info": {
+    "_postman_id": "igdp-backend-api",
+    "name": "IGDP Backend API",
+    "description": "IGDP Backend API - Complete Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "School",
+      "item": [
+        {
+          "name": "Create School",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Holy Angel Academy\",\n  \"address\": \"123 Main Street, Manila\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/school",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "school"
+              ]
+            },
+            "description": "Create a new school"
+          },
+          "response": []
+        },
+        {
+          "name": "Find School by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/school?name=Holy Angel Academy",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "school"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Holy Angel Academy"
+                }
+              ]
+            },
+            "description": "Find school by name"
+          },
+          "response": []
+        },
+        {
+          "name": "Get School by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/school/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "school",
+                "1"
+              ]
+            },
+            "description": "Get a specific school by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update School",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated School Name\",\n  \"address\": \"456 New Street, Manila\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/school/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "school",
+                "1"
+              ]
+            },
+            "description": "Update a school"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete School",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/school/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "school",
+                "1"
+              ]
+            },
+            "description": "Delete a school"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Company",
+      "item": [
+        {
+          "name": "Create Company",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tech Corp Inc.\",\n  \"address\": \"789 Business Ave, Manila\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/company",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "company"
+              ]
+            },
+            "description": "Create a new company"
+          },
+          "response": []
+        },
+        {
+          "name": "Find Company by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/company?name=Tech Corp Inc.",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "company"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Tech Corp Inc."
+                }
+              ]
+            },
+            "description": "Find company by name"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Company by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/company/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "company",
+                "1"
+              ]
+            },
+            "description": "Get a specific company by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Corp Inc.\",\n  \"address\": \"999 New Business Ave, Manila\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/company/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "company",
+                "1"
+              ]
+            },
+            "description": "Update a company"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Company",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/company/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "company",
+                "1"
+              ]
+            },
+            "description": "Delete a company"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Account",
+      "item": [
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"middleName\": \"Paul\",\n  \"lastName\": \"Doe\",\n  \"nickname\": \"JP\",\n  \"profilePicture\": \"http://example.com/pic.jpg\",\n  \"facebookLink\": \"https://facebook.com/johndoe\",\n  \"contactNumber\": \"09171234567\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"birthDate\": \"1990-01-15\",\n  \"userType\": \"Member\",\n  \"emergencyContactName\": \"Jane Doe\",\n  \"emergencyContactNumber\": \"09179876543\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/account",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "Create a new account"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Accounts (Sorted)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account/all?page=1&pageSize=10&sortOrder=asc&sortBy=lastName",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "lastName"
+                }
+              ]
+            },
+            "description": "Get all accounts with sorting and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Account by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account/search-by-name?name=John",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "search-by-name"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "John"
+                }
+              ]
+            },
+            "description": "Search account by name"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Account by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "1"
+              ]
+            },
+            "description": "Get a specific account by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jonathan\",\n  \"email\": \"jonathan.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/account/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "1"
+              ]
+            },
+            "description": "Update an account (partial update)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "1"
+              ]
+            },
+            "description": "Delete an account"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Education",
+      "item": [
+        {
+          "name": "Create Education",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": 1,\n  \"schoolId\": 1,\n  \"gradeYear\": \"Grade10\",\n  \"course\": \"Science\",\n  \"startDate\": \"2020-06-01\",\n  \"endDate\": \"2022-03-31\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/education",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "education"
+              ]
+            },
+            "description": "Create a new education record"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Education by Account ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/education/accountId/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "education",
+                "accountId",
+                "1"
+              ]
+            },
+            "description": "Get all education records for an account"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Education",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gradeYear\": \"Grade11\",\n  \"course\": \"Advanced Science\",\n  \"endDate\": \"2023-03-31\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/education/1/accountId/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "education",
+                "1",
+                "accountId",
+                "1"
+              ]
+            },
+            "description": "Update an education record"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Education",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/education/1/accountId/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "education",
+                "1",
+                "accountId",
+                "1"
+              ]
+            },
+            "description": "Delete an education record"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Students by School ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/education/schoolId/1/students",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "education",
+                "schoolId",
+                "1",
+                "students"
+              ]
+            },
+            "description": "Get all students of a school"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employment",
+      "item": [
+        {
+          "name": "Create Employment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": 1,\n  \"companyId\": 1,\n  \"position\": \"Software Engineer\",\n  \"startDate\": \"2022-01-15\",\n  \"endDate\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/employment",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employment"
+              ]
+            },
+            "description": "Create a new employment record"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Employment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employment",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employment"
+              ]
+            },
+            "description": "Get all employment records"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employment/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employment",
+                "1"
+              ]
+            },
+            "description": "Get a specific employment record by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Employment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"position\": \"Senior Software Engineer\",\n  \"endDate\": \"2024-12-31\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/employment/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employment",
+                "1"
+              ]
+            },
+            "description": "Update an employment record"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Employment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employment/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employment",
+                "1"
+              ]
+            },
+            "description": "Delete an employment record"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employees by Company ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employment/company/1/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employment",
+                "company",
+                "1",
+                "employees"
+              ]
+            },
+            "description": "Get all employees of a company"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Series",
+      "item": [
+        {
+          "name": "Create Series",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sunday Service Series\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series"
+              ]
+            },
+            "description": "Create a new series"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Series",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series"
+              ]
+            },
+            "description": "Retrieve all series"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Series by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series/search?name=Sunday",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Sunday",
+                  "description": "Search term - returns series with names containing this substring (case-insensitive)"
+                }
+              ]
+            },
+            "description": "Search series by name with substring matching"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Series By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series",
+                "1"
+              ]
+            },
+            "description": "Get a specific series by ID with related events"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Series",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Series Name\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/series/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series",
+                "1"
+              ]
+            },
+            "description": "Update a series"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Series",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/series/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "series",
+                "1"
+              ]
+            },
+            "description": "Delete a series"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Event",
+      "item": [
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventName\": \"Youth Fellowship Meeting\",\n  \"eventDate\": \"2026-03-15\",\n  \"location\": \"Conference Hall A\",\n  \"speakerId\": 1,\n  \"seriesId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/event",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event"
+              ]
+            },
+            "description": "Create a new event"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event"
+              ]
+            },
+            "description": "Retrieve all events"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Event by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event/search?name=Fellowship",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Fellowship",
+                  "description": "Search term - returns events with names containing this substring (case-insensitive)"
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "disabled": true,
+                  "description": "Optional - number of records to skip"
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "disabled": true,
+                  "description": "Optional - number of records to take"
+                }
+              ]
+            },
+            "description": "Search events by name with substring matching and optional pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Events with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event?skip=0&take=10&eventName=Fellowship&location=Hall",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "description": "Number of records to skip"
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "description": "Number of records to take"
+                },
+                {
+                  "key": "eventName",
+                  "value": "Fellowship",
+                  "disabled": true,
+                  "description": "Filter by event name (substring search, case-insensitive)"
+                },
+                {
+                  "key": "location",
+                  "value": "Hall",
+                  "disabled": true,
+                  "description": "Filter by location (substring search, case-insensitive)"
+                },
+                {
+                  "key": "speakerId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter by speaker ID"
+                },
+                {
+                  "key": "seriesId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter by series ID"
+                },
+                {
+                  "key": "eventDate",
+                  "value": "2026-03-15",
+                  "disabled": true,
+                  "description": "Filter by event date (YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Retrieve events with flexible filtering and pagination. Use any combination of filters."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Event By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event",
+                "1"
+              ]
+            },
+            "description": "Get a specific event by ID with speaker and series details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Event",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventName\": \"Updated Event Name\",\n  \"location\": \"Conference Hall B\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/event/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event",
+                "1"
+              ]
+            },
+            "description": "Update an event (partial update allowed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Event",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event",
+                "1"
+              ]
+            },
+            "description": "Delete an event"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

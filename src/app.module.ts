@@ -7,9 +7,20 @@ import { CompanyModule } from './company/company.module';
 import { AccountModule } from './account/account.module';
 import { EducationModule } from './education/education.module';
 import { EmploymentModule } from './employment/employment.module';
+import { SeriesModule } from './series/series.module';
+import { EventModule } from './event/event.module';
 
 @Module({
-  imports: [SchoolModule, DatabaseModule, CompanyModule, AccountModule, EducationModule, EmploymentModule],
+  imports: [
+    SchoolModule,
+    DatabaseModule,
+    CompanyModule,
+    AccountModule,
+    EducationModule,
+    EmploymentModule,
+    SeriesModule,
+    EventModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

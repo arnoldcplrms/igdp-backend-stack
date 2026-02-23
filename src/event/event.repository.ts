@@ -1,0 +1,123 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../common/database/prisma.service';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
+
+@Injectable()
+export class EventRepository {
+  constructor(private prisma: PrismaService) {}
+
+  async create(data: CreateEventDto) {
+    const createData: any = { ...data };
+    createData.eventDate = new Date(data.eventDate + 'T00:00:00Z');
+
+    return this.prisma.event.create({
+      data: createData,
+      include: {
+        speaker: true,
+        series: true,
+      },
+    });
+  }
+
+  async findAll(
+    skip?: number,
+    take?: number,
+    eventName?: string,
+    location?: string,
+    speakerId?: number,
+    seriesId?: number,
+    eventDate?: string,
+  ) {
+    // Build where clause dynamically
+    const where: any = {};
+
+    if (eventName) {
+      where.eventName = {
+        contains: eventName,
+        mode: 'insensitive',
+      };
+    }
+
+    if (location) {
+      where.location = {
+        contains: location,
+        mode: 'insensitive',
+      };
+    }
+
+    if (speakerId) {
+      where.speakerId = speakerId;
+    }
+
+    if (seriesId) {
+      where.seriesId = seriesId;
+    }
+
+    if (eventDate) {
+      const dateObj = new Date(eventDate + 'T00:00:00Z');
+      where.eventDate = dateObj;
+    }
+
+    return this.prisma.event.findMany({
+      skip,
+      take,
+      where: Object.keys(where).length > 0 ? where : undefined,
+      include: {
+        speaker: true,
+        series: true,
+      },
+    });
+  }
+
+  async findByName(name: string, skip?: number, take?: number) {
+    return this.prisma.event.findMany({
+      skip,
+      take,
+      where: {
+        eventName: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+      include: {
+        speaker: true,
+        series: true,
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    return this.prisma.event.findUnique({
+      where: { id },
+      include: {
+        speaker: true,
+        series: true,
+      },
+    });
+  }
+
+  async update(id: number, data: UpdateEventDto) {
+    const updateData: any = { ...data };
+
+    // Convert eventDate if provided
+    if (data.eventDate) {
+      updateData.eventDate = new Date(data.eventDate + 'T00:00:00Z');
+    }
+
+    return this.prisma.event.update({
+      where: { id },
+      data: updateData,
+      include: {
+        speaker: true,
+        series: true,
+      },
+    });
+  }
+
+  async remove(id: number) {
+    return this.prisma.event.delete({
+      where: { id },
+    });
+  }
+}
