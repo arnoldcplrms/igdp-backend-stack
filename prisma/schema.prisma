@@ -80,11 +80,13 @@ model Account {
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader  Account?     @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers Account[]    @relation("dGroupLeader")
-  education     Education[]
-  employment    Employment[]
-  events        Event[]
+  dGroupLeader       Account[]    @relation("dGroupLeader")
+  dGroupMembers      Account?     @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  education          Education[]
+  employment         Employment[]
+  events             Event[]
+  attendances        Attendance[] @relation("AttendeeAccount")
+  deletedAttendances Attendance[] @relation("DeletedByAccount")
 }
 
 model Education {
@@ -139,6 +141,25 @@ model Event {
   updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
-  speaker Account @relation(fields: [speakerId], references: [id])
-  series  Series? @relation(fields: [seriesId], references: [id])
+  speaker     Account      @relation(fields: [speakerId], references: [id])
+  series      Series?      @relation(fields: [seriesId], references: [id])
+  attendances Attendance[]
+}
+
+model Attendance {
+  eventId   Int
+  accountId Int
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime? @db.Timestamptz(6)
+  deletedBy Int?
+  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  // Relations
+  event         Event    @relation(fields: [eventId], references: [id])
+  account       Account  @relation("AttendeeAccount", fields: [accountId], references: [id])
+  deletedByUser Account? @relation("DeletedByAccount", fields: [deletedBy], references: [id])
+
+  @@id([eventId, accountId])
+  @@unique([eventId, accountId], name: "unique_event_account_attendance")
 }

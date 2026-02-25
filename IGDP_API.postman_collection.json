@@ -1040,6 +1040,165 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Attendance",
+      "item": [
+        {
+          "name": "Create Attendance (Single or Multiple)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attendances\": [\n    {\n      \"eventId\": 1,\n      \"accountId\": 2\n    },\n    {\n      \"eventId\": 1,\n      \"accountId\": 3\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/attendance",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "attendance"
+              ]
+            },
+            "description": "Create attendance records. Supports single or multiple entries. Uses composite key (eventId, accountId)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Attendance with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/attendance?skip=0&take=10&eventId=1&accountId=2&isDeleted=false",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "attendance"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "description": "Number of records to skip for pagination"
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "description": "Number of records to take"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter by event ID"
+                },
+                {
+                  "key": "accountId",
+                  "value": "2",
+                  "disabled": true,
+                  "description": "Filter by account ID"
+                },
+                {
+                  "key": "isDeleted",
+                  "value": "false",
+                  "disabled": true,
+                  "description": "Filter by deletion status (true/false)"
+                },
+                {
+                  "key": "deletedBy",
+                  "value": "5",
+                  "disabled": true,
+                  "description": "Filter by the account ID who deleted the attendance"
+                }
+              ]
+            },
+            "description": "Retrieve all attendance records with flexible filtering by eventId, accountId, isDeleted, and deletedBy"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Attendance by Event and Account",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/attendance/1/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "attendance",
+                "1",
+                "2"
+              ]
+            },
+            "description": "Get a specific attendance record by eventId and accountId"
+          },
+          "response": []
+        },
+        {
+          "name": "Soft Delete Attendance",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deletedBy\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/attendance/1/2/soft-delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "attendance",
+                "1",
+                "2",
+                "soft-delete"
+              ]
+            },
+            "description": "Soft delete an attendance record. Updates isDeleted=true and records deletedAt timestamp and deletedBy user ID. No hard delete - record remains in database."
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Attendance",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/attendance/1/2/restore",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "attendance",
+                "1",
+                "2",
+                "restore"
+              ]
+            },
+            "description": "Restore a soft-deleted attendance record. Sets isDeleted=false and clears deletedAt and deletedBy fields."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [

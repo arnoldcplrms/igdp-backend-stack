@@ -20,14 +20,19 @@ export class AccountRepository {
       lastName: true,
       middleName: true,
       birthDate: true,
-      dGroupLeader: {
+      dGroupMembers: {
+        // This is actually the leader (single object) in Prisma
         select: {
           firstName: true,
           lastName: true,
         },
       },
-      _count: {
-        select: { dGroupMembers: true },
+      dGroupLeader: {
+        // This is actually the members (array) in Prisma
+        select: {
+          firstName: true,
+          lastName: true,
+        },
       },
     },
   };

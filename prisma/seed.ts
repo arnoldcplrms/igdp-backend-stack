@@ -302,7 +302,7 @@ async function main() {
     }),
     prisma.series.create({
       data: {
-        name: 'Love, Relationships & God\'s Design for Singles',
+        name: "Love, Relationships & God's Design for Singles",
       },
     }),
     prisma.series.create({

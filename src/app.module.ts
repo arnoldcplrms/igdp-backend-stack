@@ -9,6 +9,7 @@ import { EducationModule } from './education/education.module';
 import { EmploymentModule } from './employment/employment.module';
 import { SeriesModule } from './series/series.module';
 import { EventModule } from './event/event.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EventModule } from './event/event.module';
     EmploymentModule,
     SeriesModule,
     EventModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

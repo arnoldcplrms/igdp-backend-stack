@@ -5,10 +5,13 @@ export class AccountMapper {
     return (
       result &&
       result.map((item) => ({
-        ...item,
-        dGroupMembers: item._count.dGroupMembers,
-        // Remove the _count property
-        _count: undefined,
+        id: item.id,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        middleName: item.middleName,
+        birthDate: item.birthDate,
+        dGroupLeader: item.dGroupMembers, // Swap: Prisma's dGroupMembers is the leader
+        dGroupMembers: item.dGroupLeader, // Swap: Prisma's dGroupLeader is the members array
       }))
     );
   }

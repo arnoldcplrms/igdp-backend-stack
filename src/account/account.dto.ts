@@ -36,8 +36,22 @@ export const createAccountSchema = z.object({
 });
 
 export const updateAccountSchema = z
-  .object()
-  .extend(createAccountSchema.shape)
+  .object({
+    firstName: z.string().min(1).max(50).optional(),
+    middleName: z.string().min(1).max(50).optional().nullable(),
+    lastName: z.string().min(1).max(50).optional(),
+    nickName: z.string().max(50).optional().nullable(),
+    profilePicture: z.string().max(255).optional().nullable(),
+    facebookLink: z.string().max(255).optional().nullable(),
+    contactNumber: z.string().max(20).optional(),
+    email: z.string().email().min(1).max(100).optional(),
+    gender: z.enum(Gender).optional(),
+    birthDate: z.coerce.date().optional(),
+    userType: z.enum(UserType).optional(),
+    emergencyContactName: z.string().max(100).optional().nullable(),
+    emergencyContactNumber: z.string().max(20).optional().nullable(),
+    dGroupLeaderId: z.number().int().optional().nullable(),
+  })
   .partial();
 
 export class CreateAccountDto extends ZodClass(createAccountSchema) {
@@ -51,14 +65,18 @@ export class AccountDTO {
   middleName?: string | null;
   lastName: string;
   birthDate: Date;
-  dGroupLeader?: any;
-  dGroupMembers?: number;
+  dGroupLeader?: { firstName: string; lastName: string } | null; // Single leader
+  dGroupMembers?: { firstName: string; lastName: string }[]; // Array of members
 }
 
-export class AccountQueryDto extends AccountDTO {
-  _count: {
-    dGroupMembers: number;
-  };
+export class AccountQueryDto {
+  id: number;
+  firstName: string;
+  middleName?: string | null;
+  lastName: string;
+  birthDate: Date;
+  dGroupMembers?: { firstName: string; lastName: string } | null; // From Prisma (actually the leader)
+  dGroupLeader?: { firstName: string; lastName: string }[]; // From Prisma (actually the members)
 }
 
 export class UpdateAccountDto extends ZodClass(updateAccountSchema) {}
