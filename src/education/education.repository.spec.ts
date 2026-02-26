@@ -1,4 +1,4 @@
-import { EducationRespository } from './education.respository';
+import { EducationRespository } from './education.repository';
 
 describe('EducationRespository', () => {
   let repository: EducationRespository;

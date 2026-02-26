@@ -10,8 +10,14 @@ export class AccountMapper {
         lastName: item.lastName,
         middleName: item.middleName,
         birthDate: item.birthDate,
-        dGroupLeader: item.dGroupMembers, // Swap: Prisma's dGroupMembers is the leader
-        dGroupMembers: item.dGroupLeader, // Swap: Prisma's dGroupLeader is the members array
+        age: Math.floor(
+          (new Date().getTime() - new Date(item.birthDate).getTime()) /
+            (1000 * 60 * 60 * 24 * 365.25),
+        ),
+        gender: item.gender,
+        profilePicture: item.profilePicture,
+        dGroupLeader: item.dGroupLeader,
+        dGroupMembers: item.dGroupMembers,
       }))
     );
   }

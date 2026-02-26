@@ -80,8 +80,8 @@ model Account {
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader       Account[]    @relation("dGroupLeader")
-  dGroupMembers      Account?     @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupLeader       Account?     @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupMembers      Account[]    @relation("dGroupLeader")
   education          Education[]
   employment         Employment[]
   events             Event[]

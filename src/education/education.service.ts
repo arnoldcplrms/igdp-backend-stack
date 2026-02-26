@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEducationDto, UpdateEducationDto } from './education.dto';
-import { EducationRespository } from './education.respository';
+import { EducationRespository } from './education.repository';
 @Injectable()
 export class EducationService {
   constructor(private educationRepo: EducationRespository) {}
