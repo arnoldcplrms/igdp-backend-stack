@@ -348,6 +348,35 @@
           "response": []
         },
         {
+          "name": "Fetch DGroup Leaders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"exemptedAccountId\": 1,\n  \"gender\": \"Male\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/account/dgroup-leaders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "dgroup-leaders"
+              ]
+            },
+            "description": "Fetch all DGroup leaders excluding a specific account ID with a specific gender"
+          },
+          "response": []
+        },
+        {
           "name": "Get Account by ID",
           "request": {
             "method": "GET",

@@ -6,7 +6,7 @@ import {
   UpdateAccountDto,
 } from './account.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Gender, Prisma } from '@prisma/client';
 import { AccountMapper } from './account.mapper';
 
 @Injectable()
@@ -169,5 +169,28 @@ export class AccountRepository {
     return this.prisma.account.delete({
       where: { id },
     });
+  }
+
+  async fetchDGroupLeaders(exemptedAccountId: number, gender: Gender) {
+    const result = await this.prisma.account.findMany({
+      where: {
+        gender: gender,
+        id: {
+          not: exemptedAccountId,
+        },
+        dGroupMembers: {
+          some: {},
+        },
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        gender: true,
+      },
+    });
+
+    return result;
   }
 }

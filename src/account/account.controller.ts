@@ -14,6 +14,8 @@ import {
   createAccountSchema,
   UpdateAccountDto,
   updateAccountSchema,
+  FetchDGroupLeadersDto,
+  fetchDGroupLeadersSchema,
 } from './account.dto';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
@@ -49,6 +51,17 @@ export class AccountController {
   @Get('search-by-name')
   findByName(@Query('name') name: string) {
     return this.accountService.findByName(name);
+  }
+
+  @Post('dgroup-leaders')
+  fetchDGroupLeaders(
+    @Body(new ZodValidationPipe(fetchDGroupLeadersSchema))
+    fetchDGroupLeadersDto: FetchDGroupLeadersDto,
+  ) {
+    return this.accountService.fetchDGroupLeaders(
+      fetchDGroupLeadersDto.exemptedAccountId,
+      fetchDGroupLeadersDto.gender,
+    );
   }
 
   @Get(':id')

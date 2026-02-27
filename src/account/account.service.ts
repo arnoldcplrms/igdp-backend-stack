@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from './account.repository';
 import { CreateAccountDto, UpdateAccountDto } from './account.dto';
+import { Gender } from '@prisma/client';
 
 @Injectable()
 export class AccountService {
@@ -40,5 +41,12 @@ export class AccountService {
 
   remove(id: number) {
     return this.accountRepo.removeAccount(id);
+  }
+
+  fetchDGroupLeaders(exemptedAccountId: number, gender: string) {
+    return this.accountRepo.fetchDGroupLeaders(
+      exemptedAccountId,
+      gender as Gender,
+    );
   }
 }

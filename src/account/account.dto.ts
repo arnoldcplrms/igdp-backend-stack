@@ -87,3 +87,10 @@ export class AccountQueryDto {
 }
 
 export class UpdateAccountDto extends ZodClass(updateAccountSchema) {}
+
+export const fetchDGroupLeadersSchema = z.object({
+  exemptedAccountId: z.number().int(),
+  gender: z.enum(Gender),
+});
+
+export class FetchDGroupLeadersDto extends ZodClass(fetchDGroupLeadersSchema) {}
