@@ -109,6 +109,7 @@ export class AccountRepository {
     return this.prisma.account.findUnique({
       where: { id },
       include: {
+        dGroupMembers: true,
         education: {
           select: {
             schoolId: false,
