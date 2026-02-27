@@ -1,0 +1,15 @@
+{
+  "workspace": {
+    "id": "ff6afbf6-5148-4b5e-8b6e-f031b66a1440"
+  },
+  "entities": {
+    "environments": [],
+    "flows": [],
+    "globals": [],
+    "mocks": [],
+    "specs": [],
+    "collections": [
+      "../IGDP_API.postman_collection.json"
+    ]
+  }
+}

@@ -11,6 +11,7 @@
       "item": [
         {
           "name": "Create School",
+          "id": "3dcb3f35-0c58-4fe3-b13f-94c21bfe88b3",
           "request": {
             "method": "POST",
             "header": [
@@ -39,6 +40,7 @@
         },
         {
           "name": "Find School by Name",
+          "id": "24932e8b-e309-4474-a06a-852d8a204d6e",
           "request": {
             "method": "GET",
             "header": [],
@@ -63,6 +65,7 @@
         },
         {
           "name": "Get School by ID",
+          "id": "cb59f303-1594-4697-a87b-a8e20085e18e",
           "request": {
             "method": "GET",
             "header": [],
@@ -82,6 +85,7 @@
         },
         {
           "name": "Update School",
+          "id": "a1ff4c4e-b9d9-43f8-841a-8061a4c48e58",
           "request": {
             "method": "PUT",
             "header": [
@@ -111,6 +115,7 @@
         },
         {
           "name": "Delete School",
+          "id": "9c0bf82a-3040-48cc-855f-06904651f50a",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -128,13 +133,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "1a82b307-3caa-4840-9be3-f7a468772ba1"
     },
     {
       "name": "Company",
       "item": [
         {
           "name": "Create Company",
+          "id": "64d30add-3ed6-434f-b476-a7cc731add08",
           "request": {
             "method": "POST",
             "header": [
@@ -163,6 +170,7 @@
         },
         {
           "name": "Find Company by Name",
+          "id": "24b14fe5-8cc0-4e5b-8504-e7b143c899c4",
           "request": {
             "method": "GET",
             "header": [],
@@ -187,6 +195,7 @@
         },
         {
           "name": "Get Company by ID",
+          "id": "f8702d2a-9b5c-4478-b716-0bbacdc494e9",
           "request": {
             "method": "GET",
             "header": [],
@@ -206,6 +215,7 @@
         },
         {
           "name": "Update Company",
+          "id": "34c42e14-7033-434f-82fa-90c8b6b29c00",
           "request": {
             "method": "PUT",
             "header": [
@@ -235,6 +245,7 @@
         },
         {
           "name": "Delete Company",
+          "id": "cfd09517-76b7-4656-84dc-c1fcb0154014",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -252,13 +263,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "61502d03-adf5-48b0-8f41-df3ed27957a5"
     },
     {
       "name": "Account",
       "item": [
         {
           "name": "Create Account",
+          "id": "15d75bad-941f-416b-b3b0-f69e373211dd",
           "request": {
             "method": "POST",
             "header": [
@@ -287,6 +300,7 @@
         },
         {
           "name": "Get All Accounts (Sorted)",
+          "id": "133e605f-0271-4018-88da-aaa625e35d39",
           "request": {
             "method": "GET",
             "header": [],
@@ -324,6 +338,7 @@
         },
         {
           "name": "Search Account by Name",
+          "id": "97cea9d0-3bb1-45fe-a923-b5193724c637",
           "request": {
             "method": "GET",
             "header": [],
@@ -349,6 +364,7 @@
         },
         {
           "name": "Fetch DGroup Leaders",
+          "id": "589fedef-4de0-457f-9601-0f109dacbc7f",
           "request": {
             "method": "POST",
             "header": [
@@ -378,6 +394,7 @@
         },
         {
           "name": "Get Account by ID",
+          "id": "6d9274f6-95e1-4238-89d5-088ca1fb872c",
           "request": {
             "method": "GET",
             "header": [],
@@ -397,6 +414,7 @@
         },
         {
           "name": "Update Account",
+          "id": "9d031e92-d66b-4cf1-bf5c-72db4d1952c5",
           "request": {
             "method": "PATCH",
             "header": [
@@ -426,6 +444,7 @@
         },
         {
           "name": "Delete Account",
+          "id": "9104acae-85c8-4d6f-869d-487f75931e18",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -443,13 +462,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "64dbbbf1-834b-4619-9d35-d79e6c63ac1d"
     },
     {
       "name": "Education",
       "item": [
         {
           "name": "Create Education",
+          "id": "f4e95f48-dd21-4600-a8b3-94031071cecb",
           "request": {
             "method": "POST",
             "header": [
@@ -478,6 +499,7 @@
         },
         {
           "name": "Get Education by Account ID",
+          "id": "eb1257dc-a28c-4168-b337-79dc27632ab3",
           "request": {
             "method": "GET",
             "header": [],
@@ -498,6 +520,7 @@
         },
         {
           "name": "Update Education",
+          "id": "cc82726d-1828-4ad9-841e-94cc48f6cf4b",
           "request": {
             "method": "PUT",
             "header": [
@@ -529,6 +552,7 @@
         },
         {
           "name": "Delete Education",
+          "id": "c7dfee8e-88b1-43bf-ad05-a6075d072f3e",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -550,6 +574,7 @@
         },
         {
           "name": "Get Students by School ID",
+          "id": "e757050f-5a73-49e1-b7da-11e506992594",
           "request": {
             "method": "GET",
             "header": [],
@@ -569,13 +594,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "5dc85cff-31d1-445e-b7e2-95ea08708741"
     },
     {
       "name": "Employment",
       "item": [
         {
           "name": "Create Employment",
+          "id": "940451cb-2135-4322-b4dc-919c0c63c193",
           "request": {
             "method": "POST",
             "header": [
@@ -604,6 +631,7 @@
         },
         {
           "name": "Get All Employment",
+          "id": "033508a1-248e-4a18-9770-3adbc6de4c4c",
           "request": {
             "method": "GET",
             "header": [],
@@ -622,6 +650,7 @@
         },
         {
           "name": "Get Employment by ID",
+          "id": "b6ca1277-a36f-4cb6-81f1-83a3e3fb897a",
           "request": {
             "method": "GET",
             "header": [],
@@ -641,6 +670,7 @@
         },
         {
           "name": "Update Employment",
+          "id": "30386e69-86ec-4f57-8a66-162729b5938a",
           "request": {
             "method": "PATCH",
             "header": [
@@ -670,6 +700,7 @@
         },
         {
           "name": "Delete Employment",
+          "id": "498e18cf-6fc0-4896-97f2-6200550ac1f2",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -689,6 +720,7 @@
         },
         {
           "name": "Get Employees by Company ID",
+          "id": "69c8c34b-0052-47f1-b50c-a2c573c7b398",
           "request": {
             "method": "GET",
             "header": [],
@@ -708,13 +740,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "77c0facf-aeda-48b2-b818-a8b695cbcdf2"
     },
     {
       "name": "Series",
       "item": [
         {
           "name": "Create Series",
+          "id": "2b4368f3-0b56-465f-87f2-b386b9528166",
           "request": {
             "method": "POST",
             "header": [
@@ -743,6 +777,7 @@
         },
         {
           "name": "Get All Series",
+          "id": "27738f78-a0a6-48ba-832b-b2087f5ab9a3",
           "request": {
             "method": "GET",
             "header": [],
@@ -761,6 +796,7 @@
         },
         {
           "name": "Search Series by Name",
+          "id": "ce62e5ee-96d6-43a8-8418-9349e2b08f89",
           "request": {
             "method": "GET",
             "header": [],
@@ -787,6 +823,7 @@
         },
         {
           "name": "Get Series By ID",
+          "id": "751b7319-8b3e-46a0-b706-9f290f9c16b4",
           "request": {
             "method": "GET",
             "header": [],
@@ -806,6 +843,7 @@
         },
         {
           "name": "Update Series",
+          "id": "67738a60-f3df-4131-9266-4a06d4dd20aa",
           "request": {
             "method": "PATCH",
             "header": [
@@ -835,6 +873,7 @@
         },
         {
           "name": "Delete Series",
+          "id": "f8d7137d-999e-4635-8547-e9e9ba70302c",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -852,13 +891,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "bf847b18-efd7-4b1d-93c4-ef7f1d68c307"
     },
     {
       "name": "Event",
       "item": [
         {
           "name": "Create Event",
+          "id": "6401057e-fedf-4bdb-ada8-426d90bb6b47",
           "request": {
             "method": "POST",
             "header": [
@@ -887,6 +928,7 @@
         },
         {
           "name": "Get All Events",
+          "id": "c5fe1c28-6b85-4378-a9ff-c644916f3350",
           "request": {
             "method": "GET",
             "header": [],
@@ -905,6 +947,7 @@
         },
         {
           "name": "Search Event by Name",
+          "id": "0ea95a67-acdb-4207-8729-072657f3f54b",
           "request": {
             "method": "GET",
             "header": [],
@@ -926,14 +969,14 @@
                 {
                   "key": "skip",
                   "value": "0",
-                  "disabled": true,
-                  "description": "Optional - number of records to skip"
+                  "description": "Optional - number of records to skip",
+                  "disabled": true
                 },
                 {
                   "key": "take",
                   "value": "10",
-                  "disabled": true,
-                  "description": "Optional - number of records to take"
+                  "description": "Optional - number of records to take",
+                  "disabled": true
                 }
               ]
             },
@@ -943,11 +986,12 @@
         },
         {
           "name": "Get All Events with Filters",
+          "id": "5b14e743-f43e-4dc5-8fcd-a28a7313e089",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/event?skip=0&take=10&eventName=Fellowship&location=Hall",
+              "raw": "{{base_url}}/event?skip=0&take=10",
               "host": [
                 "{{base_url}}"
               ],
@@ -968,32 +1012,32 @@
                 {
                   "key": "eventName",
                   "value": "Fellowship",
-                  "disabled": true,
-                  "description": "Filter by event name (substring search, case-insensitive)"
+                  "description": "Filter by event name (substring search, case-insensitive)",
+                  "disabled": true
                 },
                 {
                   "key": "location",
                   "value": "Hall",
-                  "disabled": true,
-                  "description": "Filter by location (substring search, case-insensitive)"
+                  "description": "Filter by location (substring search, case-insensitive)",
+                  "disabled": true
                 },
                 {
                   "key": "speakerId",
                   "value": "1",
-                  "disabled": true,
-                  "description": "Filter by speaker ID"
+                  "description": "Filter by speaker ID",
+                  "disabled": true
                 },
                 {
                   "key": "seriesId",
                   "value": "1",
-                  "disabled": true,
-                  "description": "Filter by series ID"
+                  "description": "Filter by series ID",
+                  "disabled": true
                 },
                 {
                   "key": "eventDate",
                   "value": "2026-03-15",
-                  "disabled": true,
-                  "description": "Filter by event date (YYYY-MM-DD)"
+                  "description": "Filter by event date (YYYY-MM-DD)",
+                  "disabled": true
                 }
               ]
             },
@@ -1003,6 +1047,7 @@
         },
         {
           "name": "Get Event By ID",
+          "id": "af0ca191-6c12-4d2d-ba6a-6dd37cf8fcbd",
           "request": {
             "method": "GET",
             "header": [],
@@ -1022,6 +1067,7 @@
         },
         {
           "name": "Update Event",
+          "id": "fe4ed7d1-3695-4c39-95b2-d67e6e8069a7",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1051,6 +1097,7 @@
         },
         {
           "name": "Delete Event",
+          "id": "0053ed52-b5e9-4559-8566-1d277014ab5c",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -1068,13 +1115,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "bad7b677-e6a0-4e47-9726-c23395bfe38d"
     },
     {
       "name": "Attendance",
       "item": [
         {
           "name": "Create Attendance (Single or Multiple)",
+          "id": "8b1f7001-5415-49c4-9a57-2e28966a35f9",
           "request": {
             "method": "POST",
             "header": [
@@ -1103,11 +1152,12 @@
         },
         {
           "name": "Get All Attendance with Filters",
+          "id": "9d8b64b7-be46-4a1c-9264-0f064ac589bb",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/attendance?skip=0&take=10&eventId=1&accountId=2&isDeleted=false",
+              "raw": "{{base_url}}/attendance?skip=0&take=10",
               "host": [
                 "{{base_url}}"
               ],
@@ -1128,26 +1178,26 @@
                 {
                   "key": "eventId",
                   "value": "1",
-                  "disabled": true,
-                  "description": "Filter by event ID"
+                  "description": "Filter by event ID",
+                  "disabled": true
                 },
                 {
                   "key": "accountId",
                   "value": "2",
-                  "disabled": true,
-                  "description": "Filter by account ID"
+                  "description": "Filter by account ID",
+                  "disabled": true
                 },
                 {
                   "key": "isDeleted",
                   "value": "false",
-                  "disabled": true,
-                  "description": "Filter by deletion status (true/false)"
+                  "description": "Filter by deletion status (true/false)",
+                  "disabled": true
                 },
                 {
                   "key": "deletedBy",
                   "value": "5",
-                  "disabled": true,
-                  "description": "Filter by the account ID who deleted the attendance"
+                  "description": "Filter by the account ID who deleted the attendance",
+                  "disabled": true
                 }
               ]
             },
@@ -1157,6 +1207,7 @@
         },
         {
           "name": "Get Attendance by Event and Account",
+          "id": "dcbaccb5-ab52-48fe-b0c8-7cca9bb11083",
           "request": {
             "method": "GET",
             "header": [],
@@ -1177,6 +1228,7 @@
         },
         {
           "name": "Soft Delete Attendance",
+          "id": "7aba84f5-812d-42d8-a716-16976bd54a96",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1208,6 +1260,7 @@
         },
         {
           "name": "Restore Attendance",
+          "id": "09cbda0d-c2e4-4e22-9c6b-1babe87ced29",
           "request": {
             "method": "PATCH",
             "header": [],
@@ -1227,11 +1280,13 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "39aff248-82d9-4f07-b2d1-1f5ebc3d3050"
     }
   ],
   "variable": [
     {
+      "id": "b4f5860f-fcc2-47f1-b03a-e72d8d44b2b0",
       "key": "base_url",
       "value": "http://localhost:3000",
       "type": "string"
