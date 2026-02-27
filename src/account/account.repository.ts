@@ -22,6 +22,7 @@ export class AccountRepository {
       birthDate: true,
       gender: true,
       profilePicture: true,
+      email: true,
       dGroupMembers: {
         select: {
           id: true,

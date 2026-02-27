@@ -15,6 +15,7 @@ export class AccountMapper {
             (1000 * 60 * 60 * 24 * 365.25),
         ),
         gender: item.gender,
+        email: item.email,
         profilePicture: item.profilePicture,
         dGroupLeader: item.dGroupLeader,
         dGroupMembers: item.dGroupMembers,

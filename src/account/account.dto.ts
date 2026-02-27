@@ -68,6 +68,7 @@ export class AccountDTO {
   profilePicture?: string | null;
   gender: string;
   age: number;
+  email: string;
   dGroupLeader?: { id: number; firstName: string; lastName: string } | null; // Single leader
   dGroupMembers?: { id: number; firstName: string; lastName: string }[]; // Array of members
 }
@@ -78,6 +79,7 @@ export class AccountQueryDto {
   middleName?: string | null;
   lastName: string;
   birthDate: Date;
+  email: string;
   gender: string;
   profilePicture?: string | null;
   dGroupLeader?: { id: number; firstName: string; lastName: string } | null;
