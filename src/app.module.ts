@@ -10,6 +10,7 @@ import { EmploymentModule } from './employment/employment.module';
 import { SeriesModule } from './series/series.module';
 import { EventModule } from './event/event.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AttendanceModule } from './attendance/attendance.module';
     SeriesModule,
     EventModule,
     AttendanceModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

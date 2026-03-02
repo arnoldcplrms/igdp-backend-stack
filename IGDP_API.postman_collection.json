@@ -1282,6 +1282,32 @@
         }
       ],
       "id": "39aff248-82d9-4f07-b2d1-1f5ebc3d3050"
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Metrics",
+          "id": "dashboard-metrics-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard/metrics",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard",
+                "metrics"
+              ]
+            },
+            "description": "Get dashboard metrics: total accounts, facilitators (2 or fewer group members), and D-Leaders (3 or more group members)"
+          },
+          "response": []
+        }
+      ],
+      "id": "53dh5693-j8dk-50y7-d2li-2m6gfe4l9o51"
     }
   ],
   "variable": [
