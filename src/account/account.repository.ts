@@ -110,6 +110,14 @@ export class AccountRepository {
       where: { id },
       include: {
         dGroupMembers: true,
+        dGroupLeader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            middleName: true,
+          },
+        },
         education: {
           select: {
             schoolId: false,
@@ -178,17 +186,8 @@ export class AccountRepository {
         id: {
           not: exemptedAccountId,
         },
-        dGroupMembers: {
-          some: {},
-        },
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        gender: true,
-      },
+      ...this.selectObject,
     });
 
     return result;
