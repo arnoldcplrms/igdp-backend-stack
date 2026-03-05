@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   AccountDTO,
   AccountQueryDto,
+  AccountDetailDto,
   CreateAccountDto,
   UpdateAccountDto,
 } from './account.dto';
@@ -36,6 +37,17 @@ export class AccountRepository {
           firstName: true,
           lastName: true,
         },
+      },
+      attendances: {
+        select: {
+          eventId: true,
+          createdAt: true,
+        },
+        where: {
+          isDeleted: false,
+        },
+        orderBy: { createdAt: 'desc' as const },
+        take: 1,
       },
     },
   };
@@ -105,8 +117,8 @@ export class AccountRepository {
     return AccountMapper.toAccountDto(result as AccountQueryDto[]);
   }
 
-  findAccountById(id: number) {
-    return this.prisma.account.findUnique({
+  async findAccountById(id: number): Promise<AccountDetailDto> {
+    const result = await this.prisma.account.findUnique({
       where: { id },
       include: {
         dGroupMembers: true,
@@ -148,8 +160,24 @@ export class AccountRepository {
             },
           },
         },
+        attendances: {
+          select: {
+            eventId: true,
+            accountId: true,
+            isDeleted: true,
+            deletedAt: true,
+            deletedBy: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          where: { isDeleted: false },
+          orderBy: { createdAt: 'desc' as const },
+          take: 1,
+        },
       },
     });
+
+    return AccountMapper.toAccountDetailDto(result);
   }
 
   async findAccountsByName(name: string) {

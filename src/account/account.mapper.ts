@@ -1,4 +1,4 @@
-import { AccountDTO, AccountQueryDto } from './account.dto';
+import { AccountDTO, AccountQueryDto, AccountDetailDto } from './account.dto';
 
 export class AccountMapper {
   public static toAccountDto(result: AccountQueryDto[]): AccountDTO[] {
@@ -19,7 +19,39 @@ export class AccountMapper {
         profilePicture: item.profilePicture,
         dGroupLeader: item.dGroupLeader,
         dGroupMembers: item.dGroupMembers,
+        latestAttendance:
+          item.attendances && item.attendances.length > 0
+            ? item.attendances[0].createdAt
+            : null,
       }))
     );
+  }
+
+  public static toAccountDetailDto(result: any): AccountDetailDto {
+    return {
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      middleName: result.middleName,
+      birthDate: result.birthDate,
+      profilePicture: result.profilePicture,
+      gender: result.gender,
+      email: result.email,
+      contactNumber: result.contactNumber,
+      userType: result.userType,
+      dGroupLeaderId: result.dGroupLeaderId,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+      emergencyContactName: result.emergencyContactName,
+      emergencyContactNumber: result.emergencyContactNumber,
+      dGroupLeader: result.dGroupLeader,
+      dGroupMembers: result.dGroupMembers,
+      education: result.education,
+      employment: result.employment,
+      latestAttendance:
+        result.attendances && result.attendances.length > 0
+          ? result.attendances[0].createdAt
+          : null,
+    };
   }
 }
