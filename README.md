@@ -13,33 +13,33 @@ CCF IGDP Backend is a [NestJS](https://github.com/nestjs/nest) framework applica
 ## Project setup
 
 ```bash
-$ pnpm install
+$ bun install
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ pnpm run start
+$ bun run start
 
 # watch mode
-$ pnpm run start:dev
+$ bun run start:dev
 
 # production mode
-$ pnpm run start:prod
+$ bun run start:prod
 ```
 
 ## Run tests
 
 ```bash
 # unit tests
-$ pnpm run test
+$ bun run test
 
 # e2e tests
-$ pnpm run test:e2e
+$ bun run test:e2e
 
 # test coverage
-$ pnpm run test:cov
+$ bun run test:cov
 ```
 
 ## License
