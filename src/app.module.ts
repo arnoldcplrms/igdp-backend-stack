@@ -11,6 +11,7 @@ import { SeriesModule } from './series/series.module';
 import { EventModule } from './event/event.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { SpeakerModule } from './speaker/speaker.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     EventModule,
     AttendanceModule,
     DashboardModule,
+    SpeakerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

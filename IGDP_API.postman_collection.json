@@ -1284,6 +1284,189 @@
       "id": "39aff248-82d9-4f07-b2d1-1f5ebc3d3050"
     },
     {
+      "name": "Speaker",
+      "item": [
+        {
+          "name": "Create Speaker",
+          "id": "speaker-create-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pastor John Smith\",\n  \"accountId\": 1,\n  \"updatedBy\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/speaker",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "speaker"
+              ]
+            },
+            "description": "Create a new speaker"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Speakers",
+          "id": "speaker-getall-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/speaker",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "speaker"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "description": "Number of records to skip for pagination",
+                  "disabled": true
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "description": "Number of records to take",
+                  "disabled": true
+                },
+                {
+                  "key": "name",
+                  "value": "Smith",
+                  "description": "Filter by speaker name (substring search, case-insensitive)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all speakers with optional filtering and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Speaker by Name",
+          "id": "speaker-search-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/speaker/search?name=John",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "speaker",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "John",
+                  "description": "Search term - returns speakers with names containing this substring (case-insensitive)"
+                },
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "description": "Optional - number of records to skip",
+                  "disabled": true
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "description": "Optional - number of records to take",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Search speakers by name with substring matching and optional pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Speaker by ID",
+          "id": "speaker-getid-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/speaker/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "speaker",
+                "1"
+              ]
+            },
+            "description": "Get a specific speaker by ID with account and updatedBy user details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Speaker",
+          "id": "speaker-update-001",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pastor John Doe Smith\",\n  \"updatedBy\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/speaker/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "speaker",
+                "1"
+              ]
+            },
+            "description": "Update a speaker (partial update allowed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Speaker",
+          "id": "speaker-delete-001",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/speaker/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "speaker",
+                "1"
+              ]
+            },
+            "description": "Delete a speaker"
+          },
+          "response": []
+        }
+      ],
+      "id": "3a9c8f5b-1d4e-4c7a-9f2b-7e8c6d5a4b3c"
+    },
+    {
       "name": "Dashboard",
       "item": [
         {
