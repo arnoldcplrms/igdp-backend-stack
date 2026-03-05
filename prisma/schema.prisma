@@ -87,6 +87,8 @@ model Account {
   events             Event[]
   attendances        Attendance[] @relation("AttendeeAccount")
   deletedAttendances Attendance[] @relation("DeletedByAccount")
+  speakerAccount     Speaker[]    @relation("SpeakerAccount")
+  speakerUpdatedBy   Speaker[]    @relation("SpeakerUpdatedBy")
 }
 
 model Education {
@@ -118,6 +120,19 @@ model Employment {
   // Relations
   company Company @relation(fields: [companyId], references: [id])
   account Account @relation(fields: [accountId], references: [id])
+}
+
+model Speaker {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  accountId Int?
+  updatedBy Int?
+  createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  // Relations
+  account       Account? @relation("SpeakerAccount", fields: [accountId], references: [id])
+  updatedByUser Account? @relation("SpeakerUpdatedBy", fields: [updatedBy], references: [id])
 }
 
 model Series {

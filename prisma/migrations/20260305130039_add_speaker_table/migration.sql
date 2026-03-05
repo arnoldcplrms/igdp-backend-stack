@@ -1,0 +1,1 @@
+-- no-op migration retained to preserve existing migration history entry
