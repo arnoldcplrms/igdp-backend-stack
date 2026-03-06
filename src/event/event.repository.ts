@@ -15,6 +15,7 @@ export class EventRepository {
       data: createData,
       include: {
         series: true,
+        ministry: true,
         eventSpeakers: {
           include: {
             speaker: true,
@@ -30,6 +31,7 @@ export class EventRepository {
     eventName?: string,
     location?: string,
     seriesId?: number,
+    ministryId?: number,
     eventDate?: string,
   ) {
     // Build where clause dynamically
@@ -53,6 +55,10 @@ export class EventRepository {
       where.seriesId = seriesId;
     }
 
+    if (ministryId) {
+      where.ministryId = ministryId;
+    }
+
     if (eventDate) {
       const dateObj = new Date(eventDate + 'T00:00:00Z');
       where.eventDate = dateObj;
@@ -64,6 +70,7 @@ export class EventRepository {
       where: Object.keys(where).length > 0 ? where : undefined,
       include: {
         series: true,
+        ministry: true,
         eventSpeakers: {
           include: {
             speaker: true,
@@ -85,6 +92,7 @@ export class EventRepository {
       },
       include: {
         series: true,
+        ministry: true,
         eventSpeakers: {
           include: {
             speaker: true,
@@ -99,6 +107,7 @@ export class EventRepository {
       where: { id },
       include: {
         series: true,
+        ministry: true,
         eventSpeakers: {
           include: {
             speaker: true,
@@ -121,6 +130,7 @@ export class EventRepository {
       data: updateData,
       include: {
         series: true,
+        ministry: true,
         eventSpeakers: {
           include: {
             speaker: true,

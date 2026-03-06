@@ -17,6 +17,7 @@ export class EventService {
     eventName?: string,
     location?: string,
     seriesId?: number,
+    ministryId?: number,
     eventDate?: string,
   ) {
     return this.eventRepository.findAll(
@@ -25,6 +26,7 @@ export class EventService {
       eventName,
       location,
       seriesId,
+      ministryId,
       eventDate,
     );
   }

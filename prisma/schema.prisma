@@ -25,6 +25,23 @@ model Company {
   Employment Employment[]
 }
 
+model Ministry {
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(100)
+  parentMinistry Int?
+  mission        String?  @db.Text
+  vision         String?  @db.Text
+  description    String?  @db.Text
+  createdAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  // Relations
+  parent   Ministry?  @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
+  children Ministry[] @relation("MinistryHierarchy")
+  series   Series[]
+  events   Event[]
+}
+
 enum Gender {
   Male
   Female
@@ -136,26 +153,30 @@ model Speaker {
 }
 
 model Series {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(100)
-  createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(100)
+  ministryId Int?
+  createdAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
-  events Event[]
+  ministry Ministry? @relation(fields: [ministryId], references: [id])
+  events   Event[]
 }
 
 model Event {
-  id        Int      @id @default(autoincrement())
-  eventName String   @db.VarChar(100)
-  eventDate DateTime @db.Date
-  location  String   @db.VarChar(100)
-  seriesId  Int?
-  createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  id         Int      @id @default(autoincrement())
+  eventName  String   @db.VarChar(100)
+  eventDate  DateTime @db.Date
+  location   String   @db.VarChar(100)
+  seriesId   Int?
+  ministryId Int?
+  createdAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
   series        Series?         @relation(fields: [seriesId], references: [id])
+  ministry      Ministry?       @relation(fields: [ministryId], references: [id])
   attendances   Attendance[]
   eventSpeakers EventSpeakers[]
 }

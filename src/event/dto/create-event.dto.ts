@@ -27,4 +27,8 @@ export class CreateEventDto {
   @IsInt()
   @IsOptional()
   seriesId?: number;
+
+  @IsInt()
+  @IsOptional()
+  ministryId?: number;
 }

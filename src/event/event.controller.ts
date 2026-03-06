@@ -41,6 +41,7 @@ export class EventController {
     @Query('eventName') eventName?: string,
     @Query('location') location?: string,
     @Query('seriesId') seriesId?: string,
+    @Query('ministryId') ministryId?: string,
     @Query('eventDate') eventDate?: string,
   ) {
     return this.eventService.findAll(
@@ -49,6 +50,7 @@ export class EventController {
       eventName,
       location,
       seriesId ? parseInt(seriesId) : undefined,
+      ministryId ? parseInt(ministryId) : undefined,
       eventDate,
     );
   }

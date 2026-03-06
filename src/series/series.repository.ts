@@ -10,11 +10,18 @@ export class SeriesRepository {
   async create(data: CreateSeriesDto) {
     return this.prisma.series.create({
       data,
+      include: {
+        ministry: true,
+      },
     });
   }
 
   async findAll() {
-    return this.prisma.series.findMany();
+    return this.prisma.series.findMany({
+      include: {
+        ministry: true,
+      },
+    });
   }
 
   async findByName(name: string) {
@@ -26,6 +33,7 @@ export class SeriesRepository {
         },
       },
       include: {
+        ministry: true,
         events: true,
       },
     });
@@ -35,6 +43,7 @@ export class SeriesRepository {
     return this.prisma.series.findUnique({
       where: { id },
       include: {
+        ministry: true,
         events: true,
       },
     });
@@ -44,6 +53,9 @@ export class SeriesRepository {
     return this.prisma.series.update({
       where: { id },
       data,
+      include: {
+        ministry: true,
+      },
     });
   }
 
