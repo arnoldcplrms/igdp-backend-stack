@@ -84,7 +84,6 @@ model Account {
   dGroupMembers      Account[]    @relation("dGroupLeader")
   education          Education[]
   employment         Employment[]
-  events             Event[]
   attendances        Attendance[] @relation("AttendeeAccount")
   deletedAttendances Attendance[] @relation("DeletedByAccount")
   speakerAccount     Speaker[]    @relation("SpeakerAccount")
@@ -131,8 +130,9 @@ model Speaker {
   updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
-  account       Account? @relation("SpeakerAccount", fields: [accountId], references: [id])
-  updatedByUser Account? @relation("SpeakerUpdatedBy", fields: [updatedBy], references: [id])
+  account       Account?        @relation("SpeakerAccount", fields: [accountId], references: [id])
+  updatedByUser Account?        @relation("SpeakerUpdatedBy", fields: [updatedBy], references: [id])
+  eventSpeakers EventSpeakers[]
 }
 
 model Series {
@@ -150,15 +150,14 @@ model Event {
   eventName String   @db.VarChar(100)
   eventDate DateTime @db.Date
   location  String   @db.VarChar(100)
-  speakerId Int
   seriesId  Int?
   createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
   updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
-  speaker     Account      @relation(fields: [speakerId], references: [id])
-  series      Series?      @relation(fields: [seriesId], references: [id])
-  attendances Attendance[]
+  series        Series?         @relation(fields: [seriesId], references: [id])
+  attendances   Attendance[]
+  eventSpeakers EventSpeakers[]
 }
 
 model Attendance {
@@ -177,4 +176,16 @@ model Attendance {
 
   @@id([eventId, accountId])
   @@unique([eventId, accountId], name: "unique_event_account_attendance")
+}
+
+model EventSpeakers {
+  speakerId Int
+  eventId   Int
+  createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  // Relations
+  speaker Speaker @relation(fields: [speakerId], references: [id])
+  event   Event   @relation(fields: [eventId], references: [id])
+
+  @@id([speakerId, eventId])
 }

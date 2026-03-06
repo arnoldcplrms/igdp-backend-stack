@@ -40,7 +40,6 @@ export class EventController {
     @Query('take') take?: string,
     @Query('eventName') eventName?: string,
     @Query('location') location?: string,
-    @Query('speakerId') speakerId?: string,
     @Query('seriesId') seriesId?: string,
     @Query('eventDate') eventDate?: string,
   ) {
@@ -49,7 +48,6 @@ export class EventController {
       take ? parseInt(take) : undefined,
       eventName,
       location,
-      speakerId ? parseInt(speakerId) : undefined,
       seriesId ? parseInt(seriesId) : undefined,
       eventDate,
     );

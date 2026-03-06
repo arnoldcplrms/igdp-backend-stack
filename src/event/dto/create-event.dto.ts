@@ -25,10 +25,6 @@ export class CreateEventDto {
   location: string;
 
   @IsInt()
-  @IsNotEmpty()
-  speakerId: number;
-
-  @IsInt()
   @IsOptional()
   seriesId?: number;
 }

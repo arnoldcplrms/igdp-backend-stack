@@ -16,7 +16,6 @@ export class EventService {
     take?: number,
     eventName?: string,
     location?: string,
-    speakerId?: number,
     seriesId?: number,
     eventDate?: string,
   ) {
@@ -25,7 +24,6 @@ export class EventService {
       take,
       eventName,
       location,
-      speakerId,
       seriesId,
       eventDate,
     );

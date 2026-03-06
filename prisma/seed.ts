@@ -323,6 +323,46 @@ async function main() {
   ]);
   console.log(`Created ${series.length} series`);
 
+  console.log('Creating Speakers...');
+  const speakers = await Promise.all([
+    prisma.speaker.create({
+      data: {
+        name: `${accounts[0].firstName} ${accounts[0].lastName}`,
+        accountId: accounts[0].id,
+        updatedBy: accounts[0].id,
+      },
+    }),
+    prisma.speaker.create({
+      data: {
+        name: `${accounts[1].firstName} ${accounts[1].lastName}`,
+        accountId: accounts[1].id,
+        updatedBy: accounts[1].id,
+      },
+    }),
+    prisma.speaker.create({
+      data: {
+        name: `${accounts[2].firstName} ${accounts[2].lastName}`,
+        accountId: accounts[2].id,
+        updatedBy: accounts[2].id,
+      },
+    }),
+    prisma.speaker.create({
+      data: {
+        name: `${accounts[3].firstName} ${accounts[3].lastName}`,
+        accountId: accounts[3].id,
+        updatedBy: accounts[3].id,
+      },
+    }),
+    prisma.speaker.create({
+      data: {
+        name: `${accounts[4].firstName} ${accounts[4].lastName}`,
+        accountId: accounts[4].id,
+        updatedBy: accounts[4].id,
+      },
+    }),
+  ]);
+  console.log(`Created ${speakers.length} speakers`);
+
   console.log('Creating Events...');
   const events = await Promise.all([
     prisma.event.create({
@@ -330,7 +370,6 @@ async function main() {
         eventName: 'Guarding Your Heart: Dating with Purpose',
         eventDate: new Date('2024-02-15'),
         location: 'UP Diliman Chapel, Quezon City',
-        speakerId: accounts[0].id,
         seriesId: series[1].id,
       },
     }),
@@ -339,7 +378,6 @@ async function main() {
         eventName: 'Finding Your Identity in Christ as a Young Adult',
         eventDate: new Date('2024-03-10'),
         location: 'Ateneo De Manila University, Katipunan',
-        speakerId: accounts[1].id,
         seriesId: series[0].id,
       },
     }),
@@ -348,7 +386,6 @@ async function main() {
         eventName: 'Love Languages and Biblical Relationships',
         eventDate: new Date('2024-04-05'),
         location: 'DLSU Auditorium, Manila',
-        speakerId: accounts[2].id,
         seriesId: series[1].id,
       },
     }),
@@ -357,7 +394,6 @@ async function main() {
         eventName: 'Living Out Your Faith in the Workplace',
         eventDate: new Date('2024-05-20'),
         location: 'BGC Prayer Center, Taguig',
-        speakerId: accounts[3].id,
         seriesId: series[2].id,
       },
     }),
@@ -366,12 +402,46 @@ async function main() {
         eventName: 'Youth Leaders Summit: Serving Your Peers',
         eventDate: new Date('2024-06-01'),
         location: 'Makati City Sports Complex, Makati',
-        speakerId: accounts[4].id,
         seriesId: series[3].id,
       },
     }),
   ]);
   console.log(`Created ${events.length} events`);
+
+  console.log('Creating EventSpeakers...');
+  const eventSpeakers = await Promise.all([
+    prisma.eventSpeakers.create({
+      data: {
+        speakerId: speakers[0].id,
+        eventId: events[0].id,
+      },
+    }),
+    prisma.eventSpeakers.create({
+      data: {
+        speakerId: speakers[1].id,
+        eventId: events[1].id,
+      },
+    }),
+    prisma.eventSpeakers.create({
+      data: {
+        speakerId: speakers[2].id,
+        eventId: events[2].id,
+      },
+    }),
+    prisma.eventSpeakers.create({
+      data: {
+        speakerId: speakers[3].id,
+        eventId: events[3].id,
+      },
+    }),
+    prisma.eventSpeakers.create({
+      data: {
+        speakerId: speakers[4].id,
+        eventId: events[4].id,
+      },
+    }),
+  ]);
+  console.log(`Created ${eventSpeakers.length} event-speaker relations`);
 
   console.log('✅ Seed data created successfully!');
 }

@@ -14,8 +14,12 @@ export class EventRepository {
     return this.prisma.event.create({
       data: createData,
       include: {
-        speaker: true,
         series: true,
+        eventSpeakers: {
+          include: {
+            speaker: true,
+          },
+        },
       },
     });
   }
@@ -25,7 +29,6 @@ export class EventRepository {
     take?: number,
     eventName?: string,
     location?: string,
-    speakerId?: number,
     seriesId?: number,
     eventDate?: string,
   ) {
@@ -46,10 +49,6 @@ export class EventRepository {
       };
     }
 
-    if (speakerId) {
-      where.speakerId = speakerId;
-    }
-
     if (seriesId) {
       where.seriesId = seriesId;
     }
@@ -64,8 +63,12 @@ export class EventRepository {
       take,
       where: Object.keys(where).length > 0 ? where : undefined,
       include: {
-        speaker: true,
         series: true,
+        eventSpeakers: {
+          include: {
+            speaker: true,
+          },
+        },
       },
     });
   }
@@ -81,8 +84,12 @@ export class EventRepository {
         },
       },
       include: {
-        speaker: true,
         series: true,
+        eventSpeakers: {
+          include: {
+            speaker: true,
+          },
+        },
       },
     });
   }
@@ -91,8 +98,12 @@ export class EventRepository {
     return this.prisma.event.findUnique({
       where: { id },
       include: {
-        speaker: true,
         series: true,
+        eventSpeakers: {
+          include: {
+            speaker: true,
+          },
+        },
       },
     });
   }
@@ -109,8 +120,12 @@ export class EventRepository {
       where: { id },
       data: updateData,
       include: {
-        speaker: true,
         series: true,
+        eventSpeakers: {
+          include: {
+            speaker: true,
+          },
+        },
       },
     });
   }

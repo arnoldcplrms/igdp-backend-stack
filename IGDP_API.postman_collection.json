@@ -911,7 +911,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"eventName\": \"Youth Fellowship Meeting\",\n  \"eventDate\": \"2026-03-15\",\n  \"location\": \"Conference Hall A\",\n  \"speakerId\": 1,\n  \"seriesId\": 1\n}"
+              "raw": "{\n  \"eventName\": \"Youth Fellowship Meeting\",\n  \"eventDate\": \"2026-03-15\",\n  \"location\": \"Conference Hall A\",\n  \"seriesId\": 1\n}"
             },
             "url": {
               "raw": "{{base_url}}/event",
@@ -1022,12 +1022,6 @@
                   "disabled": true
                 },
                 {
-                  "key": "speakerId",
-                  "value": "1",
-                  "description": "Filter by speaker ID",
-                  "disabled": true
-                },
-                {
                   "key": "seriesId",
                   "value": "1",
                   "description": "Filter by series ID",
@@ -1041,7 +1035,7 @@
                 }
               ]
             },
-            "description": "Retrieve events with flexible filtering and pagination. Use any combination of filters."
+            "description": "Retrieve events with flexible filtering and pagination. Use any combination of filters. Speaker relations are managed via /event-speakers."
           },
           "response": []
         },
@@ -1465,6 +1459,168 @@
         }
       ],
       "id": "3a9c8f5b-1d4e-4c7a-9f2b-7e8c6d5a4b3c"
+    },
+    {
+      "name": "EventSpeakers",
+      "item": [
+        {
+          "name": "Create EventSpeakers (Single or Multiple)",
+          "id": "eventspeakers-create-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventSpeakers\": [\n    {\n      \"speakerId\": 1,\n      \"eventId\": 1\n    },\n    {\n      \"speakerId\": 2,\n      \"eventId\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/event-speakers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-speakers"
+              ]
+            },
+            "description": "Create event-speaker relationships. Supports single or multiple entries. Uses composite key (speakerId, eventId)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All EventSpeakers with Filters",
+          "id": "eventspeakers-getall-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-speakers?skip=0&take=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-speakers"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "description": "Number of records to skip for pagination"
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "description": "Number of records to take"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1",
+                  "description": "Filter by event ID",
+                  "disabled": true
+                },
+                {
+                  "key": "speakerId",
+                  "value": "1",
+                  "description": "Filter by speaker ID",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all event-speaker relationships with flexible filtering by eventId and speakerId"
+          },
+          "response": []
+        },
+        {
+          "name": "Get EventSpeakers by Speaker ID",
+          "id": "eventspeakers-byspeaker-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-speakers/speaker/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-speakers",
+                "speaker",
+                "1"
+              ]
+            },
+            "description": "Get all events for a specific speaker"
+          },
+          "response": []
+        },
+        {
+          "name": "Get EventSpeakers by Event ID",
+          "id": "eventspeakers-byevent-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-speakers/event/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-speakers",
+                "event",
+                "1"
+              ]
+            },
+            "description": "Get all speakers for a specific event"
+          },
+          "response": []
+        },
+        {
+          "name": "Get EventSpeaker by Speaker and Event",
+          "id": "eventspeakers-getone-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-speakers/1/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-speakers",
+                "1",
+                "1"
+              ]
+            },
+            "description": "Get a specific event-speaker relationship by speakerId and eventId"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete EventSpeaker",
+          "id": "eventspeakers-delete-001",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-speakers/1/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-speakers",
+                "1",
+                "1"
+              ]
+            },
+            "description": "Delete an event-speaker relationship by speakerId and eventId"
+          },
+          "response": []
+        }
+      ],
+      "id": "8f2e9d4a-5c3b-4a1e-9f7d-6b8c5e4a3d2b"
     },
     {
       "name": "Dashboard",
