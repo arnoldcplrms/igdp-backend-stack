@@ -1,20 +1,9 @@
-import {
-  IsString,
-  IsNotEmpty,
-  MinLength,
-  MaxLength,
-  IsInt,
-  IsOptional,
-} from 'class-validator';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
 
-export class CreateSeriesDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  @MaxLength(100)
-  name: string;
+export const createSeriesSchema = z.object({
+  name: z.string().min(1).max(100),
+  ministryId: z.number().int().optional(),
+});
 
-  @IsInt()
-  @IsOptional()
-  ministryId?: number;
-}
+export class CreateSeriesDto extends ZodClass(createSeriesSchema) {}

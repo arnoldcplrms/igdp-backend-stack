@@ -1,19 +1,17 @@
-import { IsInt, IsNotEmpty, IsArray, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
 
-export class EventSpeakerItemDto {
-  @IsInt()
-  @IsNotEmpty()
-  speakerId: number;
+export const eventSpeakerItemSchema = z.object({
+  speakerId: z.number().int(),
+  eventId: z.number().int(),
+});
 
-  @IsInt()
-  @IsNotEmpty()
-  eventId: number;
-}
+export const createEventSpeakersSchema = z.object({
+  eventSpeakers: z.array(eventSpeakerItemSchema),
+});
 
-export class CreateEventSpeakersDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EventSpeakerItemDto)
-  eventSpeakers: EventSpeakerItemDto[];
-}
+export class EventSpeakerItemDto extends ZodClass(eventSpeakerItemSchema) {}
+
+export class CreateEventSpeakersDto extends ZodClass(
+  createEventSpeakersSchema,
+) {}

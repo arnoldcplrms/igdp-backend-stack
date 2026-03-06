@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSeriesDto } from './create-series.dto';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
+import { createSeriesSchema } from './create-series.dto';
 
-export class UpdateSeriesDto extends PartialType(CreateSeriesDto) {}
+export const updateSeriesSchema = createSeriesSchema.partial();
+
+export class UpdateSeriesDto extends ZodClass(updateSeriesSchema) {}

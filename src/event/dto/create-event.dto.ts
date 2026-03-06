@@ -1,34 +1,12 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsInt,
-  IsOptional,
-  IsDateString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
 
-export class CreateEventDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  @MaxLength(100)
-  eventName: string;
+export const createEventSchema = z.object({
+  eventName: z.string().min(1).max(100),
+  eventDate: z.string().datetime(),
+  location: z.string().max(100),
+  seriesId: z.number().int().optional(),
+  ministryId: z.number().int().optional(),
+});
 
-  @IsDateString()
-  @IsNotEmpty()
-  eventDate: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
-  location: string;
-
-  @IsInt()
-  @IsOptional()
-  seriesId?: number;
-
-  @IsInt()
-  @IsOptional()
-  ministryId?: number;
-}
+export class CreateEventDto extends ZodClass(createEventSchema) {}

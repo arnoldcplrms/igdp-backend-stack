@@ -1,24 +1,10 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsInt,
-  IsOptional,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
 
-export class CreateSpeakerDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  @MaxLength(100)
-  name: string;
+export const createSpeakerSchema = z.object({
+  name: z.string().min(1).max(100),
+  accountId: z.number().int().optional(),
+  updatedBy: z.number().int().optional(),
+});
 
-  @IsInt()
-  @IsOptional()
-  accountId?: number;
-
-  @IsInt()
-  @IsOptional()
-  updatedBy?: number;
-}
+export class CreateSpeakerDto extends ZodClass(createSpeakerSchema) {}

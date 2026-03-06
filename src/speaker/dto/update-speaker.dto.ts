@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSpeakerDto } from './create-speaker.dto';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
+import { createSpeakerSchema } from './create-speaker.dto';
 
-export class UpdateSpeakerDto extends PartialType(CreateSpeakerDto) {}
+export const updateSpeakerSchema = createSpeakerSchema.partial();
+
+export class UpdateSpeakerDto extends ZodClass(updateSpeakerSchema) {}

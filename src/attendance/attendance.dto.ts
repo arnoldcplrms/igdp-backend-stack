@@ -1,64 +1,34 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsArray,
-  ValidateNested,
-  IsOptional,
-  IsBoolean,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { z } from 'zod';
 
-export class AttendanceItemDto {
-  @IsInt()
-  @IsNotEmpty()
-  eventId: number;
+export const attendanceItemSchema = z.object({
+  eventId: z.number().int(),
+  accountId: z.number().int(),
+});
 
-  @IsInt()
-  @IsNotEmpty()
-  accountId: number;
-}
+export const createAttendanceSchema = z.object({
+  attendances: z.array(attendanceItemSchema),
+});
 
-export class CreateAttendanceDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => AttendanceItemDto)
-  attendances: AttendanceItemDto[];
-}
+export const softDeleteAttendanceSchema = z.object({
+  deletedBy: z.number().int(),
+});
 
-export class SoftDeleteAttendanceDto {
-  @IsInt()
-  @IsNotEmpty()
-  deletedBy: number;
-}
+export const filterAttendanceSchema = z.object({
+  eventId: z.number().int().optional(),
+  accountId: z.number().int().optional(),
+  isDeleted: z.boolean().optional(),
+  deletedBy: z.number().int().optional(),
+  skip: z.number().int().optional(),
+  take: z.number().int().optional(),
+});
 
-export class FilterAttendanceDto {
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  eventId?: number;
+export class AttendanceItemDto extends ZodClass(attendanceItemSchema) {}
 
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  accountId?: number;
+export class CreateAttendanceDto extends ZodClass(createAttendanceSchema) {}
 
-  @IsOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  isDeleted?: boolean;
+export class SoftDeleteAttendanceDto extends ZodClass(
+  softDeleteAttendanceSchema,
+) {}
 
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  deletedBy?: number;
-
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  skip?: number;
-
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  take?: number;
-}
+export class FilterAttendanceDto extends ZodClass(filterAttendanceSchema) {}
