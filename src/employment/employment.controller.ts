@@ -8,14 +8,23 @@ import {
   Delete,
 } from '@nestjs/common';
 import { EmploymentService } from './employment.service';
-import { CreateEmploymentDto } from './employment.dto';
+import {
+  CreateEmploymentDto,
+  UpdateEmploymentDto,
+  createEmploymentSchema,
+  updateEmploymentSchema,
+} from './employment.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('employment')
 export class EmploymentController {
   constructor(private readonly employmentService: EmploymentService) {}
 
   @Post()
-  create(@Body() createEmploymentDto: CreateEmploymentDto) {
+  create(
+    @Body(new ZodValidationPipe(createEmploymentSchema))
+    createEmploymentDto: CreateEmploymentDto,
+  ) {
     return this.employmentService.create(createEmploymentDto);
   }
 
@@ -30,7 +39,11 @@ export class EmploymentController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmploymentDto: any) {
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateEmploymentSchema))
+    updateEmploymentDto: UpdateEmploymentDto,
+  ) {
     return this.employmentService.update(+id, updateEmploymentDto);
   }
 

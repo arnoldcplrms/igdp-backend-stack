@@ -13,4 +13,8 @@ export const createEmploymentSchema = z.object({
     .nullable(),
 });
 
+export const updateEmploymentSchema = createEmploymentSchema.partial();
+
 export class CreateEmploymentDto extends ZodClass(createEmploymentSchema) {}
+
+export class UpdateEmploymentDto extends ZodClass(updateEmploymentSchema) {}

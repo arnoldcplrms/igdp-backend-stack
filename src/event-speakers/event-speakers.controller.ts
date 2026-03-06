@@ -9,17 +9,26 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { EventSpeakersService } from './event-speakers.service';
-import { CreateEventSpeakersDto } from './event-speakers.dto';
+import {
+  CreateEventSpeakersDto,
+  EventSpeakerItemDto,
+  createEventSpeakersSchema,
+} from './event-speakers.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('event-speakers')
 export class EventSpeakersController {
   constructor(private readonly eventSpeakersService: EventSpeakersService) {}
 
   @Post()
-  create(@Body() createEventSpeakersDto: CreateEventSpeakersDto) {
-    return this.eventSpeakersService.createMany(
-      createEventSpeakersDto.eventSpeakers,
+  create(
+    @Body(new ZodValidationPipe(createEventSpeakersSchema))
+    createEventSpeakersDto: CreateEventSpeakersDto,
+  ) {
+    const eventSpeakers = createEventSpeakersDto.eventSpeakers.map(
+      (item) => new EventSpeakerItemDto(item),
     );
+    return this.eventSpeakersService.createMany(eventSpeakers);
   }
 
   @Get()

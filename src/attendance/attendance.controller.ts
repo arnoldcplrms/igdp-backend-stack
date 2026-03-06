@@ -9,15 +9,28 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
-import { CreateAttendanceDto, SoftDeleteAttendanceDto } from './attendance.dto';
+import {
+  CreateAttendanceDto,
+  SoftDeleteAttendanceDto,
+  AttendanceItemDto,
+  createAttendanceSchema,
+  softDeleteAttendanceSchema,
+} from './attendance.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('attendance')
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @Post()
-  create(@Body() createAttendanceDto: CreateAttendanceDto) {
-    return this.attendanceService.createMany(createAttendanceDto.attendances);
+  create(
+    @Body(new ZodValidationPipe(createAttendanceSchema))
+    createAttendanceDto: CreateAttendanceDto,
+  ) {
+    const attendances = createAttendanceDto.attendances.map(
+      (item) => new AttendanceItemDto(item),
+    );
+    return this.attendanceService.createMany(attendances);
   }
 
   @Get()
@@ -51,7 +64,8 @@ export class AttendanceController {
   softDelete(
     @Param('eventId', ParseIntPipe) eventId: number,
     @Param('accountId', ParseIntPipe) accountId: number,
-    @Body() softDeleteDto: SoftDeleteAttendanceDto,
+    @Body(new ZodValidationPipe(softDeleteAttendanceSchema))
+    softDeleteDto: SoftDeleteAttendanceDto,
   ) {
     return this.attendanceService.softDelete(
       eventId,

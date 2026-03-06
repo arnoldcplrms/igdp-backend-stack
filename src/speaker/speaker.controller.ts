@@ -9,15 +9,25 @@ import {
   Query,
 } from '@nestjs/common';
 import { SpeakerService } from './speaker.service';
-import { CreateSpeakerDto } from './dto/create-speaker.dto';
-import { UpdateSpeakerDto } from './dto/update-speaker.dto';
+import {
+  CreateSpeakerDto,
+  createSpeakerSchema,
+} from './dto/create-speaker.dto';
+import {
+  UpdateSpeakerDto,
+  updateSpeakerSchema,
+} from './dto/update-speaker.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('speaker')
 export class SpeakerController {
   constructor(private readonly speakerService: SpeakerService) {}
 
   @Post()
-  create(@Body() createSpeakerDto: CreateSpeakerDto) {
+  create(
+    @Body(new ZodValidationPipe(createSpeakerSchema))
+    createSpeakerDto: CreateSpeakerDto,
+  ) {
     return this.speakerService.create(createSpeakerDto);
   }
 
@@ -53,7 +63,11 @@ export class SpeakerController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSpeakerDto: UpdateSpeakerDto) {
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateSpeakerSchema))
+    updateSpeakerDto: UpdateSpeakerDto,
+  ) {
     return this.speakerService.update(+id, updateSpeakerDto);
   }
 

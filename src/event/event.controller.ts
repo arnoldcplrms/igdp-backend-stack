@@ -9,15 +9,19 @@ import {
   Query,
 } from '@nestjs/common';
 import { EventService } from './event.service';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+import { CreateEventDto, createEventSchema } from './dto/create-event.dto';
+import { UpdateEventDto, updateEventSchema } from './dto/update-event.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
+  create(
+    @Body(new ZodValidationPipe(createEventSchema))
+    createEventDto: CreateEventDto,
+  ) {
     return this.eventService.create(createEventDto);
   }
 
@@ -61,7 +65,11 @@ export class EventController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateEventSchema))
+    updateEventDto: UpdateEventDto,
+  ) {
     return this.eventService.update(+id, updateEventDto);
   }
 

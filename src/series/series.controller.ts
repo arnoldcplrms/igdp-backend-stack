@@ -9,15 +9,19 @@ import {
   Query,
 } from '@nestjs/common';
 import { SeriesService } from './series.service';
-import { CreateSeriesDto } from './dto/create-series.dto';
-import { UpdateSeriesDto } from './dto/update-series.dto';
+import { CreateSeriesDto, createSeriesSchema } from './dto/create-series.dto';
+import { UpdateSeriesDto, updateSeriesSchema } from './dto/update-series.dto';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
 @Controller('series')
 export class SeriesController {
   constructor(private readonly seriesService: SeriesService) {}
 
   @Post()
-  create(@Body() createSeriesDto: CreateSeriesDto) {
+  create(
+    @Body(new ZodValidationPipe(createSeriesSchema))
+    createSeriesDto: CreateSeriesDto,
+  ) {
     return this.seriesService.create(createSeriesDto);
   }
 
@@ -37,7 +41,11 @@ export class SeriesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSeriesDto: UpdateSeriesDto) {
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateSeriesSchema))
+    updateSeriesDto: UpdateSeriesDto,
+  ) {
     return this.seriesService.update(+id, updateSeriesDto);
   }
 
