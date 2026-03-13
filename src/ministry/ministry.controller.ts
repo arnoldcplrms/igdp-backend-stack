@@ -37,6 +37,11 @@ export class MinistryController {
     return this.ministryService.findAll();
   }
 
+  @Get('main')
+  findAllMain() {
+    return this.ministryService.findAllMain();
+  }
+
   @Put(':id')
   update(
     @Param('id') id: string,

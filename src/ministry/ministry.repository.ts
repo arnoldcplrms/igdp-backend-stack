@@ -84,4 +84,17 @@ export class MinistryRepository {
       },
     });
   }
+
+  findAllMainMinistries() {
+    // get all the ministries that do not have a parent ministry
+    return this.prisma.ministry.findMany({
+      where: {
+        parentMinistry: null,
+      },
+      include: this.getNestedInclude(),
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
 }

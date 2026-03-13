@@ -18,6 +18,10 @@ export class MinistryService {
     return this.ministryRepo.findAllMinistries();
   }
 
+  findAllMain() {
+    return this.ministryRepo.findAllMainMinistries();
+  }
+
   update(id: number, updateMinistryDto: UpdateMinistryDto) {
     return this.ministryRepo.updateMinistry(id, updateMinistryDto);
   }

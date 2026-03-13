@@ -1680,6 +1680,26 @@
           "response": []
         },
         {
+          "name": "Get Main Ministries",
+          "id": "ministry-getmain-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ministry/main",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry",
+                "main"
+              ]
+            },
+            "description": "Retrieve only top-level ministries where parentMinistry is null, including nested children"
+          },
+          "response": []
+        },
+        {
           "name": "Search Ministry by Name",
           "id": "ministry-search-001",
           "request": {
