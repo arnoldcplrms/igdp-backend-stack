@@ -1779,6 +1779,180 @@
       "id": "9e3f8b2a-6d5c-4b2e-8a9f-7c6d5e4b3a2c"
     },
     {
+      "name": "Ministry Roles",
+      "item": [
+        {
+          "name": "Bulk Create Ministry Roles",
+          "id": "ministryroles-createbulk-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ministryRoles\": [\n    {\n      \"ministryId\": 1,\n      \"roleName\": \"Ministry Head\"\n    },\n    {\n      \"ministryId\": 1,\n      \"roleName\": \"Member\"\n    },\n    {\n      \"ministryId\": 2,\n      \"roleName\": \"Ministry Head\"\n    },\n        {\n      \"ministryId\": 2,\n      \"roleName\": \"Member\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ministry-roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry-roles"
+              ]
+            },
+            "description": "Bulk create ministry roles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ministry Roles (All)",
+          "id": "ministryroles-getall-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ministry-roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry-roles"
+              ]
+            },
+            "description": "Get all ministry roles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ministry Roles (Flexible Query)",
+          "id": "ministryroles-filter-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ministry-roles?ministryId=1&roleNameContains=lead&orderBy=roleName&sortOrder=asc&skip=0&take=10&columns=id,roleName",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry-roles"
+              ],
+              "query": [
+                {
+                  "key": "ministryId",
+                  "value": "1"
+                },
+                {
+                  "key": "roleNameContains",
+                  "value": "lead"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "roleName"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "10"
+                },
+                {
+                  "key": "columns",
+                  "value": "id,roleName",
+                  "description": "Comma-separated columns. Allowed: id, ministryId, roleName"
+                }
+              ]
+            },
+            "description": "Fetch ministry roles using query params and selected columns"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ministry Role by ID",
+          "id": "ministryroles-getid-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ministry-roles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry-roles",
+                "1"
+              ]
+            },
+            "description": "Get a specific ministry role by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ministry Role",
+          "id": "ministryroles-update-001",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleName\": \"Core Leader\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ministry-roles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry-roles",
+                "1"
+              ]
+            },
+            "description": "Update a ministry role"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Ministry Role",
+          "id": "ministryroles-delete-001",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ministry-roles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ministry-roles",
+                "1"
+              ]
+            },
+            "description": "Delete a ministry role"
+          },
+          "response": []
+        }
+      ],
+      "id": "ministryroles-collection-001"
+    },
+    {
       "name": "Dashboard",
       "item": [
         {

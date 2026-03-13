@@ -36,10 +36,19 @@ model Ministry {
   updatedAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
-  parent   Ministry?  @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
-  children Ministry[] @relation("MinistryHierarchy")
+  parent   Ministry?      @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
+  children Ministry[]     @relation("MinistryHierarchy")
+  roles    MinistryRole[]
   series   Series[]
   events   Event[]
+}
+
+model MinistryRole {
+  id         Int    @id @default(autoincrement())
+  ministryId Int
+  roleName   String @db.VarChar(100)
+
+  ministry Ministry @relation(fields: [ministryId], references: [id])
 }
 
 enum Gender {
