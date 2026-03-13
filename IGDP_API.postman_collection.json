@@ -1997,6 +1997,177 @@
         }
       ],
       "id": "53dh5693-j8dk-50y7-d2li-2m6gfe4l9o51"
+    },
+    {
+      "name": "Account Ministry",
+      "item": [
+        {
+          "name": "Create Account Ministry",
+          "id": "accountministry-create-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": 1,\n  \"ministryId\": 1,\n  \"ministryRoleId\": 1,\n  \"isPrimary\": true,\n  \"description\": \"Primary ministry assignment for this account\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/account-ministries",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account-ministries"
+              ]
+            },
+            "description": "Create a new account-ministry assignment"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Account Ministries (Filtered)",
+          "id": "accountministry-filter-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account-ministries?accountId=1&isPrimary=true&orderBy=updatedAt&sortOrder=desc&skip=0&take=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account-ministries"
+              ],
+              "query": [
+                {
+                  "key": "accountId",
+                  "value": "1"
+                },
+                {
+                  "key": "isPrimary",
+                  "value": "true"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "updatedAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get account-ministry assignments with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ministries By Account",
+          "id": "accountministry-byaccount-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account-ministries/account/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account-ministries",
+                "account",
+                "1"
+              ]
+            },
+            "description": "Get all ministry assignments for a specific account"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Account Ministry By ID",
+          "id": "accountministry-getid-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account-ministries/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account-ministries",
+                "1"
+              ]
+            },
+            "description": "Get a specific account-ministry assignment by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Account Ministry",
+          "id": "accountministry-update-001",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isPrimary\": false,\n  \"description\": \"Updated assignment notes\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/account-ministries/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account-ministries",
+                "1"
+              ]
+            },
+            "description": "Update an existing account-ministry assignment"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account Ministry",
+          "id": "accountministry-delete-001",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/account-ministries/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account-ministries",
+                "1"
+              ]
+            },
+            "description": "Delete an account-ministry assignment"
+          },
+          "response": []
+        }
+      ],
+      "id": "accountministry-collection-001"
     }
   ],
   "variable": [

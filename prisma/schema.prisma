@@ -36,9 +36,10 @@ model Ministry {
   updatedAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
 
   // Relations
-  parent   Ministry?      @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
-  children Ministry[]     @relation("MinistryHierarchy")
+  parent   Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
+  children Ministry[]        @relation("MinistryHierarchy")
   roles    MinistryRole[]
+  accounts AccountMinistry[]
   series   Series[]
   events   Event[]
 }
@@ -48,7 +49,10 @@ model MinistryRole {
   ministryId Int
   roleName   String @db.VarChar(100)
 
-  ministry Ministry @relation(fields: [ministryId], references: [id])
+  ministry        Ministry          @relation(fields: [ministryId], references: [id])
+  accountMinistry AccountMinistry[]
+
+  @@unique([id, ministryId], name: "unique_ministry_role_ministry")
 }
 
 enum Gender {
@@ -106,14 +110,32 @@ model Account {
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader       Account?     @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers      Account[]    @relation("dGroupLeader")
+  dGroupLeader       Account?          @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupMembers      Account[]         @relation("dGroupLeader")
   education          Education[]
   employment         Employment[]
-  attendances        Attendance[] @relation("AttendeeAccount")
-  deletedAttendances Attendance[] @relation("DeletedByAccount")
-  speakerAccount     Speaker[]    @relation("SpeakerAccount")
-  speakerUpdatedBy   Speaker[]    @relation("SpeakerUpdatedBy")
+  ministries         AccountMinistry[]
+  attendances        Attendance[]      @relation("AttendeeAccount")
+  deletedAttendances Attendance[]      @relation("DeletedByAccount")
+  speakerAccount     Speaker[]         @relation("SpeakerAccount")
+  speakerUpdatedBy   Speaker[]         @relation("SpeakerUpdatedBy")
+}
+
+model AccountMinistry {
+  id             Int      @id @default(autoincrement())
+  accountId      Int
+  ministryId     Int
+  ministryRoleId Int
+  isPrimary      Boolean  @default(false)
+  description    String?  @db.Text
+  createdAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  updatedAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+
+  account      Account      @relation(fields: [accountId], references: [id])
+  ministry     Ministry     @relation(fields: [ministryId], references: [id])
+  ministryRole MinistryRole @relation(fields: [ministryRoleId, ministryId], references: [id, ministryId])
+
+  @@unique([accountId, ministryId], name: "unique_account_ministry")
 }
 
 model Education {
