@@ -10,7 +10,20 @@
 
 CCF IGDP Backend is a [NestJS](https://github.com/nestjs/nest) framework application built to support the Inter Generational Discipleship Program (IGDP) at CCF Tandang Sora. This is a community-driven initiative developed by volunteers.
 
+
+
 ## Project setup
+
+Install Bun globally first:
+
+```bash
+# macOS / Linux (official installer)
+$ curl -fsSL https://bun.sh/install | bash
+```
+
+Or install from the official website: [https://bun.sh](https://bun.sh)
+
+Then install project dependencies:
 
 ```bash
 $ bun install
