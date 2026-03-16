@@ -26,13 +26,24 @@ export class SeriesController {
   }
 
   @Get('search')
-  findByName(@Query('name') name: string) {
-    return this.seriesService.findByName(name);
+  findByName(
+    @Query('name') name: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.seriesService.findByName(
+      name,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Get()
-  findAll() {
-    return this.seriesService.findAll();
+  findAll(@Query('skip') skip?: string, @Query('take') take?: string) {
+    return this.seriesService.findAll(
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Get(':id')

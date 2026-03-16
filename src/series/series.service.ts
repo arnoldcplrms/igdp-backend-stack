@@ -11,12 +11,12 @@ export class SeriesService {
     return this.seriesRepository.create(createSeriesDto);
   }
 
-  async findAll() {
-    return this.seriesRepository.findAll();
+  async findAll(skip?: number, take?: number) {
+    return this.seriesRepository.findAll(skip, take);
   }
 
-  async findByName(name: string) {
-    return this.seriesRepository.findByName(name);
+  async findByName(name: string, skip?: number, take?: number) {
+    return this.seriesRepository.findByName(name, skip, take);
   }
 
   async findOne(id: number) {

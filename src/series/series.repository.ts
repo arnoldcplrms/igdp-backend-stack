@@ -17,24 +17,26 @@ export class SeriesRepository {
     });
   }
 
-  async findAll() {
+  async findAll(skip?: number, take?: number) {
     return this.prisma.series.findMany({
-      take: toOverfetchTake(),
+      skip,
+      take: toOverfetchTake(take),
       include: {
         ministry: true,
       },
     });
   }
 
-  async findByName(name: string) {
+  async findByName(name: string, skip?: number, take?: number) {
     return this.prisma.series.findMany({
+      skip,
       where: {
         name: {
           contains: name,
           mode: 'insensitive',
         },
       },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
       include: {
         ministry: true,
         events: true,

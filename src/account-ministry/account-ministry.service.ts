@@ -20,8 +20,12 @@ export class AccountMinistryService {
     return this.accountMinistryRepository.findAll(filters);
   }
 
-  findByAccountId(accountId: number) {
-    return this.accountMinistryRepository.findByAccountId(accountId);
+  findByAccountId(accountId: number, skip?: number, take?: number) {
+    return this.accountMinistryRepository.findByAccountId(
+      accountId,
+      skip,
+      take,
+    );
   }
 
   findById(id: number) {

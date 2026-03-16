@@ -13,10 +13,11 @@ export class EducationRespository {
     });
   }
 
-  findByAccountId(accountId: number) {
+  findByAccountId(accountId: number, skip?: number, take?: number) {
     return this.prisma.education.findMany({
       where: { accountId },
-      take: toOverfetchTake(),
+      skip,
+      take: toOverfetchTake(take),
       select: {
         schoolId: false,
         startDate: true,

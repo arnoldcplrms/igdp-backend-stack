@@ -43,8 +43,16 @@ export class AccountMinistryController {
   }
 
   @Get('account/:accountId')
-  findByAccountId(@Param('accountId', ParseIntPipe) accountId: number) {
-    return this.accountMinistryService.findByAccountId(accountId);
+  findByAccountId(
+    @Param('accountId', ParseIntPipe) accountId: number,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.accountMinistryService.findByAccountId(
+      accountId,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Get(':id')

@@ -30,16 +30,29 @@ export class MinistryController {
   }
 
   @Get()
-  findByNameOrAll(@Query('name') name?: string) {
+  findByNameOrAll(
+    @Query('name') name?: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    const parsedSkip = skip ? parseInt(skip) : undefined;
+    const parsedTake = take ? parseInt(take) : undefined;
+
     if (name) {
-      return this.ministryService.findByName(name);
+      return this.ministryService.findByName(name, parsedSkip, parsedTake);
     }
-    return this.ministryService.findAll();
+    return this.ministryService.findAll(parsedSkip, parsedTake);
   }
 
   @Get('main')
-  findAllMain() {
-    return this.ministryService.findAllMain();
+  findAllMain(
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.ministryService.findAllMain(
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Put(':id')

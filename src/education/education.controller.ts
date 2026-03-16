@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Delete,
+  Query,
   Put,
 } from '@nestjs/common';
 import { EducationService } from './education.service';
@@ -29,8 +30,16 @@ export class EducationController {
   }
 
   @Get('accountId/:accountId')
-  findByAccountId(@Param('accountId') accountId: string) {
-    return this.educationService.findByAccountId(+accountId);
+  findByAccountId(
+    @Param('accountId') accountId: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.educationService.findByAccountId(
+      +accountId,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Put(':id/accountId/:accountId')

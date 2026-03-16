@@ -104,10 +104,11 @@ export class AccountMinistryRepository {
     });
   }
 
-  findByAccountId(accountId: number) {
+  findByAccountId(accountId: number, skip?: number, take?: number) {
     return this.prisma.accountMinistry.findMany({
+      skip,
       where: { accountId },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
       include: this.includeRelations,
       orderBy: [{ isPrimary: 'desc' }, { updatedAt: 'desc' }],
     });

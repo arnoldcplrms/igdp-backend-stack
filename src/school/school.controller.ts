@@ -14,7 +14,9 @@ import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 import {
   createSchoolSchema,
   updateSchoolSchema,
+  filterSchoolSchema,
   CreateSchoolDto,
+  FilterSchoolDto,
   UpdateSchoolDto,
 } from './school.dto';
 
@@ -31,8 +33,11 @@ export class SchoolController {
   }
 
   @Get()
-  findByName(@Query('name') name: string) {
-    return this.schoolService.findByName(name);
+  findAll(
+    @Query(new ZodValidationPipe(filterSchoolSchema))
+    filters: FilterSchoolDto,
+  ) {
+    return this.schoolService.findAll(filters);
   }
 
   @Put(':id')

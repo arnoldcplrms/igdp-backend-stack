@@ -62,10 +62,11 @@ export class EventSpeakersRepository {
     });
   }
 
-  async findBySpeakerId(speakerId: number) {
+  async findBySpeakerId(speakerId: number, skip?: number, take?: number) {
     return this.prisma.eventSpeakers.findMany({
+      skip,
       where: { speakerId },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
       include: {
         speaker: true,
         event: true,
@@ -76,10 +77,11 @@ export class EventSpeakersRepository {
     });
   }
 
-  async findByEventId(eventId: number) {
+  async findByEventId(eventId: number, skip?: number, take?: number) {
     return this.prisma.eventSpeakers.findMany({
+      skip,
       where: { eventId },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
       include: {
         speaker: true,
         event: true,

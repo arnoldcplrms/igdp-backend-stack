@@ -9,8 +9,8 @@ export class EducationService {
     return this.educationRepo.createEducation(createEducationDto);
   }
 
-  findByAccountId(accountId: number) {
-    return this.educationRepo.findByAccountId(accountId);
+  findByAccountId(accountId: number, skip?: number, take?: number) {
+    return this.educationRepo.findByAccountId(accountId, skip, take);
   }
 
   update(

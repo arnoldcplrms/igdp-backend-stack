@@ -10,16 +10,16 @@ export class MinistryService {
     return this.ministryRepo.createMinistry(createMinistryDto);
   }
 
-  findByName(name?: string) {
-    return this.ministryRepo.findMinistryByName(name);
+  findByName(name?: string, skip?: number, take?: number) {
+    return this.ministryRepo.findMinistryByName(name, skip, take);
   }
 
-  findAll() {
-    return this.ministryRepo.findAllMinistries();
+  findAll(skip?: number, take?: number) {
+    return this.ministryRepo.findAllMinistries(skip, take);
   }
 
-  findAllMain() {
-    return this.ministryRepo.findAllMainMinistries();
+  findAllMain(skip?: number, take?: number) {
+    return this.ministryRepo.findAllMainMinistries(skip, take);
   }
 
   update(id: number, updateMinistryDto: UpdateMinistryDto) {

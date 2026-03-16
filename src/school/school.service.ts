@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import type { CreateSchoolDto, SchoolDTO, UpdateSchoolDto } from './school.dto';
+import type {
+  CreateSchoolDto,
+  FilterSchoolDto,
+  SchoolDTO,
+  UpdateSchoolDto,
+} from './school.dto';
 import { SchoolRepository } from './school.repository';
 
 @Injectable()
@@ -11,8 +16,8 @@ export class SchoolService {
     return this.schoolRepo.createSchool(createSchoolDto);
   }
 
-  findByName(name?: string): Promise<SchoolDTO[]> {
-    return this.schoolRepo.findSchoolByName(name);
+  findAll(filters: FilterSchoolDto): Promise<SchoolDTO[]> {
+    return this.schoolRepo.findSchools(filters);
   }
 
   update(id: number, updateSchoolDto: UpdateSchoolDto) {

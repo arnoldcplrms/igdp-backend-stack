@@ -10,9 +10,10 @@ datasource db {
 model School {
   id        Int         @id @default(autoincrement())
   name      String
+  acronym   String?     @db.VarChar(20)
   address   String
-  createdAt DateTime    @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime?   @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt DateTime    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime?   @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   education Education[]
 }
 
@@ -20,8 +21,8 @@ model Company {
   id         Int          @id @default(autoincrement())
   name       String
   address    String
-  createdAt  DateTime     @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt  DateTime?    @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt  DateTime     @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt  DateTime?    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   Employment Employment[]
 }
 
@@ -32,8 +33,8 @@ model Ministry {
   mission        String?  @db.Text
   vision         String?  @db.Text
   description    String?  @db.Text
-  createdAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   parent   Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
@@ -52,7 +53,7 @@ model MinistryRole {
   ministry        Ministry          @relation(fields: [ministryId], references: [id])
   accountMinistry AccountMinistry[]
 
-  @@unique([id, ministryId], name: "unique_ministry_role_ministry")
+  @@unique([id, ministryId])
 }
 
 enum Gender {
@@ -105,8 +106,8 @@ model Account {
   birthDate              DateTime @db.Date
   userType               UserType
   dGroupLeaderId         Int?
-  createdAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt              DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt              DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt              DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
@@ -128,14 +129,14 @@ model AccountMinistry {
   ministryRoleId Int
   isPrimary      Boolean  @default(false)
   description    String?  @db.Text
-  createdAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt      DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   account      Account      @relation(fields: [accountId], references: [id])
   ministry     Ministry     @relation(fields: [ministryId], references: [id])
   ministryRole MinistryRole @relation(fields: [ministryRoleId, ministryId], references: [id, ministryId])
 
-  @@unique([accountId, ministryId], name: "unique_account_ministry")
+  @@unique([accountId, ministryId])
 }
 
 model Education {
@@ -146,8 +147,8 @@ model Education {
   course    String?   @db.VarChar(150)
   startDate DateTime  @db.Date
   endDate   DateTime? @db.Date
-  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   school  School  @relation(fields: [schoolId], references: [id])
@@ -161,8 +162,8 @@ model Employment {
   position  String?   @db.VarChar(100)
   startDate DateTime  @db.Date
   endDate   DateTime? @db.Date
-  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   company Company @relation(fields: [companyId], references: [id])
@@ -174,8 +175,8 @@ model Speaker {
   name      String   @db.VarChar(100)
   accountId Int?
   updatedBy Int?
-  createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   account       Account?        @relation("SpeakerAccount", fields: [accountId], references: [id])
@@ -187,8 +188,8 @@ model Series {
   id         Int      @id @default(autoincrement())
   name       String   @db.VarChar(100)
   ministryId Int?
-  createdAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   ministry Ministry? @relation(fields: [ministryId], references: [id])
@@ -202,8 +203,8 @@ model Event {
   location   String   @db.VarChar(100)
   seriesId   Int?
   ministryId Int?
-  createdAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt  DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   series        Series?         @relation(fields: [seriesId], references: [id])
@@ -218,8 +219,8 @@ model Attendance {
   isDeleted Boolean   @default(false)
   deletedAt DateTime? @db.Timestamptz(6)
   deletedBy Int?
-  createdAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
-  updatedAt DateTime  @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   event         Event    @relation(fields: [eventId], references: [id])
@@ -233,7 +234,7 @@ model Attendance {
 model EventSpeakers {
   speakerId Int
   eventId   Int
-  createdAt DateTime @default(dbgenerated("(now() AT TIME ZONE 'Asia/Manila')")) @db.Timestamptz(6)
+  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
   speaker Speaker @relation(fields: [speakerId], references: [id])

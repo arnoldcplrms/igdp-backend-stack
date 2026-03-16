@@ -80,7 +80,11 @@ describe('AccountService', () => {
 
     const result = service.findByName('john');
 
-    expect(accountRepository.findAccountsByName).toHaveBeenCalledWith('john');
+    expect(accountRepository.findAccountsByName).toHaveBeenCalledWith(
+      'john',
+      undefined,
+      undefined,
+    );
     expect(result).toBe(expected);
   });
 

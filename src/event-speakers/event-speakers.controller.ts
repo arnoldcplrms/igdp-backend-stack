@@ -47,13 +47,29 @@ export class EventSpeakersController {
   }
 
   @Get('speaker/:speakerId')
-  findBySpeakerId(@Param('speakerId', ParseIntPipe) speakerId: number) {
-    return this.eventSpeakersService.findBySpeakerId(speakerId);
+  findBySpeakerId(
+    @Param('speakerId', ParseIntPipe) speakerId: number,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.eventSpeakersService.findBySpeakerId(
+      speakerId,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Get('event/:eventId')
-  findByEventId(@Param('eventId', ParseIntPipe) eventId: number) {
-    return this.eventSpeakersService.findByEventId(eventId);
+  findByEventId(
+    @Param('eventId', ParseIntPipe) eventId: number,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.eventSpeakersService.findByEventId(
+      eventId,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Get(':speakerId/:eventId')

@@ -103,13 +103,14 @@ export class AccountRepository {
     sortBy: string = 'lastName',
     name?: string,
   ): Promise<AccountDTO[]> {
-    if (name) {
-      return this.findAccountsByName(name);
-    }
-
     const normalizedLimit = clampPaginationLimit(pageSize);
     const normalizedPage = Math.max(page, 1);
     const skip = (normalizedPage - 1) * normalizedLimit;
+
+    if (name) {
+      return this.findAccountsByName(name, skip, pageSize);
+    }
+
     const orderBy: Prisma.AccountOrderByWithRelationInput = {
       [sortBy]: sort,
     };
@@ -187,15 +188,16 @@ export class AccountRepository {
     return AccountMapper.toAccountDetailDto(result);
   }
 
-  async findAccountsByName(name: string) {
+  async findAccountsByName(name: string, skip?: number, take?: number) {
     const result = await this.prisma.account.findMany({
+      skip,
       where: {
         OR: [
           { firstName: { contains: name, mode: 'insensitive' } },
           { lastName: { contains: name, mode: 'insensitive' } },
         ],
       },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
       ...this.selectObject,
     });
 

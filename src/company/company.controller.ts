@@ -30,8 +30,16 @@ export class CompanyController {
   }
 
   @Get()
-  findByName(@Query('name') name: string) {
-    return this.companyService.findByName(name);
+  findByName(
+    @Query('name') name: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.companyService.findByName(
+      name,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Put(':id')

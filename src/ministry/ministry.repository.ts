@@ -43,8 +43,9 @@ export class MinistryRepository {
     });
   }
 
-  findMinistryByName(name?: string) {
+  findMinistryByName(name?: string, skip?: number, take?: number) {
     return this.prisma.ministry.findMany({
+      skip,
       where: {
         name: name ? { contains: name, mode: 'insensitive' } : undefined,
       },
@@ -52,7 +53,7 @@ export class MinistryRepository {
       orderBy: {
         createdAt: 'desc',
       },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
     });
   }
 
@@ -77,19 +78,21 @@ export class MinistryRepository {
     });
   }
 
-  findAllMinistries() {
+  findAllMinistries(skip?: number, take?: number) {
     return this.prisma.ministry.findMany({
+      skip,
       include: this.getNestedInclude(),
       orderBy: {
         createdAt: 'desc',
       },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
     });
   }
 
-  findAllMainMinistries() {
+  findAllMainMinistries(skip?: number, take?: number) {
     // get all the ministries that do not have a parent ministry
     return this.prisma.ministry.findMany({
+      skip,
       where: {
         parentMinistry: null,
       },
@@ -97,7 +100,7 @@ export class MinistryRepository {
       orderBy: {
         createdAt: 'desc',
       },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
     });
   }
 }

@@ -2,6 +2,17 @@ import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { createUpdatedAtMiddleware } from './prisma-middleware';
 
+function withManilaTimezone(url?: string): string | undefined {
+  if (!url) {
+    return url;
+  }
+
+  const parsed = new URL(url);
+  parsed.searchParams.set('options', '-c TimeZone=Asia/Manila');
+
+  return parsed.toString();
+}
+
 @Injectable()
 export class PrismaService
   extends PrismaClient
@@ -10,7 +21,13 @@ export class PrismaService
   private static instance: PrismaService;
 
   constructor() {
-    super();
+    super({
+      datasources: {
+        db: {
+          url: withManilaTimezone(process.env.DATABASE_URL),
+        },
+      },
+    });
   }
 
   static getInstance(): PrismaService {
@@ -21,10 +38,11 @@ export class PrismaService
   }
 
   async onModuleInit() {
-    // Register middleware for automatic updatedAt with Philippine timezone
+    // Keep updatedAt in sync on update operations.
     this.$use(createUpdatedAtMiddleware());
-    
+
     await this.$connect();
+    await this.$executeRawUnsafe("SET TIME ZONE 'Asia/Manila'");
   }
 
   async onModuleDestroy() {

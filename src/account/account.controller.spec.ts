@@ -89,7 +89,11 @@ describe('AccountController', () => {
 
     const result = controller.findByName('john');
 
-    expect(accountService.findByName).toHaveBeenCalledWith('john');
+    expect(accountService.findByName).toHaveBeenCalledWith(
+      'john',
+      undefined,
+      undefined,
+    );
     expect(result).toBe(expected);
   });
 

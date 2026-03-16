@@ -16,15 +16,16 @@ export class CompanyRepository {
     });
   }
 
-  findCompanyByName(name?: string) {
+  findCompanyByName(name?: string, skip?: number, take?: number) {
     return this.prisma.company.findMany({
+      skip,
       where: {
         name: name ? { contains: name, mode: 'insensitive' } : undefined,
       },
       orderBy: {
         createdAt: 'desc',
       },
-      take: toOverfetchTake(),
+      take: toOverfetchTake(take),
     });
   }
 

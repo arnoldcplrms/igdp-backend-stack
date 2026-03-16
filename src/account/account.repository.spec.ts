@@ -153,7 +153,7 @@ describe('AccountRepository', () => {
         'jo',
       );
 
-      expect(byNameSpy).toHaveBeenCalledWith('jo');
+      expect(byNameSpy).toHaveBeenCalledWith('jo', 0, 10);
       expect(result).toEqual(expected);
     });
 

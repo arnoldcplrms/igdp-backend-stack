@@ -11,8 +11,8 @@ export class CompanyService {
     return this.companyRepo.createCompany(createCompanyDto);
   }
 
-  findByName(name?: string) {
-    return this.companyRepo.findCompanyByName(name);
+  findByName(name?: string, skip?: number, take?: number) {
+    return this.companyRepo.findCompanyByName(name, skip, take);
   }
 
   update(id: number, updateCompanyDto: UpdateCompanyDto) {

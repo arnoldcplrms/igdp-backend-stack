@@ -25,12 +25,12 @@ export class EventSpeakersService {
     return this.eventSpeakersRepository.findOne(speakerId, eventId);
   }
 
-  async findBySpeakerId(speakerId: number) {
-    return this.eventSpeakersRepository.findBySpeakerId(speakerId);
+  async findBySpeakerId(speakerId: number, skip?: number, take?: number) {
+    return this.eventSpeakersRepository.findBySpeakerId(speakerId, skip, take);
   }
 
-  async findByEventId(eventId: number) {
-    return this.eventSpeakersRepository.findByEventId(eventId);
+  async findByEventId(eventId: number, skip?: number, take?: number) {
+    return this.eventSpeakersRepository.findByEventId(eventId, skip, take);
   }
 
   async remove(speakerId: number, eventId: number) {

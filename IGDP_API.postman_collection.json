@@ -23,7 +23,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Holy Angel Academy\",\n  \"address\": \"123 Main Street, Manila\"\n}"
+              "raw": "{\n  \"name\": \"Holy Angel Academy\",\n  \"acronym\": \"HAA\",\n  \"address\": \"123 Main Street, Manila\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/school",
@@ -39,13 +39,13 @@
           "response": []
         },
         {
-          "name": "Find School by Name",
+          "name": "Find Schools (Flexible Query)",
           "id": "24932e8b-e309-4474-a06a-852d8a204d6e",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/school?name=Holy Angel Academy",
+              "raw": "{{base_url}}/school?name=ha&acronym=HA&address=Manila&skip=0&take=10",
               "host": [
                 "{{base_url}}"
               ],
@@ -55,11 +55,27 @@
               "query": [
                 {
                   "key": "name",
-                  "value": "Holy Angel Academy"
+                  "value": "ha"
+                },
+                {
+                  "key": "acronym",
+                  "value": "HA"
+                },
+                {
+                  "key": "address",
+                  "value": "Manila"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "10"
                 }
               ]
             },
-            "description": "Find school by name"
+            "description": "Find schools with optional filters for name (matches name and acronym), acronym, address, and pagination"
           },
           "response": []
         },
@@ -97,7 +113,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated School Name\",\n  \"address\": \"456 New Street, Manila\"\n}"
+              "raw": "{\n  \"name\": \"Updated School Name\",\n  \"acronym\": \"USN\",\n  \"address\": \"456 New Street, Manila\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/school/1",
