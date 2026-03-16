@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/database/prisma.service';
 import { CreateSpeakerDto } from './dto/create-speaker.dto';
 import { UpdateSpeakerDto } from './dto/update-speaker.dto';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class SpeakerRepository {
@@ -28,9 +29,11 @@ export class SpeakerRepository {
       };
     }
 
+    const normalizedTake = toOverfetchTake(take);
+
     return this.prisma.speaker.findMany({
       skip,
-      take,
+      take: normalizedTake,
       where: Object.keys(where).length > 0 ? where : undefined,
       include: {
         account: true,
@@ -43,9 +46,11 @@ export class SpeakerRepository {
   }
 
   async findByName(name: string, skip?: number, take?: number) {
+    const normalizedTake = toOverfetchTake(take);
+
     return this.prisma.speaker.findMany({
       skip,
-      take,
+      take: normalizedTake,
       where: {
         name: {
           contains: name,

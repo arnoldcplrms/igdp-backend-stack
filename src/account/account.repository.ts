@@ -9,6 +9,11 @@ import {
 import { PrismaService } from 'src/common/database/prisma.service';
 import { Gender, Prisma } from '@prisma/client';
 import { AccountMapper } from './account.mapper';
+import {
+  clampPaginationLimit,
+  toOverfetchTake,
+} from 'src/common/utils/pagination.util';
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 
 @Injectable()
 export class AccountRepository {
@@ -93,7 +98,7 @@ export class AccountRepository {
 
   async findAccountsSorted(
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = PAGE_SIZE_COUNT,
     sort: 'asc' | 'desc' = 'asc',
     sortBy: string = 'lastName',
     name?: string,
@@ -102,14 +107,16 @@ export class AccountRepository {
       return this.findAccountsByName(name);
     }
 
-    const skip = (page - 1) * pageSize;
+    const normalizedLimit = clampPaginationLimit(pageSize);
+    const normalizedPage = Math.max(page, 1);
+    const skip = (normalizedPage - 1) * normalizedLimit;
     const orderBy: Prisma.AccountOrderByWithRelationInput = {
       [sortBy]: sort,
     };
 
     const result = await this.prisma.account.findMany({
       skip,
-      take: pageSize,
+      take: toOverfetchTake(pageSize),
       orderBy,
       ...this.selectObject,
     });
@@ -188,6 +195,7 @@ export class AccountRepository {
           { lastName: { contains: name, mode: 'insensitive' } },
         ],
       },
+      take: toOverfetchTake(),
       ...this.selectObject,
     });
 
@@ -215,6 +223,7 @@ export class AccountRepository {
           not: exemptedAccountId,
         },
       },
+      take: toOverfetchTake(),
       ...this.selectObject,
     });
 

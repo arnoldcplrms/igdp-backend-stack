@@ -174,8 +174,8 @@ describe('AccountRepository', () => {
 
       expect(prisma.account.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          skip: 25,
-          take: 25,
+          skip: 20,
+          take: 21,
           orderBy: { firstName: 'desc' },
         }),
       );

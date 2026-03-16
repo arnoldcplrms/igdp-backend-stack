@@ -1,4 +1,5 @@
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 import { z } from 'zod';
 
 export const accountMinistryColumnSchema = z.enum([
@@ -44,7 +45,7 @@ export const filterAccountMinistrySchema = z.object({
     .optional(),
   descriptionContains: z.string().min(1).max(1000).optional(),
   skip: z.coerce.number().int().min(0).optional(),
-  take: z.coerce.number().int().positive().max(100).optional(),
+  take: z.coerce.number().int().positive().max(PAGE_SIZE_COUNT).optional(),
   orderBy: accountMinistryColumnSchema.optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
 });

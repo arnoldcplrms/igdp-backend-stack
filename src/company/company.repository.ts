@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto, UpdateCompanyDto } from './company.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class CompanyRepository {
@@ -23,7 +24,7 @@ export class CompanyRepository {
       orderBy: {
         createdAt: 'desc',
       },
-      take: 10,
+      take: toOverfetchTake(),
     });
   }
 

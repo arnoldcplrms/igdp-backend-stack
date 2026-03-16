@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/common/database/prisma.service';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 import {
   CreateAccountMinistryDto,
   FilterAccountMinistryDto,
@@ -95,7 +96,7 @@ export class AccountMinistryRepository {
     return this.prisma.accountMinistry.findMany({
       where,
       skip,
-      take,
+      take: toOverfetchTake(take),
       include: this.includeRelations,
       orderBy: {
         [orderBy ?? 'updatedAt']: sortOrder ?? 'desc',
@@ -106,6 +107,7 @@ export class AccountMinistryRepository {
   findByAccountId(accountId: number) {
     return this.prisma.accountMinistry.findMany({
       where: { accountId },
+      take: toOverfetchTake(),
       include: this.includeRelations,
       orderBy: [{ isPrimary: 'desc' }, { updatedAt: 'desc' }],
     });

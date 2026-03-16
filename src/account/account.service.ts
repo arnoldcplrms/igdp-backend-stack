@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AccountRepository } from './account.repository';
 import { CreateAccountDto, UpdateAccountDto } from './account.dto';
 import { Gender } from '@prisma/client';
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 
 @Injectable()
 export class AccountService {
@@ -13,7 +14,7 @@ export class AccountService {
 
   findSorted(
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = PAGE_SIZE_COUNT,
     sort: 'asc' | 'desc' = 'asc',
     sortBy: string = 'lastName',
     name?: string,

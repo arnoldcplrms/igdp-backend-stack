@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/database/prisma.service';
 import { CreateSeriesDto } from './dto/create-series.dto';
 import { UpdateSeriesDto } from './dto/update-series.dto';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class SeriesRepository {
@@ -18,6 +19,7 @@ export class SeriesRepository {
 
   async findAll() {
     return this.prisma.series.findMany({
+      take: toOverfetchTake(),
       include: {
         ministry: true,
       },
@@ -32,6 +34,7 @@ export class SeriesRepository {
           mode: 'insensitive',
         },
       },
+      take: toOverfetchTake(),
       include: {
         ministry: true,
         events: true,

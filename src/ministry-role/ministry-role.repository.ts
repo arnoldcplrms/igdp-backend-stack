@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/common/database/prisma.service';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 import {
   FilterMinistryRoleDto,
   MinistryRoleItemDto,
@@ -62,7 +63,7 @@ export class MinistryRoleRepository {
     return this.prisma.ministryRole.findMany({
       where,
       skip,
-      take,
+      take: toOverfetchTake(take),
       orderBy: {
         [orderBy ?? 'id']: sortOrder ?? 'desc',
       },

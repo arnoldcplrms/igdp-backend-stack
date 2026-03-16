@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMinistryDto, UpdateMinistryDto } from './ministry.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class MinistryRepository {
@@ -51,7 +52,7 @@ export class MinistryRepository {
       orderBy: {
         createdAt: 'desc',
       },
-      take: 10,
+      take: toOverfetchTake(),
     });
   }
 
@@ -82,6 +83,7 @@ export class MinistryRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      take: toOverfetchTake(),
     });
   }
 
@@ -95,6 +97,7 @@ export class MinistryRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      take: toOverfetchTake(),
     });
   }
 }

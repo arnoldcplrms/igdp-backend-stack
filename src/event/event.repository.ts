@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/database/prisma.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class EventRepository {
@@ -64,9 +65,11 @@ export class EventRepository {
       where.eventDate = dateObj;
     }
 
+    const normalizedTake = toOverfetchTake(take);
+
     return this.prisma.event.findMany({
       skip,
-      take,
+      take: normalizedTake,
       where: Object.keys(where).length > 0 ? where : undefined,
       include: {
         series: true,
@@ -81,9 +84,11 @@ export class EventRepository {
   }
 
   async findByName(name: string, skip?: number, take?: number) {
+    const normalizedTake = toOverfetchTake(take);
+
     return this.prisma.event.findMany({
       skip,
-      take,
+      take: normalizedTake,
       where: {
         eventName: {
           contains: name,

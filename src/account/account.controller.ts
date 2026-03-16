@@ -18,6 +18,7 @@ import {
   fetchDGroupLeadersSchema,
 } from './account.dto';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 
 @Controller('account')
 export class AccountController {
@@ -34,7 +35,7 @@ export class AccountController {
   @Get('all')
   findSorted(
     @Query('page') page = '1',
-    @Query('pageSize') pageSize = '10',
+    @Query('pageSize') pageSize = String(PAGE_SIZE_COUNT),
     @Query('sortOrder') sort: 'asc' | 'desc' = 'asc',
     @Query('sortBy') sortBy: string = 'lastName',
     @Query('name') name?: string,

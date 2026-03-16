@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/database/prisma.service';
 import { AttendanceItemDto } from './attendance.dto';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class AttendanceRepository {
@@ -39,10 +40,12 @@ export class AttendanceRepository {
       where.deletedBy = deletedBy;
     }
 
+    const normalizedTake = toOverfetchTake(take);
+
     return this.prisma.attendance.findMany({
       where,
       skip: skip || 0,
-      take: take || 10,
+      take: normalizedTake,
       include: {
         event: true,
         account: {

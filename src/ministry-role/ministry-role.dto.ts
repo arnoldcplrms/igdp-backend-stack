@@ -1,4 +1,5 @@
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 import { z } from 'zod';
 
 export const ministryRoleColumnSchema = z.enum([
@@ -27,7 +28,7 @@ export const filterMinistryRoleSchema = z.object({
   roleName: z.string().min(1).max(100).optional(),
   roleNameContains: z.string().min(1).max(100).optional(),
   skip: z.coerce.number().int().min(0).optional(),
-  take: z.coerce.number().int().positive().max(100).optional(),
+  take: z.coerce.number().int().positive().max(PAGE_SIZE_COUNT).optional(),
   orderBy: ministryRoleColumnSchema.optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
   columns: z

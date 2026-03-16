@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { CreateEducationDto, UpdateEducationDto } from './education.dto';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class EducationRespository {
@@ -15,6 +16,7 @@ export class EducationRespository {
   findByAccountId(accountId: number) {
     return this.prisma.education.findMany({
       where: { accountId },
+      take: toOverfetchTake(),
       select: {
         schoolId: false,
         startDate: true,
