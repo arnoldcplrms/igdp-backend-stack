@@ -48,9 +48,6 @@ export class AccountRepository {
           eventId: true,
           createdAt: true,
         },
-        where: {
-          isDeleted: false,
-        },
         orderBy: { createdAt: 'desc' as const },
         take: 1,
       },
@@ -172,13 +169,9 @@ export class AccountRepository {
           select: {
             eventId: true,
             accountId: true,
-            isDeleted: true,
-            deletedAt: true,
-            deletedBy: true,
             createdAt: true,
             updatedAt: true,
           },
-          where: { isDeleted: false },
           orderBy: { createdAt: 'desc' as const },
           take: 1,
         },

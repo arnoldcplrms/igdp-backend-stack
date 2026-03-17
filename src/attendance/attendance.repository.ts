@@ -19,8 +19,6 @@ export class AttendanceRepository {
     take?: number,
     eventId?: number,
     accountId?: number,
-    isDeleted?: boolean,
-    deletedBy?: number,
   ) {
     const where: any = {};
 
@@ -30,14 +28,6 @@ export class AttendanceRepository {
 
     if (accountId !== undefined) {
       where.accountId = accountId;
-    }
-
-    if (isDeleted !== undefined) {
-      where.isDeleted = isDeleted;
-    }
-
-    if (deletedBy !== undefined) {
-      where.deletedBy = deletedBy;
     }
 
     const normalizedTake = toOverfetchTake(take);
@@ -59,14 +49,6 @@ export class AttendanceRepository {
             email: true,
           },
         },
-        deletedByUser: {
-          select: {
-            id: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-          },
-        },
       },
     });
   }
@@ -78,82 +60,6 @@ export class AttendanceRepository {
           eventId,
           accountId,
         },
-      },
-      include: {
-        event: true,
-        account: {
-          select: {
-            id: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-            nickname: true,
-            contactNumber: true,
-            email: true,
-          },
-        },
-        deletedByUser: {
-          select: {
-            id: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
-  }
-
-  async softDelete(eventId: number, accountId: number, deletedBy: number) {
-    return this.prisma.attendance.update({
-      where: {
-        eventId_accountId: {
-          eventId,
-          accountId,
-        },
-      },
-      data: {
-        isDeleted: true,
-        deletedAt: new Date(),
-        deletedBy,
-      },
-      include: {
-        event: true,
-        account: {
-          select: {
-            id: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-            nickname: true,
-            contactNumber: true,
-            email: true,
-          },
-        },
-        deletedByUser: {
-          select: {
-            id: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
-  }
-
-  async restore(eventId: number, accountId: number) {
-    return this.prisma.attendance.update({
-      where: {
-        eventId_accountId: {
-          eventId,
-          accountId,
-        },
-      },
-      data: {
-        isDeleted: false,
-        deletedAt: null,
-        deletedBy: null,
       },
       include: {
         event: true,

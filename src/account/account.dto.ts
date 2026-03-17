@@ -94,9 +94,6 @@ export class AccountQueryDto {
 export class AttendanceDetailDto {
   eventId: number;
   accountId: number;
-  isDeleted: boolean;
-  deletedAt?: Date | null;
-  deletedBy?: number | null;
   createdAt: Date;
   updatedAt: Date;
 }

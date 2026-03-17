@@ -15,28 +15,11 @@ export class AttendanceService {
     take?: number,
     eventId?: number,
     accountId?: number,
-    isDeleted?: boolean,
-    deletedBy?: number,
   ) {
-    return this.attendanceRepository.findAll(
-      skip,
-      take,
-      eventId,
-      accountId,
-      isDeleted,
-      deletedBy,
-    );
+    return this.attendanceRepository.findAll(skip, take, eventId, accountId);
   }
 
   async findOne(eventId: number, accountId: number) {
     return this.attendanceRepository.findOne(eventId, accountId);
-  }
-
-  async softDelete(eventId: number, accountId: number, deletedBy: number) {
-    return this.attendanceRepository.softDelete(eventId, accountId, deletedBy);
-  }
-
-  async restore(eventId: number, accountId: number) {
-    return this.attendanceRepository.restore(eventId, accountId);
   }
 }

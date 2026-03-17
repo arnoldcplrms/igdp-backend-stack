@@ -141,18 +141,17 @@ model Account {
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader       Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers      Account[]          @relation("dGroupLeader")
-  spouse             Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
-  spouseOf           Account[]          @relation("AccountSpouse")
-  education          Education[]
-  employment         Employment[]
-  ministries         AccountMinistry[]
-  attendances        Attendance[]       @relation("AttendeeAccount")
-  deletedAttendances Attendance[]       @relation("DeletedByAccount")
-  speakerAccount     Speaker[]          @relation("SpeakerAccount")
-  speakerUpdatedBy   Speaker[]          @relation("SpeakerUpdatedBy")
-  dGroupMemberships  DGroupMembership[]
+  dGroupLeader      Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupMembers     Account[]          @relation("dGroupLeader")
+  spouse            Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
+  spouseOf          Account[]          @relation("AccountSpouse")
+  education         Education[]
+  employment        Employment[]
+  ministries        AccountMinistry[]
+  attendances       Attendance[]       @relation("AttendeeAccount")
+  speakerAccount    Speaker[]          @relation("SpeakerAccount")
+  speakerUpdatedBy  Speaker[]          @relation("SpeakerUpdatedBy")
+  dGroupMemberships DGroupMembership[]
 }
 
 model AccountMinistry {
@@ -249,16 +248,12 @@ model Event {
 model Attendance {
   eventId   Int
   accountId Int
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime? @db.Timestamptz(6)
-  deletedBy Int?
-  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
-  event         Event    @relation(fields: [eventId], references: [id])
-  account       Account  @relation("AttendeeAccount", fields: [accountId], references: [id])
-  deletedByUser Account? @relation("DeletedByAccount", fields: [deletedBy], references: [id])
+  event   Event   @relation(fields: [eventId], references: [id])
+  account Account @relation("AttendeeAccount", fields: [accountId], references: [id])
 
   @@id([eventId, accountId])
   @@unique([eventId, accountId], name: "unique_event_account_attendance")

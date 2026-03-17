@@ -1373,22 +1373,10 @@
                   "value": "2",
                   "description": "Filter by account ID",
                   "disabled": true
-                },
-                {
-                  "key": "isDeleted",
-                  "value": "false",
-                  "description": "Filter by deletion status (true/false)",
-                  "disabled": true
-                },
-                {
-                  "key": "deletedBy",
-                  "value": "5",
-                  "description": "Filter by the account ID who deleted the attendance",
-                  "disabled": true
                 }
               ]
             },
-            "description": "Retrieve all attendance records with flexible filtering by eventId, accountId, isDeleted, and deletedBy"
+            "description": "Retrieve all attendance records with flexible filtering by eventId and accountId"
           },
           "response": []
         },
@@ -1413,60 +1401,6 @@
           },
           "response": []
         },
-        {
-          "name": "Soft Delete Attendance",
-          "id": "7aba84f5-812d-42d8-a716-16976bd54a96",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"deletedBy\": 5\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/attendance/1/2/soft-delete",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "attendance",
-                "1",
-                "2",
-                "soft-delete"
-              ]
-            },
-            "description": "Soft delete an attendance record. Updates isDeleted=true and records deletedAt timestamp and deletedBy user ID. No hard delete - record remains in database."
-          },
-          "response": []
-        },
-        {
-          "name": "Restore Attendance",
-          "id": "09cbda0d-c2e4-4e22-9c6b-1babe87ced29",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/attendance/1/2/restore",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "attendance",
-                "1",
-                "2",
-                "restore"
-              ]
-            },
-            "description": "Restore a soft-deleted attendance record. Sets isDeleted=false and clears deletedAt and deletedBy fields."
-          },
-          "response": []
-        }
       ],
       "id": "39aff248-82d9-4f07-b2d1-1f5ebc3d3050"
     },
