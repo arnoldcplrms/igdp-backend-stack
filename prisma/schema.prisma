@@ -130,11 +130,12 @@ model Account {
   profilePicture         String?  @db.VarChar(255)
   facebookLink           String?  @db.VarChar(255)
   contactNumber          String   @db.VarChar(20)
-  email                  String   @db.VarChar(100)
+  email                  String   @unique @db.VarChar(100)
   gender                 Gender
   birthDate              DateTime @db.Date
   userType               UserType
   dGroupLeaderId         Int?
+  spouseId               Int?
   createdAt              DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   updatedAt              DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   emergencyContactName   String?  @db.VarChar(100)
@@ -142,6 +143,8 @@ model Account {
 
   dGroupLeader       Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
   dGroupMembers      Account[]          @relation("dGroupLeader")
+  spouse             Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
+  spouseOf           Account[]          @relation("AccountSpouse")
   education          Education[]
   employment         Employment[]
   ministries         AccountMinistry[]
