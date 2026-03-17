@@ -15,6 +15,10 @@ export class CompanyService {
     return this.companyRepo.findCompanyByName(name, skip, take);
   }
 
+  findMany(search?: string, skip?: number, take?: number) {
+    return this.companyRepo.findCompanyMany(search, skip, take);
+  }
+
   update(id: number, updateCompanyDto: UpdateCompanyDto) {
     return this.companyRepo.updateCompany(id, updateCompanyDto);
   }

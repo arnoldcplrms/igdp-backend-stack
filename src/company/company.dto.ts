@@ -3,11 +3,13 @@ import { z } from 'zod';
 
 export const createCompanySchema = z.object({
   name: z.string().min(1).max(100),
+  acronym: z.string().max(20).optional(),
   address: z.string().min(1),
 });
 
 export const updateCompanySchema = z.object({
   name: z.string().min(1).max(100).optional(),
+  acronym: z.string().max(20).optional(),
   address: z.string().min(1).optional(),
 });
 

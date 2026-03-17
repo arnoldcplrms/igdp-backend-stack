@@ -30,13 +30,13 @@ export class CompanyController {
   }
 
   @Get()
-  findByName(
-    @Query('name') name: string,
+  findMany(
+    @Query('search') search?: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
-    return this.companyService.findByName(
-      name,
+    return this.companyService.findMany(
+      search,
       skip ? parseInt(skip) : undefined,
       take ? parseInt(take) : undefined,
     );

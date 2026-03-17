@@ -20,6 +20,7 @@ model School {
 model Company {
   id         Int          @id @default(autoincrement())
   name       String
+  acronym    String?      @db.VarChar(20)
   address    String
   createdAt  DateTime     @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   updatedAt  DateTime?    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)

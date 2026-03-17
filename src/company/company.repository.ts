@@ -11,6 +11,7 @@ export class CompanyRepository {
     return this.prisma.company.create({
       data: {
         name: createCompanyDto.name,
+        acronym: createCompanyDto.acronym,
         address: createCompanyDto.address,
       },
     });
@@ -22,6 +23,24 @@ export class CompanyRepository {
       where: {
         name: name ? { contains: name, mode: 'insensitive' } : undefined,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: toOverfetchTake(take),
+    });
+  }
+
+  findCompanyMany(search?: string, skip?: number, take?: number) {
+    return this.prisma.company.findMany({
+      skip,
+      where: search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' } },
+              { acronym: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+        : undefined,
       orderBy: {
         createdAt: 'desc',
       },

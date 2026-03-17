@@ -169,7 +169,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Tech Corp Inc.\",\n  \"address\": \"789 Business Ave, Manila\"\n}"
+              "raw": "{\n  \"name\": \"Tech Corp Inc.\",\n  \"acronym\": \"TCI\",\n  \"address\": \"789 Business Ave, Manila\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/company",
@@ -205,7 +205,40 @@
                 }
               ]
             },
-            "description": "Find company by name"
+            "description": "Find company by name (legacy endpoint)"
+          },
+          "response": []
+        },
+        {
+          "name": "Find Company (Search by Name/Acronym)",
+          "id": "a8c5e1f4-9b2d-4c3e-8a1f-5e7d9c2b4f6a",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/company?search=tech&skip=0&take=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "company"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "tech"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Find companies with flexible search across name and acronym fields. Supports pagination with skip and take parameters."
           },
           "response": []
         },
@@ -243,7 +276,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated Corp Inc.\",\n  \"address\": \"999 New Business Ave, Manila\"\n}"
+              "raw": "{\n  \"name\": \"Updated Corp Inc.\",\n  \"acronym\": \"UCI\",\n  \"address\": \"999 New Business Ave, Manila\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/company/1",
