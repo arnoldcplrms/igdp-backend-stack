@@ -17,6 +17,7 @@ import { MinistryModule } from './ministry/ministry.module';
 import { MinistryRoleModule } from './ministry-role/ministry-role.module';
 import { AccountMinistryModule } from './account-ministry/account-ministry.module';
 import { DGroupModule } from './dgroup/dgroup.module';
+import { DGroupMembershipModule } from './dgroup-membership/dgroup-membership.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { DGroupModule } from './dgroup/dgroup.module';
     MinistryRoleModule,
     AccountMinistryModule,
     DGroupModule,
+    DGroupMembershipModule,
   ],
   controllers: [AppController],
   providers: [AppService],

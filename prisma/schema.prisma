@@ -57,11 +57,32 @@ model MinistryRole {
   @@unique([id, ministryId])
 }
 
+enum DGroupMembershipRole {
+  Member
+  Leader
+}
+
 model DGroup {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(100)
-  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime? @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  id          Int                @id @default(autoincrement())
+  name        String             @db.VarChar(100)
+  createdAt   DateTime           @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt   DateTime?          @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  memberships DGroupMembership[]
+}
+
+model DGroupMembership {
+  id        Int                  @id @default(autoincrement())
+  dGroupId  Int
+  accountId Int
+  role      DGroupMembershipRole
+  createdAt DateTime             @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime             @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+
+  // Relations
+  dGroup  DGroup  @relation(fields: [dGroupId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  @@unique([dGroupId, accountId])
 }
 
 enum Gender {
@@ -119,15 +140,16 @@ model Account {
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
 
-  dGroupLeader       Account?          @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers      Account[]         @relation("dGroupLeader")
+  dGroupLeader       Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
+  dGroupMembers      Account[]          @relation("dGroupLeader")
   education          Education[]
   employment         Employment[]
   ministries         AccountMinistry[]
-  attendances        Attendance[]      @relation("AttendeeAccount")
-  deletedAttendances Attendance[]      @relation("DeletedByAccount")
-  speakerAccount     Speaker[]         @relation("SpeakerAccount")
-  speakerUpdatedBy   Speaker[]         @relation("SpeakerUpdatedBy")
+  attendances        Attendance[]       @relation("AttendeeAccount")
+  deletedAttendances Attendance[]       @relation("DeletedByAccount")
+  speakerAccount     Speaker[]          @relation("SpeakerAccount")
+  speakerUpdatedBy   Speaker[]          @relation("SpeakerUpdatedBy")
+  dGroupMemberships  DGroupMembership[]
 }
 
 model AccountMinistry {

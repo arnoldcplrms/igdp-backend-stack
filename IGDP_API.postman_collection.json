@@ -2355,6 +2355,123 @@
         }
       ],
       "id": "accountministry-collection-001"
+    },
+    {
+      "name": "DGroup Membership",
+      "id": "dgroup-membership-collection-001",
+      "item": [
+        {
+          "name": "Create DGroup Memberships (Bulk)",
+          "id": "dgroup-membership-create-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memberships\": [\n    {\n      \"dGroupId\": 1,\n      \"accountId\": 1,\n      \"role\": \"Member\"\n    },\n    {\n      \"dGroupId\": 1,\n      \"accountId\": 2,\n      \"role\": \"Leader\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dgroup-membership",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup-membership"
+              ]
+            },
+            "description": "Bulk create DGroup membership records. Skips duplicates (dGroupId + accountId must be unique)."
+          },
+          "response": []
+        },
+        {
+          "name": "Find DGroup Memberships",
+          "id": "dgroup-membership-findall-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dgroup-membership?dGroupId=1&role=Member&skip=0&take=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup-membership"
+              ],
+              "query": [
+                {
+                  "key": "dGroupId",
+                  "value": "1"
+                },
+                {
+                  "key": "accountId",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "role",
+                  "value": "Member"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Find DGroup memberships with optional filters: dGroupId, accountId, role (Member|Leader), skip, take"
+          },
+          "response": []
+        },
+        {
+          "name": "Get DGroup Membership by ID",
+          "id": "dgroup-membership-findbyid-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dgroup-membership/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup-membership",
+                "1"
+              ]
+            },
+            "description": "Get a specific DGroup membership by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete DGroup Membership",
+          "id": "dgroup-membership-delete-001",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dgroup-membership/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup-membership",
+                "1"
+              ]
+            },
+            "description": "Delete a DGroup membership by ID"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
