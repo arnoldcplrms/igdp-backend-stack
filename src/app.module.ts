@@ -16,6 +16,7 @@ import { EventSpeakersModule } from './event-speakers/event-speakers.module';
 import { MinistryModule } from './ministry/ministry.module';
 import { MinistryRoleModule } from './ministry-role/ministry-role.module';
 import { AccountMinistryModule } from './account-ministry/account-ministry.module';
+import { DGroupModule } from './dgroup/dgroup.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AccountMinistryModule } from './account-ministry/account-ministry.modul
     MinistryModule,
     MinistryRoleModule,
     AccountMinistryModule,
+    DGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -316,6 +316,144 @@
       "id": "61502d03-adf5-48b0-8f41-df3ed27957a5"
     },
     {
+      "name": "DGroup",
+      "item": [
+        {
+          "name": "Create DGroup",
+          "id": "49a81b57-8f37-4016-a6c8-d7eeafe6ca2e",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alpha DGroup\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dgroup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup"
+              ]
+            },
+            "description": "Create a new dgroup"
+          },
+          "response": []
+        },
+        {
+          "name": "Find DGroups (Search)",
+          "id": "1ef6c3a8-6d64-4f3f-beb0-3a9e5ec10a4c",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dgroup?search=alpha&skip=0&take=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "alpha"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Find dgroups with optional name search and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get DGroup by ID",
+          "id": "f22c6d3a-40ef-4871-aaf9-296d42771027",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dgroup/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup",
+                "1"
+              ]
+            },
+            "description": "Get a specific dgroup by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update DGroup",
+          "id": "cdd87da7-c90a-4700-ae66-ef3ff56bbf3c",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated DGroup Name\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dgroup/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup",
+                "1"
+              ]
+            },
+            "description": "Update a dgroup"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete DGroup",
+          "id": "53a9c4a3-63ff-4d8e-8f04-aed0f47f803a",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dgroup/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dgroup",
+                "1"
+              ]
+            },
+            "description": "Delete a dgroup"
+          },
+          "response": []
+        }
+      ],
+      "id": "b89b3f9d-1bd2-4ba0-bf9f-cddf1ee8dc4c"
+    },
+    {
       "name": "Account",
       "item": [
         {

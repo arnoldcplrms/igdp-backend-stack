@@ -57,6 +57,13 @@ model MinistryRole {
   @@unique([id, ministryId])
 }
 
+model DGroup {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(100)
+  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime? @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+}
+
 enum Gender {
   Male
   Female
