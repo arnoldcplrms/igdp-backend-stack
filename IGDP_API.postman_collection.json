@@ -1400,7 +1400,7 @@
             "description": "Get a specific attendance record by eventId and accountId"
           },
           "response": []
-        },
+        }
       ],
       "id": "39aff248-82d9-4f07-b2d1-1f5ebc3d3050"
     },
@@ -1748,6 +1748,205 @@
         }
       ],
       "id": "8f2e9d4a-5c3b-4a1e-9f7d-6b8c5e4a3d2b"
+    },
+    {
+      "name": "EventMinistry",
+      "item": [
+        {
+          "name": "Create EventMinistry (Single or Multiple)",
+          "id": "eventministry-create-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventMinistries\": [\n    {\n      \"eventId\": 1,\n      \"ministryId\": 1,\n      \"isPrimaryOrganizer\": true\n    },\n    {\n      \"eventId\": 1,\n      \"ministryId\": 2,\n      \"isPrimaryOrganizer\": null\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/event-ministries",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries"
+              ]
+            },
+            "description": "Create event-ministry relationships. Supports single or multiple entries. Uses composite key (eventId, ministryId)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All EventMinistry with Filters",
+          "id": "eventministry-getall-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-ministries?skip=0&take=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "description": "Number of records to skip for pagination"
+                },
+                {
+                  "key": "take",
+                  "value": "10",
+                  "description": "Number of records to take"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1",
+                  "description": "Filter by event ID",
+                  "disabled": true
+                },
+                {
+                  "key": "ministryId",
+                  "value": "1",
+                  "description": "Filter by ministry ID",
+                  "disabled": true
+                },
+                {
+                  "key": "isPrimaryOrganizer",
+                  "value": "true",
+                  "description": "Filter by primary organizer status",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all event-ministry relationships with flexible filtering by eventId, ministryId, and isPrimaryOrganizer"
+          },
+          "response": []
+        },
+        {
+          "name": "Get EventMinistry by Event ID",
+          "id": "eventministry-byevent-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-ministries/event/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries",
+                "event",
+                "1"
+              ]
+            },
+            "description": "Get all ministries linked to a specific event"
+          },
+          "response": []
+        },
+        {
+          "name": "Get EventMinistry by Ministry ID",
+          "id": "eventministry-byministry-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-ministries/ministry/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries",
+                "ministry",
+                "1"
+              ]
+            },
+            "description": "Get all events linked to a specific ministry"
+          },
+          "response": []
+        },
+        {
+          "name": "Get EventMinistry by Event and Ministry",
+          "id": "eventministry-getone-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-ministries/1/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries",
+                "1",
+                "1"
+              ]
+            },
+            "description": "Get a specific event-ministry relationship by eventId and ministryId"
+          },
+          "response": []
+        },
+        {
+          "name": "Update EventMinistry",
+          "id": "eventministry-update-001",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isPrimaryOrganizer\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/event-ministries/1/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries",
+                "1",
+                "1"
+              ]
+            },
+            "description": "Update event-ministry relationship properties such as isPrimaryOrganizer"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete EventMinistry",
+          "id": "eventministry-delete-001",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/event-ministries/1/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "event-ministries",
+                "1",
+                "1"
+              ]
+            },
+            "description": "Delete an event-ministry relationship by eventId and ministryId"
+          },
+          "response": []
+        }
+      ],
+      "id": "6e8c0f3a-4a71-4eb1-9f44-2e9d3259c4d7"
     },
     {
       "name": "Ministry",

@@ -22,6 +22,11 @@ export class EventRepository {
             speaker: true,
           },
         },
+        eventMinistries: {
+          include: {
+            ministry: true,
+          },
+        },
       },
     });
   }
@@ -79,6 +84,11 @@ export class EventRepository {
             speaker: true,
           },
         },
+        eventMinistries: {
+          include: {
+            ministry: true,
+          },
+        },
       },
     });
   }
@@ -103,6 +113,11 @@ export class EventRepository {
             speaker: true,
           },
         },
+        eventMinistries: {
+          include: {
+            ministry: true,
+          },
+        },
       },
     });
   }
@@ -116,6 +131,11 @@ export class EventRepository {
         eventSpeakers: {
           include: {
             speaker: true,
+          },
+        },
+        eventMinistries: {
+          include: {
+            ministry: true,
           },
         },
       },
@@ -139,6 +159,11 @@ export class EventRepository {
         eventSpeakers: {
           include: {
             speaker: true,
+          },
+        },
+        eventMinistries: {
+          include: {
+            ministry: true,
           },
         },
       },

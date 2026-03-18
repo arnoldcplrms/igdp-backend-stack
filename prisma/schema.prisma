@@ -38,12 +38,13 @@ model Ministry {
   updatedAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
-  parent   Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
-  children Ministry[]        @relation("MinistryHierarchy")
-  roles    MinistryRole[]
-  accounts AccountMinistry[]
-  series   Series[]
-  events   Event[]
+  parent          Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
+  children        Ministry[]        @relation("MinistryHierarchy")
+  roles           MinistryRole[]
+  accounts        AccountMinistry[]
+  series          Series[]
+  events          Event[]
+  eventMinistries EventMinistry[]
 }
 
 model MinistryRole {
@@ -239,10 +240,22 @@ model Event {
   updatedAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
 
   // Relations
-  series        Series?         @relation(fields: [seriesId], references: [id])
-  ministry      Ministry?       @relation(fields: [ministryId], references: [id])
-  attendances   Attendance[]
-  eventSpeakers EventSpeakers[]
+  series          Series?         @relation(fields: [seriesId], references: [id])
+  ministry        Ministry?       @relation(fields: [ministryId], references: [id])
+  attendances     Attendance[]
+  eventSpeakers   EventSpeakers[]
+  eventMinistries EventMinistry[]
+}
+
+model EventMinistry {
+  eventId            Int
+  ministryId         Int
+  isPrimaryOrganizer Boolean?
+
+  event    Event    @relation(fields: [eventId], references: [id])
+  ministry Ministry @relation(fields: [ministryId], references: [id])
+
+  @@id([eventId, ministryId])
 }
 
 model Attendance {
