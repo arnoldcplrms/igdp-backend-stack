@@ -5,6 +5,7 @@ import {
   AccountDetailDto,
   CreateAccountDto,
   UpdateAccountDto,
+  EventDTO,
 } from './account.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { Gender, Prisma } from '@prisma/client';
@@ -119,7 +120,19 @@ export class AccountRepository {
       ...this.selectObject,
     });
 
-    return AccountMapper.toAccountDto(result as AccountQueryDto[]);
+    const event = await this.prisma.event.findMany({
+      skip,
+      take: toOverfetchTake(pageSize),
+      select: {
+        id: true,
+        eventDate: true,
+      },
+    });
+
+    return AccountMapper.toAccountDto(
+      result as AccountQueryDto[],
+      event as EventDTO[],
+    );
   }
 
   async findAccountById(id: number): Promise<AccountDetailDto> {
