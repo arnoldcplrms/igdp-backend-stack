@@ -8,6 +8,7 @@ import type {
   UpdateSchoolDto,
 } from './school.dto';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
+import { AccountDTO, CreateAccountDto } from 'src/account/account.dto';
 
 @Injectable()
 export class SchoolRepository {
@@ -100,5 +101,17 @@ export class SchoolRepository {
     }
 
     return school;
+  }
+
+  async findStudentBySchoolId(
+    schoolId: number,
+    filters: FilterSchoolDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    const { skip, take } = filters;
+    return this.prisma.account.findMany({
+      skip,
+      take: toOverfetchTake(take),
+      where: { education: { some: { schoolId } } },
+    });
   }
 }

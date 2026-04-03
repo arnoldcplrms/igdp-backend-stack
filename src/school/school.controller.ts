@@ -58,4 +58,13 @@ export class SchoolController {
   findById(@Param('id') id: string) {
     return this.schoolService.findById(+id);
   }
+
+  @Get(':id/students')
+  findStudentsInSchool(
+    @Param('id') id: string,
+    @Query(new ZodValidationPipe(filterSchoolSchema))
+    filters: FilterSchoolDto,
+  ) {
+    return this.schoolService.findStudentsInSchool(+id, filters);
+  }
 }

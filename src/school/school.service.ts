@@ -8,6 +8,7 @@ import type {
   UpdateSchoolDto,
 } from './school.dto';
 import { SchoolRepository } from './school.repository';
+import { AccountDTO } from 'src/account/account.dto';
 
 @Injectable()
 export class SchoolService {
@@ -31,5 +32,12 @@ export class SchoolService {
 
   findById(id: number): Promise<SchoolDTO> {
     return this.schoolRepo.findSchoolById(id);
+  }
+
+  findStudentsInSchool(
+    schoolId: number,
+    filters: FilterSchoolDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    return this.schoolRepo.findStudentBySchoolId(schoolId, filters);
   }
 }
