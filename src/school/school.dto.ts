@@ -27,10 +27,13 @@ export class SchoolDTO {
   name: string;
   acronym?: string | null;
   address: string;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+export class SchoolListDTO extends SchoolDTO {
   activeEducationCount: number;
   completedEducationCount: number;
-  createdAt: Date;
-  updatedAt: Date | null;
 }
 
 export class UpdateSchoolDto extends ZodClass(updateSchoolSchema) {}

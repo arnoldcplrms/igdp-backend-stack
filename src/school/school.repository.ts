@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import type {
   CreateSchoolDto,
   FilterSchoolDto,
   SchoolDTO,
+  SchoolListDTO,
   UpdateSchoolDto,
 } from './school.dto';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
@@ -12,7 +13,7 @@ import { toOverfetchTake } from 'src/common/utils/pagination.util';
 export class SchoolRepository {
   constructor(private prisma: PrismaService) {}
 
-  createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
+  createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolListDTO> {
     const data: any = {
       name: createSchoolDto.name,
       address: createSchoolDto.address,
@@ -89,9 +90,15 @@ export class SchoolRepository {
     });
   }
 
-  findSchoolById(id: number): Promise<SchoolDTO | null> {
-    return this.prisma.school.findUnique({
+  async findSchoolById(id: number): Promise<SchoolDTO> {
+    const school = await this.prisma.school.findUnique({
       where: { id },
     });
+
+    if (!school) {
+      throw new NotFoundException('School not found');
+    }
+
+    return school;
   }
 }
