@@ -29,6 +29,17 @@ export class SchoolDTO {
   name: string;
   acronym?: string | null;
   address: string;
+  activeEducationCount: number;
+  completedEducationCount: number;
+  createdAt: Date;
+  updatedAt: Date | null;
+}
+
+export class SchoolQueryDTO {
+  id: number;
+  name: string;
+  acronym?: string | null;
+  address: string;
   createdAt: Date;
   updatedAt: Date | null;
 }

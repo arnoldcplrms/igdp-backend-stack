@@ -27,55 +27,63 @@ export class SchoolRepository {
     });
   }
 
-  findSchools(filters: FilterSchoolDto) {
+  async findAll(filters: FilterSchoolDto) {
     const { name, acronym, address, skip, take } = filters;
     const andConditions: any[] = [];
 
     if (name) {
       andConditions.push({
         OR: [
-          {
-            name: {
-              contains: name,
-              mode: 'insensitive',
-            },
-          },
-          {
-            acronym: {
-              contains: name,
-              mode: 'insensitive',
-            },
-          },
+          { name: { contains: name, mode: 'insensitive' } },
+          { acronym: { contains: name, mode: 'insensitive' } },
+          { address: { contains: name, mode: 'insensitive' } },
         ],
       });
     }
 
     if (acronym) {
       andConditions.push({
-        acronym: {
-          contains: acronym,
-          mode: 'insensitive',
-        },
+        acronym: { contains: acronym, mode: 'insensitive' },
       });
     }
 
     if (address) {
       andConditions.push({
-        address: {
-          contains: address,
-          mode: 'insensitive',
-        },
+        address: { contains: address, mode: 'insensitive' },
       });
     }
 
-    return this.prisma.school.findMany({
-      skip,
-      take: toOverfetchTake(take),
+    const schools = await this.prisma.school.findMany({
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
-      orderBy: {
-        createdAt: 'desc',
+      include: {
+        _count: { select: { education: true } }, // total
+        education: { where: { endDate: null }, select: { id: true } }, // active
       },
     });
+
+    const mapped = schools.map((s) => {
+      const activeCount = s.education.length;
+      const completedCount = s._count.education - activeCount;
+
+      return {
+        id: s.id,
+        name: s.name,
+        acronym: s.acronym,
+        address: s.address,
+        createdAt: s.createdAt,
+        activeEducationCount: activeCount,
+        completedEducationCount: completedCount,
+      };
+    });
+
+    mapped.sort((a, b) => {
+      if (b.activeEducationCount !== a.activeEducationCount) {
+        return b.activeEducationCount - a.activeEducationCount;
+      }
+      return b.completedEducationCount - a.completedEducationCount;
+    });
+
+    return mapped.slice(skip || 0, (skip || 0) + (take || mapped.length));
   }
 
   updateSchool(id: number, updateSchoolDto: UpdateSchoolDto) {
