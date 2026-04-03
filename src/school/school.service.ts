@@ -17,7 +17,7 @@ export class SchoolService {
   }
 
   async findAll(filters: FilterSchoolDto): Promise<SchoolDTO[]> {
-    return await this.schoolRepo.findAll(filters);
+    return await this.schoolRepo.findSchools(filters);
   }
 
   update(id: number, updateSchoolDto: UpdateSchoolDto) {

@@ -27,33 +27,23 @@ export class SchoolRepository {
     });
   }
 
-  async findAll(filters: FilterSchoolDto) {
-    const { name, acronym, address, skip, take } = filters;
+  async findSchools(filters: FilterSchoolDto) {
+    const { search, skip, take } = filters;
     const andConditions: any[] = [];
 
-    if (name) {
+    if (search) {
       andConditions.push({
         OR: [
-          { name: { contains: name, mode: 'insensitive' } },
-          { acronym: { contains: name, mode: 'insensitive' } },
-          { address: { contains: name, mode: 'insensitive' } },
+          { name: { contains: search, mode: 'insensitive' } },
+          { acronym: { contains: search, mode: 'insensitive' } },
+          { address: { contains: search, mode: 'insensitive' } },
         ],
       });
     }
 
-    if (acronym) {
-      andConditions.push({
-        acronym: { contains: acronym, mode: 'insensitive' },
-      });
-    }
-
-    if (address) {
-      andConditions.push({
-        address: { contains: address, mode: 'insensitive' },
-      });
-    }
-
     const schools = await this.prisma.school.findMany({
+      skip,
+      take: toOverfetchTake(take),
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
       include: {
         _count: { select: { education: true } }, // total
@@ -83,7 +73,7 @@ export class SchoolRepository {
       return b.completedEducationCount - a.completedEducationCount;
     });
 
-    return mapped.slice(skip || 0, (skip || 0) + (take || mapped.length));
+    return mapped;
   }
 
   updateSchool(id: number, updateSchoolDto: UpdateSchoolDto) {
