@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { Gender, UserType } from '@prisma/client';
 import {
   CreateEducationDto,
-  createEducationSchema,
   createEducationTxSchema,
 } from 'src/education/education.dto';
 import {
@@ -25,6 +24,7 @@ export const createAccountSchema = z.object({
     gender: z.enum(Gender),
     birthDate: z.coerce.date(),
     userType: z.enum(UserType),
+    isActive: z.boolean(),
     emergencyContactName: z.string().max(100).optional().nullable(),
     emergencyContactNumber: z.string().max(20).optional().nullable(),
     dGroupLeaderId: z.number().int().optional().nullable(),
@@ -69,10 +69,16 @@ export class AccountDTO {
   gender: string;
   age: number;
   email: string;
+  isActive: boolean;
   dGroupLeader?: { id: number; firstName: string; lastName: string } | null; // Single leader
   dGroupMembers?: { id: number; firstName: string; lastName: string }[]; // Array of members
   latestAttendance?: Date | null; // Latest attendance date
 }
+
+export type EventDTO = {
+  id: number;
+  eventDate: Date; // or Date type
+};
 
 export class AccountQueryDto {
   id: number;
