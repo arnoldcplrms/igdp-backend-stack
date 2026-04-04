@@ -8,7 +8,8 @@ import type {
   UpdateSchoolDto,
 } from './school.dto';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
-import { AccountDTO, CreateAccountDto } from 'src/account/account.dto';
+import { AccountDTO } from 'src/account/account.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SchoolRepository {
@@ -107,11 +108,85 @@ export class SchoolRepository {
     schoolId: number,
     filters: FilterSchoolDto,
   ): Promise<Partial<AccountDTO>[]> {
-    const { skip, take } = filters;
+    const { search, skip, take } = filters;
+    const andConditions: Prisma.AccountWhereInput[] = [];
+
+    if (search) {
+      andConditions.push({
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { middleName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+        ],
+      });
+    }
+
+    const where: Prisma.AccountWhereInput = {
+      education: {
+        some: {
+          schoolId,
+          endDate: null, // currently studying
+        },
+      },
+      AND: andConditions.length > 0 ? andConditions : undefined,
+    };
+
     return this.prisma.account.findMany({
       skip,
       take: toOverfetchTake(take),
-      where: { education: { some: { schoolId } } },
+      orderBy: {
+        lastName: 'desc',
+      },
+      where,
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        profilePicture: true,
+      },
+    });
+  }
+
+  async findGraduateBySchoolId(
+    schoolId: number,
+    filters: FilterSchoolDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    const { search, skip, take } = filters;
+
+    const andConditions: Prisma.AccountWhereInput[] = [];
+
+    if (search) {
+      andConditions.push({
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { middleName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+        ],
+      });
+    }
+
+    const where: Prisma.AccountWhereInput = {
+      education: {
+        some: {
+          schoolId,
+          NOT: { endDate: null }, // graduate
+        },
+      },
+      AND: andConditions.length > 0 ? andConditions : undefined,
+    };
+
+    return this.prisma.account.findMany({
+      skip,
+      take: toOverfetchTake(take),
+      where,
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        profilePicture: true,
+      },
     });
   }
 }

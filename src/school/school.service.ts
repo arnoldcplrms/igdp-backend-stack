@@ -40,4 +40,11 @@ export class SchoolService {
   ): Promise<Partial<AccountDTO>[]> {
     return this.schoolRepo.findStudentBySchoolId(schoolId, filters);
   }
+
+  findGraduatesInSchool(
+    schoolId: number,
+    filters: FilterSchoolDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    return this.schoolRepo.findGraduateBySchoolId(schoolId, filters);
+  }
 }
