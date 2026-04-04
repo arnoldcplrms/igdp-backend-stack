@@ -120,6 +120,8 @@ enum GradeYear {
   FifthYearCollege
   UnderGraduate
   Graduated
+  Masteral
+  Others
 }
 
 model Account {

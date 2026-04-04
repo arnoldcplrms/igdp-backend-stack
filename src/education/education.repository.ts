@@ -7,9 +7,19 @@ import { toOverfetchTake } from 'src/common/utils/pagination.util';
 export class EducationRespository {
   constructor(private prisma: PrismaService) {}
 
-  createEducation(createEducationSchema: CreateEducationDto) {
-    return this.prisma.education.create({
-      data: createEducationSchema,
+  async createEducation(data: CreateEducationDto) {
+    const educationData = data.education.map((edu) => ({
+      accountId: data.accountId,
+      schoolId: edu.schoolId,
+      gradeYear: edu.gradeYear,
+      course: edu.course,
+      startDate: edu.startDate,
+      endDate: edu.endDate,
+    }));
+
+    return this.prisma.education.createMany({
+      data: educationData,
+      skipDuplicates: true,
     });
   }
 
