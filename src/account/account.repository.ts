@@ -26,22 +26,17 @@ export class AccountRepository {
       firstName: true,
       lastName: true,
       middleName: true,
+      nickname: true,
       birthDate: true,
       gender: true,
       profilePicture: true,
       email: true,
-      dGroupMembers: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-        },
-      },
       dGroupLeader: {
         select: {
           id: true,
           firstName: true,
           lastName: true,
+          middleName: true,
         },
       },
       attendances: {

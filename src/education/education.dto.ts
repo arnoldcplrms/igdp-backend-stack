@@ -21,7 +21,6 @@ export const createEducationSchema = z.object({
 export const createEducationTxSchema = z.object({
   id: z.number().int().optional(),
   schoolId: z.number().int(),
-  accountId: z.number().int().optional().nullable(),
   gradeYear: z.enum(GradeYear),
   course: z.string().max(150).optional().nullable(),
   startDate: z.preprocess((arg) => new Date(arg as string), z.date()),
@@ -37,6 +36,8 @@ export const updateAccountEducationSchema = z
   .partial();
 
 export class CreateEducationDto extends ZodClass(createEducationSchema) {}
+
+export class CreateUserWithEducationDto extends ZodClass(educationItemSchema) {}
 
 export class UpdateEducationDto extends ZodClass(
   createEducationSchema.partial(),

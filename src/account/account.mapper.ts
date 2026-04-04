@@ -1,4 +1,9 @@
-import { AccountDTO, AccountQueryDto, AccountDetailDto, EventDTO } from './account.dto';
+import {
+  AccountDTO,
+  AccountQueryDto,
+  AccountDetailDto,
+  EventDTO,
+} from './account.dto';
 
 export class AccountMapper {
   /**
@@ -13,20 +18,18 @@ export class AccountMapper {
     const ACTIVITY_WINDOW_DAYS = 30;
     const now = new Date();
 
-    // Create a quick lookup for events by ID
     const eventMap = new Map<number, Date>();
     events?.forEach((ev) => eventMap.set(ev.id, ev.eventDate));
 
     return (
       result &&
       result.map((item) => {
-        // Get latest attendance based on event date
         const latestAttendance =
           item.attendances && item.attendances.length > 0
             ? item.attendances
-                .map((att) => eventMap.get(att.eventId)) // map to event date
-                .filter((d): d is Date => !!d) // remove undefined
-                .sort((a, b) => b.getTime() - a.getTime())[0] // latest first
+                .map((att) => eventMap.get(att.eventId))
+                .filter((d): d is Date => !!d)
+                .sort((a, b) => b.getTime() - a.getTime())[0]
             : null;
 
         const isActive =
@@ -40,6 +43,7 @@ export class AccountMapper {
           firstName: item.firstName,
           lastName: item.lastName,
           middleName: item.middleName,
+          nickname: item.nickname,
           birthDate: item.birthDate,
           age: Math.floor(
             (now.getTime() - new Date(item.birthDate).getTime()) /
@@ -50,8 +54,6 @@ export class AccountMapper {
           isActive,
           profilePicture: item.profilePicture,
           dGroupLeader: item.dGroupLeader,
-          dGroupMembers: item.dGroupMembers,
-          latestAttendance,
         };
       })
     );
