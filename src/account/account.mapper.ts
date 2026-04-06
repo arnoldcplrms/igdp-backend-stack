@@ -24,18 +24,18 @@ export class AccountMapper {
     return (
       result &&
       result.map((item) => {
-        const latestAttendance =
-          item.attendances && item.attendances.length > 0
-            ? item.attendances
-                .map((att) => eventMap.get(att.eventId))
-                .filter((d): d is Date => !!d)
-                .sort((a, b) => b.getTime() - a.getTime())[0]
-            : null;
+        const latestAttendance = item.attendances?.length
+          ? (item.attendances
+              .map((att) => eventMap.get(att.eventId))
+              .filter((d): d is Date => d != null)
+              .sort((a, b) => b.getTime() - a.getTime())[0] ?? null)
+          : null;
+
+        const latestAttendanceTime = latestAttendance?.getTime();
 
         const isActive =
-          latestAttendance !== null &&
-          (now.getTime() - latestAttendance.getTime()) /
-            (1000 * 60 * 60 * 24) <=
+          latestAttendanceTime !== undefined &&
+          (now.getTime() - latestAttendanceTime) / (1000 * 60 * 60 * 24) <=
             ACTIVITY_WINDOW_DAYS;
 
         return {

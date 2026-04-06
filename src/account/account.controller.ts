@@ -49,19 +49,6 @@ export class AccountController {
     );
   }
 
-  @Get('search-by-name')
-  findByName(
-    @Query('name') name: string,
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-  ) {
-    return this.accountService.findByName(
-      name,
-      skip ? parseInt(skip) : undefined,
-      take ? parseInt(take) : undefined,
-    );
-  }
-
   @Post('dgroup-leaders')
   fetchDGroupLeaders(
     @Body(new ZodValidationPipe(fetchDGroupLeadersSchema))

@@ -189,22 +189,6 @@ export class AccountRepository {
     return AccountMapper.toAccountDetailDto(result);
   }
 
-  async findAccountsByName(name: string, skip?: number, take?: number) {
-    const result = await this.prisma.account.findMany({
-      skip,
-      where: {
-        OR: [
-          { firstName: { contains: name, mode: 'insensitive' } },
-          { lastName: { contains: name, mode: 'insensitive' } },
-        ],
-      },
-      take: toOverfetchTake(take),
-      ...this.selectObject,
-    });
-
-    return AccountMapper.toAccountDto(result as AccountQueryDto[]);
-  }
-
   updateAccount(id: number, updateAccountDto: UpdateAccountDto) {
     return this.prisma.account.update({
       where: { id },

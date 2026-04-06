@@ -28,10 +28,6 @@ export class AccountService {
     );
   }
 
-  findByName(name: string, skip?: number, take?: number) {
-    return this.accountRepo.findAccountsByName(name, skip, take);
-  }
-
   findOne(id: number) {
     return this.accountRepo.findAccountById(id);
   }
