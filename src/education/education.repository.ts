@@ -37,7 +37,6 @@ export class EducationRespository {
       skip,
       take: toOverfetchTake(take),
       select: {
-        schoolId: false,
         startDate: true,
         endDate: true,
         educationLevel: true,
@@ -51,6 +50,29 @@ export class EducationRespository {
         },
       },
     });
+  }
+
+  async findOne(id: number) {
+    const data = await this.prisma.education.findUnique({
+      where: { id },
+      select: {
+        startDate: true,
+        endDate: true,
+        educationLevel: true,
+        course: true,
+        school: {
+          select: {
+            id: true,
+            name: true,
+            acronym: true,
+          },
+        },
+      },
+    });
+    return {
+      success: true,
+      data,
+    };
   }
 
   removeEducation(id: number, accountId: number) {
