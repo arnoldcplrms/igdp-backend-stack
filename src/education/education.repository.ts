@@ -8,19 +8,22 @@ export class EducationRespository {
   constructor(private prisma: PrismaService) {}
 
   async createEducation(data: CreateEducationDto) {
-    const educationData = data.education.map((edu) => ({
+    const educationData = data.educations.map((edu) => ({
       accountId: data.accountId,
       schoolId: edu.schoolId,
-      gradeYear: edu.gradeYear,
+      educationLevel: edu.educationLevel,
       course: edu.course,
       startDate: edu.startDate,
       endDate: edu.endDate,
     }));
 
-    return this.prisma.education.createMany({
+    await this.prisma.education.createMany({
       data: educationData,
       skipDuplicates: true,
     });
+
+    // 🔹 Return accountId so caller knows which user this belongs to
+    return { accountId: data.accountId };
   }
 
   findByAccountId(accountId: number, skip?: number, take?: number) {
@@ -32,7 +35,7 @@ export class EducationRespository {
         schoolId: false,
         startDate: true,
         endDate: true,
-        gradeYear: true,
+        educationLevel: true,
         course: true,
         school: {
           select: {

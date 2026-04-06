@@ -148,7 +148,7 @@ export class AccountRepository {
             schoolId: false,
             startDate: true,
             endDate: true,
-            gradeYear: true,
+            educationLevel: true,
             course: true,
             school: {
               select: {

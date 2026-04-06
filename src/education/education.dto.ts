@@ -1,10 +1,10 @@
-import { GradeYear } from '@prisma/client';
+import { EducationLevel } from '@prisma/client';
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
 
 export const educationItemSchema = z.object({
   schoolId: z.number().int(),
-  gradeYear: z.enum(GradeYear),
+  educationLevel: z.enum(EducationLevel),
   course: z.string().max(150).optional().nullable(),
   startDate: z.preprocess((arg) => new Date(arg as string), z.date()),
   endDate: z
@@ -15,13 +15,13 @@ export const educationItemSchema = z.object({
 
 export const createEducationSchema = z.object({
   accountId: z.number().int(),
-  education: z.array(educationItemSchema).nonempty(),
+  educations: z.array(educationItemSchema).nonempty(),
 });
 
 export const createEducationTxSchema = z.object({
   id: z.number().int().optional(),
   schoolId: z.number().int(),
-  gradeYear: z.enum(GradeYear),
+  educationLevel: z.enum(EducationLevel),
   course: z.string().max(150).optional().nullable(),
   startDate: z.preprocess((arg) => new Date(arg as string), z.date()),
   endDate: z

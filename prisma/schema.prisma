@@ -98,7 +98,7 @@ enum UserType {
   Member
 }
 
-enum GradeYear {
+enum EducationLevel {
   JuniorHigh
   SeniorHigh
   College
@@ -160,7 +160,7 @@ model Education {
   id        Int       @id @default(autoincrement())
   schoolId  Int
   accountId Int
-  gradeYear GradeYear
+  educationLevel EducationLevel
   course    String?   @db.VarChar(150)
   startDate DateTime  @db.Date
   endDate   DateTime? @db.Date

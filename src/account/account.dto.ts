@@ -128,7 +128,7 @@ export class AccountDetailDto {
     schoolId?: number;
     startDate: Date;
     endDate?: Date | null;
-    gradeYear: string;
+    educationLevel: string;
     course?: string | null;
     school: {
       id: number;

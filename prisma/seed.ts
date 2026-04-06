@@ -194,7 +194,7 @@ async function main() {
       data: {
         schoolId: schools[0].id,
         accountId: accounts[0].id,
-        gradeYear: 'FourthYearCollege',
+        educationLevel: 'College',
         course: 'Bachelor of Science in Computer Science',
         startDate: new Date('2008-06-01'),
         endDate: new Date('2012-05-31'),
@@ -204,7 +204,7 @@ async function main() {
       data: {
         schoolId: schools[1].id,
         accountId: accounts[1].id,
-        gradeYear: 'ThirdYearCollege',
+        educationLevel: 'College',
         course: 'Bachelor of Science in Business Administration',
         startDate: new Date('2010-08-01'),
         endDate: new Date('2014-05-31'),
@@ -214,7 +214,7 @@ async function main() {
       data: {
         schoolId: schools[2].id,
         accountId: accounts[2].id,
-        gradeYear: 'Graduated',
+        educationLevel: 'College',
         course: 'Bachelor of Science in Engineering',
         startDate: new Date('2006-06-01'),
         endDate: new Date('2010-05-31'),
@@ -224,7 +224,7 @@ async function main() {
       data: {
         schoolId: schools[3].id,
         accountId: accounts[3].id,
-        gradeYear: 'Grade12',
+        educationLevel: 'JuniorHigh',
         course: null,
         startDate: new Date('2012-06-01'),
         endDate: new Date('2014-03-31'),
@@ -234,7 +234,7 @@ async function main() {
       data: {
         schoolId: schools[4].id,
         accountId: accounts[4].id,
-        gradeYear: 'FirstYearCollege',
+        educationLevel: 'College',
         course: 'Bachelor of Arts in English',
         startDate: new Date('2022-08-01'),
         endDate: null,
