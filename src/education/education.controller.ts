@@ -42,18 +42,13 @@ export class EducationController {
     );
   }
 
-  @Put(':id/accountId/:accountId')
+  @Put(':id')
   update(
     @Param('id') id: number,
-    @Param('accountId') accountId: number,
     @Body(new ZodValidationPipe(updateAccountEducationSchema))
     updateEducationDto: UpdateEducationDto,
   ) {
-    return this.educationService.update(
-      Number(id),
-      Number(accountId),
-      updateEducationDto,
-    );
+    return this.educationService.update(Number(id), updateEducationDto);
   }
 
   @Delete(':id/accountId/:accountId')

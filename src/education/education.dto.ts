@@ -32,7 +32,7 @@ export const createEducationTxSchema = z.object({
 
 export const updateAccountEducationSchema = z
   .object()
-  .extend(createEducationSchema.shape)
+  .extend(educationItemSchema.shape)
   .partial();
 
 export class CreateEducationDto extends ZodClass(createEducationSchema) {}
@@ -40,10 +40,10 @@ export class CreateEducationDto extends ZodClass(createEducationSchema) {}
 export class CreateUserWithEducationDto extends ZodClass(educationItemSchema) {}
 
 export class UpdateEducationDto extends ZodClass(
-  createEducationSchema.partial(),
+  educationItemSchema.partial(),
 ) {}
 
-export class EducationDTO extends ZodClass(createEducationSchema) {
+export class EducationDTO extends ZodClass(educationItemSchema) {
   id: number;
   createdAt: Date;
   updatedAt: Date | null;

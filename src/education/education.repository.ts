@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { CreateEducationDto, UpdateEducationDto } from './education.dto';
+import {
+  CreateEducationDto,
+  EducationDTO,
+  UpdateEducationDto,
+} from './education.dto';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
+import { ApiResponse } from 'src/app.dto';
 
 @Injectable()
 export class EducationRespository {
@@ -54,14 +59,18 @@ export class EducationRespository {
     });
   }
 
-  updateEducation(
+  async updateEducation(
     id: number,
-    accountId: number,
     updateEducationDto: UpdateEducationDto,
-  ) {
-    return this.prisma.education.update({
-      where: { id, accountId },
+  ): Promise<ApiResponse<EducationDTO>> {
+    const data = await this.prisma.education.update({
+      where: { id },
       data: updateEducationDto,
     });
+
+    return {
+      success: true,
+      data,
+    };
   }
 }
