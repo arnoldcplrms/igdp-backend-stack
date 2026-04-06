@@ -15,9 +15,7 @@ export const updateSchoolSchema = z.object({
 });
 
 export const filterSchoolSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  acronym: z.string().min(1).max(20).optional(),
-  address: z.string().min(1).optional(),
+  search: z.string().min(1).optional(),
   skip: z.coerce.number().int().min(0).optional(),
   take: z.coerce.number().int().positive().max(PAGE_SIZE_COUNT).optional(),
 });
@@ -30,7 +28,12 @@ export class SchoolDTO {
   acronym?: string | null;
   address: string;
   createdAt: Date;
-  updatedAt: Date | null;
+  updatedAt?: Date;
+}
+
+export class SchoolListDTO extends SchoolDTO {
+  activeEducationCount: number;
+  completedEducationCount: number;
 }
 
 export class UpdateSchoolDto extends ZodClass(updateSchoolSchema) {}
