@@ -21,7 +21,7 @@ export class EducationService {
     return this.educationRepo.updateEducation(id, updateEducationDto);
   }
 
-  remove(id: number, accountId: number) {
-    return this.educationRepo.removeEducation(id, accountId);
+  remove(id: number) {
+    return this.educationRepo.removeEducation(id);
   }
 }

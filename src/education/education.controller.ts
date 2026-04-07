@@ -56,8 +56,8 @@ export class EducationController {
     return this.educationService.update(Number(id), updateEducationDto);
   }
 
-  @Delete(':id/accountId/:accountId')
-  remove(@Param('id') id: number, @Param('accountId') accountId: number) {
-    return this.educationService.remove(id, accountId);
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.educationService.remove(id);
   }
 }

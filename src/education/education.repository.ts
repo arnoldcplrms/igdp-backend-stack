@@ -75,10 +75,39 @@ export class EducationRespository {
     };
   }
 
-  removeEducation(id: number, accountId: number) {
-    return this.prisma.education.deleteMany({
-      where: { id, accountId },
-    });
+  async removeEducation(id: number) {
+    const idToDelete = Number(id);
+    if (!idToDelete || idToDelete <= 0) {
+      return {
+        success: false,
+        message: 'Invalid education ID',
+      };
+    }
+
+    try {
+      const data = await this.prisma.education.delete({
+        where: { id: idToDelete },
+      });
+
+      return {
+        success: true,
+        messsage: 'Successfully deleted the record',
+        data,
+      };
+    } catch (error: any) {
+      // Prisma specific: record not found
+      if (error.code === 'P2025') {
+        return {
+          success: false,
+          message: 'Education not found',
+        };
+      }
+
+      return {
+        success: false,
+        message: 'Failed to delete education',
+      };
+    }
   }
 
   async updateEducation(
