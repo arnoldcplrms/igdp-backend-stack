@@ -44,39 +44,24 @@ export class SchoolRepository {
       });
     }
 
-    const schools = await this.prisma.school.findMany({
+    return await this.prisma.school.findMany({
       skip,
       take: toOverfetchTake(take),
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
-      include: {
-        _count: { select: { education: true } }, // total
-        education: { where: { endDate: null }, select: { id: true } }, // active
+      orderBy: [
+        { enrolledStudentCount: 'desc' },
+        { alumniStudentCount: 'desc' },
+      ],
+      select: {
+        id: true,
+        name: true,
+        acronym: true,
+        address: true,
+        createdAt: true,
+        enrolledStudentCount: true,
+        alumniStudentCount: true,
       },
     });
-
-    const mapped = schools.map((s) => {
-      const activeCount = s.education.length;
-      const completedCount = s._count.education - activeCount;
-
-      return {
-        id: s.id,
-        name: s.name,
-        acronym: s.acronym,
-        address: s.address,
-        createdAt: s.createdAt,
-        activeEducationCount: activeCount,
-        completedEducationCount: completedCount,
-      };
-    });
-
-    mapped.sort((a, b) => {
-      if (b.activeEducationCount !== a.activeEducationCount) {
-        return b.activeEducationCount - a.activeEducationCount;
-      }
-      return b.completedEducationCount - a.completedEducationCount;
-    });
-
-    return mapped;
   }
 
   updateSchool(id: number, updateSchoolDto: UpdateSchoolDto) {

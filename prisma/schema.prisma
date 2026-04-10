@@ -8,13 +8,18 @@ datasource db {
 }
 
 model School {
-  id        Int         @id @default(autoincrement())
-  name      String
-  acronym   String?     @db.VarChar(20)
-  address   String
-  createdAt DateTime    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime?   @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  education Education[]
+  id                   Int         @id @default(autoincrement())
+  name                 String
+  acronym              String?     @db.VarChar(20)
+  address              String
+  createdAt            DateTime    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt            DateTime?   @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+
+  // New fields to precompute counts
+  enrolledStudentCount   Int         @default(0)
+  alumniStudentCount Int        @default(0)
+
+  education            Education[]
 }
 
 model Company {
@@ -176,7 +181,7 @@ model Employment {
   id        Int       @id @default(autoincrement())
   companyId Int
   accountId Int
-  position  String?   @db.VarChar(100)
+  position  String    @db.VarChar(100)
   startDate DateTime  @db.Date
   endDate   DateTime? @db.Date
   createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)

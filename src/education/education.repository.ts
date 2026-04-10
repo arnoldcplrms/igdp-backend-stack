@@ -27,7 +27,37 @@ export class EducationRespository {
       skipDuplicates: true,
     });
 
-    // 🔹 Return accountId so caller knows which user this belongs to
+    const schoolIds = [...new Set(educationData.map((e) => e.schoolId))];
+
+    await Promise.all(
+      schoolIds.map(async (schoolId) => {
+        const [activeGroups, completedGroups] = await Promise.all([
+          this.prisma.education.groupBy({
+            by: ['accountId'],
+            where: {
+              schoolId,
+              endDate: null,
+            },
+          }),
+          this.prisma.education.groupBy({
+            by: ['accountId'],
+            where: {
+              schoolId,
+              NOT: { endDate: null },
+            },
+          }),
+        ]);
+
+        return this.prisma.school.update({
+          where: { id: schoolId },
+          data: {
+            enrolledStudentCount: activeGroups.length,
+            alumniStudentCount: completedGroups.length,
+          },
+        });
+      }),
+    );
+
     return { accountId: data.accountId };
   }
 
@@ -89,6 +119,30 @@ export class EducationRespository {
         where: { id: idToDelete },
       });
 
+      const enrolled = await this.prisma.education.groupBy({
+        by: ['accountId'],
+        where: {
+          schoolId: data.schoolId,
+          endDate: null,
+        },
+      });
+
+      const alumni = await this.prisma.education.groupBy({
+        by: ['accountId'],
+        where: {
+          schoolId: data.schoolId,
+          NOT: { endDate: null },
+        },
+      });
+
+      await this.prisma.school.update({
+        where: { id: data.schoolId },
+        data: {
+          enrolledStudentCount: enrolled.length,
+          alumniStudentCount: alumni.length,
+        },
+      });
+
       return {
         success: true,
         messsage: 'Successfully deleted the record',
@@ -117,6 +171,30 @@ export class EducationRespository {
     const data = await this.prisma.education.update({
       where: { id },
       data: updateEducationDto,
+    });
+
+    const enrolled = await this.prisma.education.groupBy({
+      by: ['accountId'],
+      where: {
+        schoolId: data.schoolId,
+        endDate: null,
+      },
+    });
+
+    const alumni = await this.prisma.education.groupBy({
+      by: ['accountId'],
+      where: {
+        schoolId: data.schoolId,
+        NOT: { endDate: null },
+      },
+    });
+
+    await this.prisma.school.update({
+      where: { id: data.schoolId },
+      data: {
+        enrolledStudentCount: enrolled.length,
+        alumniStudentCount: alumni.length,
+      },
     });
 
     return {
