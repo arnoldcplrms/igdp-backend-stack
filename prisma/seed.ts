@@ -34,10 +34,10 @@ async function main() {
   console.log(`Created ${church.length} churchs`);
 
   console.log('Creating Schools...');
-
   type SchoolSeed = {
     name: string;
     address: string;
+    acronym?: string;
     enrolledStudentCount: number;
     alumniStudentCount: number;
   };
@@ -59,7 +59,6 @@ async function main() {
       };
     }
 
-    // highschool
     const enrolled = Math.floor(Math.random() * 5000) + 500;
     return {
       enrolledStudentCount: enrolled,
@@ -71,142 +70,230 @@ async function main() {
     name: string;
     address: string;
     type: 'university' | 'college' | 'highschool';
+    acronym?: string;
   }> = [
-    // NCR
     {
       name: 'University of the Philippines',
       address: 'Diliman, Quezon City',
       type: 'university',
+      acronym: 'UP',
     },
     {
       name: 'Ateneo de Manila University',
-      address: 'Katipunan Avenue, Quezon City',
+      address: 'Quezon City',
       type: 'university',
+      acronym: 'ADMU',
     },
     {
       name: 'De La Salle University',
-      address: 'Taft Avenue, Manila',
+      address: 'Manila',
       type: 'university',
+      acronym: 'DLSU',
     },
     {
       name: 'University of Santo Tomas',
-      address: 'España, Manila',
+      address: 'Manila',
       type: 'university',
+      acronym: 'UST',
     },
     {
       name: 'Polytechnic University of the Philippines',
-      address: 'Sta. Mesa, Manila',
+      address: 'Manila',
       type: 'university',
+      acronym: 'PUP',
     },
-    { name: 'Far Eastern University', address: 'Manila', type: 'university' },
-    { name: 'University of the East', address: 'Manila', type: 'university' },
+
+    {
+      name: 'Far Eastern University',
+      address: 'Manila',
+      type: 'university',
+      acronym: 'FEU',
+    },
+    {
+      name: 'University of the East',
+      address: 'Manila',
+      type: 'university',
+      acronym: 'UE',
+    },
     {
       name: 'Mapúa University',
-      address: 'Intramuros, Manila',
+      address: 'Manila',
       type: 'university',
+      acronym: 'MAPUA',
     },
-    { name: 'Adamson University', address: 'Manila', type: 'university' },
-    { name: 'National University', address: 'Manila', type: 'university' },
+    {
+      name: 'Adamson University',
+      address: 'Manila',
+      type: 'university',
+      acronym: 'AdU',
+    },
+    {
+      name: 'National University',
+      address: 'Manila',
+      type: 'university',
+      acronym: 'NU',
+    },
 
-    // Colleges
     {
       name: 'De La Salle–College of Saint Benilde',
       address: 'Manila',
       type: 'college',
+      acronym: 'DLS-CSB',
     },
-    { name: 'San Beda University', address: 'Manila', type: 'college' },
-    { name: 'Arellano University', address: 'Manila', type: 'college' },
-    { name: 'Centro Escolar University', address: 'Manila', type: 'college' },
-    { name: 'Jose Rizal University', address: 'Mandaluyong', type: 'college' },
-    { name: 'Asia Pacific College', address: 'Makati', type: 'college' },
-    { name: 'University of Makati', address: 'Makati', type: 'college' },
+    {
+      name: 'San Beda University',
+      address: 'Manila',
+      type: 'college',
+      acronym: 'SBU',
+    },
+    {
+      name: 'Arellano University',
+      address: 'Manila',
+      type: 'college',
+      acronym: 'AU',
+    },
+    {
+      name: 'Centro Escolar University',
+      address: 'Manila',
+      type: 'college',
+      acronym: 'CEU',
+    },
+    {
+      name: 'Jose Rizal University',
+      address: 'Mandaluyong',
+      type: 'college',
+      acronym: 'JRU',
+    },
+
+    {
+      name: 'Asia Pacific College',
+      address: 'Makati',
+      type: 'college',
+      acronym: 'APC',
+    },
+    {
+      name: 'University of Makati',
+      address: 'Makati',
+      type: 'college',
+      acronym: 'UMak',
+    },
     {
       name: 'Pamantasan ng Lungsod ng Maynila',
-      address: 'Intramuros, Manila',
+      address: 'Manila',
       type: 'college',
+      acronym: 'PLM',
     },
-    { name: 'Taguig City University', address: 'Taguig', type: 'college' },
+    {
+      name: 'Taguig City University',
+      address: 'Taguig',
+      type: 'college',
+      acronym: 'TCU',
+    },
     {
       name: 'Rizal Technological University',
       address: 'Mandaluyong',
       type: 'college',
+      acronym: 'RTU',
     },
 
-    // Visayas / Mindanao Universities
     {
       name: 'University of San Carlos',
       address: 'Cebu City',
       type: 'university',
+      acronym: 'USC',
     },
     {
       name: 'University of San Jose–Recoletos',
       address: 'Cebu City',
       type: 'university',
+      acronym: 'USJ-R',
     },
     {
       name: 'Cebu Institute of Technology – University',
       address: 'Cebu City',
       type: 'university',
+      acronym: 'CIT-U',
     },
     {
       name: 'Silliman University',
       address: 'Dumaguete City',
       type: 'university',
+      acronym: 'SU',
     },
     {
       name: 'Central Philippine University',
       address: 'Iloilo City',
       type: 'university',
+      acronym: 'CPU',
     },
+
     {
       name: 'West Visayas State University',
       address: 'Iloilo City',
       type: 'university',
+      acronym: 'WVSU',
     },
     {
       name: 'University of St. La Salle',
       address: 'Bacolod City',
       type: 'university',
+      acronym: 'USLS',
     },
     {
       name: 'Xavier University – Ateneo de Cagayan',
       address: 'Cagayan de Oro',
       type: 'university',
+      acronym: 'XU',
     },
     {
       name: 'Ateneo de Davao University',
       address: 'Davao City',
       type: 'university',
+      acronym: 'ADDU',
     },
     {
       name: 'University of Mindanao',
       address: 'Davao City',
       type: 'university',
+      acronym: 'UM',
     },
 
-    // More schools (highschools + colleges mixed)
     {
       name: 'Philippine Science High School',
       address: 'Quezon City',
       type: 'highschool',
+      acronym: 'PSHS',
     },
-    { name: 'Miriam College', address: 'Quezon City', type: 'college' },
-    { name: 'Holy Angel University', address: 'Pampanga', type: 'university' },
-    { name: 'San Pedro College', address: 'Davao City', type: 'college' },
+    { name: 'Miriam College', address: 'Quezon City', type: 'college' }, // no official acronym commonly used
+    {
+      name: 'Holy Angel University',
+      address: 'Pampanga',
+      type: 'university',
+      acronym: 'HAU',
+    },
+    {
+      name: 'San Pedro College',
+      address: 'Davao City',
+      type: 'college',
+      acronym: 'SPC',
+    },
     {
       name: 'Benguet State University',
       address: 'La Trinidad, Benguet',
       type: 'university',
+      acronym: 'BSU',
     },
     {
       name: 'Saint Louis University',
       address: 'Baguio City',
       type: 'university',
+      acronym: 'SLU',
     },
     {
       name: 'University of Baguio',
       address: 'Baguio City',
       type: 'university',
+      acronym: 'UB',
     },
   ];
 
@@ -216,6 +303,7 @@ async function main() {
     return {
       name: school.name,
       address: school.address,
+      acronym: school.acronym,
       enrolledStudentCount: counts.enrolledStudentCount,
       alumniStudentCount: counts.alumniStudentCount,
     };
