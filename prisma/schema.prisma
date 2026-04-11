@@ -24,7 +24,7 @@ model Church {
 
 model School {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   acronym   String?  @db.VarChar(20)
   address   String
   createdAt DateTime @default(now()) @db.Timestamp(6)
