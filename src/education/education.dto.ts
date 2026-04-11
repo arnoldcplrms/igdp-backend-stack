@@ -1,12 +1,10 @@
-import { GradeYear } from '@prisma/client';
+import { EducationLevel } from '@prisma/client';
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
 
-export const createEducationSchema = z.object({
-  id: z.number().int().optional(),
-  schoolId: z.int(),
-  accountId: z.int(),
-  gradeYear: z.enum(GradeYear),
+export const educationItemSchema = z.object({
+  schoolId: z.number().int(),
+  educationLevel: z.enum(EducationLevel),
   course: z.string().max(150).optional().nullable(),
   startDate: z.preprocess((arg) => new Date(arg as string), z.date()),
   endDate: z
@@ -15,11 +13,15 @@ export const createEducationSchema = z.object({
     .nullable(),
 });
 
+export const createEducationSchema = z.object({
+  accountId: z.number().int(),
+  educations: z.array(educationItemSchema).nonempty(),
+});
+
 export const createEducationTxSchema = z.object({
   id: z.number().int().optional(),
-  schoolId: z.int(),
-  accountId: z.int().optional().nullable(),
-  gradeYear: z.enum(GradeYear),
+  schoolId: z.number().int(),
+  educationLevel: z.enum(EducationLevel),
   course: z.string().max(150).optional().nullable(),
   startDate: z.preprocess((arg) => new Date(arg as string), z.date()),
   endDate: z
@@ -30,16 +32,18 @@ export const createEducationTxSchema = z.object({
 
 export const updateAccountEducationSchema = z
   .object()
-  .extend(createEducationSchema.shape)
+  .extend(educationItemSchema.shape)
   .partial();
 
 export class CreateEducationDto extends ZodClass(createEducationSchema) {}
 
+export class CreateUserWithEducationDto extends ZodClass(educationItemSchema) {}
+
 export class UpdateEducationDto extends ZodClass(
-  createEducationSchema.partial(),
+  educationItemSchema.partial(),
 ) {}
 
-export class EducationDTO extends ZodClass(createEducationSchema) {
+export class EducationDTO extends ZodClass(educationItemSchema) {
   id: number;
   createdAt: Date;
   updatedAt: Date | null;

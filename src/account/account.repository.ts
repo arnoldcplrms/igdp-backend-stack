@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import {
   AccountDTO,
   AccountQueryDto,
@@ -26,22 +26,17 @@ export class AccountRepository {
       firstName: true,
       lastName: true,
       middleName: true,
+      nickname: true,
       birthDate: true,
       gender: true,
       profilePicture: true,
       email: true,
-      dGroupMembers: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-        },
-      },
       dGroupLeader: {
         select: {
           id: true,
           firstName: true,
           lastName: true,
+          middleName: true,
         },
       },
       attendances: {
@@ -88,6 +83,13 @@ export class AccountRepository {
 
         return account;
       } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
+            const target = error.meta?.target;
+
+            throw new ConflictException(`${target} already exists`);
+          }
+        }
         Logger.error('Error creating account:', error);
         throw error;
       }
@@ -150,10 +152,10 @@ export class AccountRepository {
         },
         education: {
           select: {
-            schoolId: false,
+            id: true,
             startDate: true,
             endDate: true,
-            gradeYear: true,
+            educationLevel: true,
             course: true,
             school: {
               select: {
@@ -192,22 +194,6 @@ export class AccountRepository {
     });
 
     return AccountMapper.toAccountDetailDto(result);
-  }
-
-  async findAccountsByName(name: string, skip?: number, take?: number) {
-    const result = await this.prisma.account.findMany({
-      skip,
-      where: {
-        OR: [
-          { firstName: { contains: name, mode: 'insensitive' } },
-          { lastName: { contains: name, mode: 'insensitive' } },
-        ],
-      },
-      take: toOverfetchTake(take),
-      ...this.selectObject,
-    });
-
-    return AccountMapper.toAccountDto(result as AccountQueryDto[]);
   }
 
   updateAccount(id: number, updateAccountDto: UpdateAccountDto) {

@@ -23,12 +23,16 @@ model Church {
 }
 
 model School {
-  id        Int         @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  acronym   String?     @db.VarChar(20)
+  acronym   String?  @db.VarChar(20)
   address   String
-  createdAt DateTime    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime?   @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+
+  enrolledStudentCount Int @default(0)
+  alumniStudentCount   Int @default(0)
+
   education Education[]
 }
 
@@ -37,8 +41,8 @@ model Company {
   name       String
   acronym    String?      @db.VarChar(20)
   address    String
-  createdAt  DateTime     @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt  DateTime?    @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt  DateTime     @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime     @updatedAt @db.Timestamp(6)
   Employment Employment[]
 }
 
@@ -50,10 +54,9 @@ model Ministry {
   mission        String?  @db.Text
   vision         String?  @db.Text
   description    String?  @db.Text
-  createdAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt      DateTime @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime @updatedAt @db.Timestamp(6)
 
-  // Relations
   parent          Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
   children        Ministry[]        @relation("MinistryHierarchy")
   church          Church?           @relation(fields: [churchId], references: [id])
@@ -84,12 +87,11 @@ model DGroup {
   id          Int                @id @default(autoincrement())
   name        String             @db.VarChar(100)
   churchId    Int?
-  createdAt   DateTime           @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt   DateTime?          @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   memberships DGroupMembership[]
-
+  createdAt   DateTime           @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime           @updatedAt @db.Timestamp(6)
   // Relations
-  church Church? @relation(fields: [churchId], references: [id])
+  church      Church?            @relation(fields: [churchId], references: [id])
 }
 
 model DGroupMembership {
@@ -97,8 +99,8 @@ model DGroupMembership {
   dGroupId  Int
   accountId Int
   role      DGroupMembershipRole
-  createdAt DateTime             @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime             @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime             @default(now()) @db.Timestamp(6)
+  updatedAt DateTime             @updatedAt @db.Timestamp(6)
 
   // Relations
   dGroup  DGroup  @relation(fields: [dGroupId], references: [id])
@@ -119,28 +121,12 @@ enum UserType {
   Member
 }
 
-enum GradeYear {
-  PreSchool
-  Kindergarten
-  Grade1
-  Grade2
-  Grade3
-  Grade4
-  Grade5
-  Grade6
-  Grade7
-  Grade8
-  Grade9
-  Grade10
-  Grade11
-  Grade12
-  FirstYearCollege
-  SecondYearCollege
-  ThirdYearCollege
-  FourthYearCollege
-  FifthYearCollege
-  UnderGraduate
-  Graduated
+enum EducationLevel {
+  JuniorHigh
+  SeniorHigh
+  College
+  Masteral
+  Doctoral
 }
 
 model Account {
@@ -151,18 +137,18 @@ model Account {
   nickname               String?  @db.VarChar(50)
   profilePicture         String?  @db.VarChar(255)
   facebookLink           String?  @db.VarChar(255)
-  contactNumber          String   @db.VarChar(20)
+  contactNumber          String?  @db.VarChar(20)
   email                  String   @unique @db.VarChar(100)
   gender                 Gender
   birthDate              DateTime @db.Date
-  userType               UserType
+  userType               UserType @default(Member)
   dGroupLeaderId         Int?
-  spouseId               Int?
+  spouseId               Int?     @unique
   churchId               Int?
-  createdAt              DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt              DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
+  createdAt              DateTime @default(now()) @db.Timestamp(6)
+  updatedAt              DateTime @updatedAt @db.Timestamp(6)
 
   dGroupLeader      Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
   dGroupMembers     Account[]          @relation("dGroupLeader")
@@ -185,8 +171,8 @@ model AccountMinistry {
   ministryRoleId Int
   isPrimary      Boolean  @default(false)
   description    String?  @db.Text
-  createdAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt      DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt      DateTime @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime @updatedAt @db.Timestamp(6)
 
   account      Account      @relation(fields: [accountId], references: [id])
   ministry     Ministry     @relation(fields: [ministryId], references: [id])
@@ -196,17 +182,16 @@ model AccountMinistry {
 }
 
 model Education {
-  id        Int       @id @default(autoincrement())
-  schoolId  Int
-  accountId Int
-  gradeYear GradeYear
-  course    String?   @db.VarChar(150)
-  startDate DateTime  @db.Date
-  endDate   DateTime? @db.Date
-  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  id             Int            @id @default(autoincrement())
+  schoolId       Int
+  accountId      Int
+  educationLevel EducationLevel
+  course         String?        @db.VarChar(150)
+  startDate      DateTime       @db.Date
+  endDate        DateTime?      @db.Date
+  createdAt      DateTime       @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime       @updatedAt @db.Timestamp(6)
 
-  // Relations
   school  School  @relation(fields: [schoolId], references: [id])
   account Account @relation(fields: [accountId], references: [id])
 }
@@ -215,11 +200,11 @@ model Employment {
   id        Int       @id @default(autoincrement())
   companyId Int
   accountId Int
-  position  String?   @db.VarChar(100)
+  position  String    @db.VarChar(100)
   startDate DateTime  @db.Date
   endDate   DateTime? @db.Date
-  createdAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime  @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt DateTime  @updatedAt @db.Timestamp(6)
 
   // Relations
   company Company @relation(fields: [companyId], references: [id])
@@ -231,8 +216,8 @@ model Speaker {
   name      String   @db.VarChar(100)
   accountId Int?
   updatedBy Int?
-  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   account       Account?        @relation("SpeakerAccount", fields: [accountId], references: [id])
@@ -245,8 +230,8 @@ model Series {
   name       String   @db.VarChar(100)
   ministryId Int?
   churchId   Int?
-  createdAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   ministry Ministry? @relation(fields: [ministryId], references: [id])
@@ -262,8 +247,8 @@ model Event {
   seriesId   Int?
   ministryId Int?
   churchId   Int?
-  createdAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt  DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   series          Series?         @relation(fields: [seriesId], references: [id])
@@ -288,8 +273,8 @@ model EventMinistry {
 model Attendance {
   eventId   Int
   accountId Int
-  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
-  updatedAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   event   Event   @relation(fields: [eventId], references: [id])
@@ -302,7 +287,8 @@ model Attendance {
 model EventSpeakers {
   speakerId Int
   eventId   Int
-  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   speaker Speaker @relation(fields: [speakerId], references: [id])

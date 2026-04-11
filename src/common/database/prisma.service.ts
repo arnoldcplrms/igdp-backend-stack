@@ -38,9 +38,6 @@ export class PrismaService
   }
 
   async onModuleInit() {
-    // Keep updatedAt in sync on update operations.
-    this.$use(createUpdatedAtMiddleware());
-
     await this.$connect();
     await this.$executeRawUnsafe("SET TIME ZONE 'Asia/Manila'");
   }

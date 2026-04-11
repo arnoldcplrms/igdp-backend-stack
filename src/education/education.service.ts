@@ -13,19 +13,15 @@ export class EducationService {
     return this.educationRepo.findByAccountId(accountId, skip, take);
   }
 
-  update(
-    id: number,
-    accountId: number,
-    updateEducationDto: UpdateEducationDto,
-  ) {
-    return this.educationRepo.updateEducation(
-      id,
-      accountId,
-      updateEducationDto,
-    );
+  findOne(accountId: number) {
+    return this.educationRepo.findOne(accountId);
   }
 
-  remove(id: number, accountId: number) {
-    return this.educationRepo.removeEducation(id, accountId);
+  update(id: number, updateEducationDto: UpdateEducationDto) {
+    return this.educationRepo.updateEducation(id, updateEducationDto);
+  }
+
+  remove(id: number) {
+    return this.educationRepo.removeEducation(id);
   }
 }

@@ -2,8 +2,8 @@ import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
 import { Gender, UserType } from '@prisma/client';
 import {
-  CreateEducationDto,
   createEducationTxSchema,
+  CreateUserWithEducationDto,
 } from 'src/education/education.dto';
 import {
   CreateEmploymentDto,
@@ -16,18 +16,16 @@ export const createAccountSchema = z.object({
     firstName: z.string().min(1).max(50),
     middleName: z.string().min(1).max(50).optional().nullable(),
     lastName: z.string().min(1).max(50),
-    nickName: z.string().max(50).optional().nullable(),
+    nickname: z.string().max(50).optional().nullable(),
     profilePicture: z.string().max(255).optional().nullable(),
     facebookLink: z.string().max(255).optional().nullable(),
-    contactNumber: z.string().max(20),
+    contactNumber: z.string().max(20).optional().nullable(),
     email: z.string().email().min(1).max(100),
     gender: z.enum(Gender),
     birthDate: z.coerce.date(),
     userType: z.enum(UserType),
-    isActive: z.boolean(),
     emergencyContactName: z.string().max(100).optional().nullable(),
     emergencyContactNumber: z.string().max(20).optional().nullable(),
-    dGroupLeaderId: z.number().int().optional().nullable(),
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional().nullable(),
   }),
@@ -40,7 +38,7 @@ export const updateAccountSchema = z
     firstName: z.string().min(1).max(50).optional(),
     middleName: z.string().min(1).max(50).optional().nullable(),
     lastName: z.string().min(1).max(50).optional(),
-    nickName: z.string().max(50).optional().nullable(),
+    nickname: z.string().max(50).optional().nullable(),
     profilePicture: z.string().max(255).optional().nullable(),
     facebookLink: z.string().max(255).optional().nullable(),
     contactNumber: z.string().max(20).optional(),
@@ -55,7 +53,7 @@ export const updateAccountSchema = z
   .partial();
 
 export class CreateAccountDto extends ZodClass(createAccountSchema) {
-  education?: CreateEducationDto[];
+  education?: CreateUserWithEducationDto[];
   employment?: CreateEmploymentDto[];
 }
 
@@ -64,6 +62,7 @@ export class AccountDTO {
   firstName: string;
   middleName?: string | null;
   lastName: string;
+  nickname?: string | null;
   birthDate: Date;
   profilePicture?: string | null;
   gender: string;
@@ -71,8 +70,6 @@ export class AccountDTO {
   email: string;
   isActive: boolean;
   dGroupLeader?: { id: number; firstName: string; lastName: string } | null; // Single leader
-  dGroupMembers?: { id: number; firstName: string; lastName: string }[]; // Array of members
-  latestAttendance?: Date | null; // Latest attendance date
 }
 
 export type EventDTO = {
@@ -85,12 +82,12 @@ export class AccountQueryDto {
   firstName: string;
   middleName?: string | null;
   lastName: string;
+  nickname?: string | null;
   birthDate: Date;
   email: string;
   gender: string;
   profilePicture?: string | null;
   dGroupLeader?: { id: number; firstName: string; lastName: string } | null;
-  dGroupMembers?: { id: number; firstName: string; lastName: string }[];
   attendances?: Array<{
     eventId: number;
     createdAt: Date;
@@ -131,7 +128,7 @@ export class AccountDetailDto {
     schoolId?: number;
     startDate: Date;
     endDate?: Date | null;
-    gradeYear: string;
+    educationLevel: string;
     course?: string | null;
     school: {
       id: number;

@@ -6,7 +6,7 @@ import {
   Param,
   Delete,
   Query,
-  Put,
+  Patch,
 } from '@nestjs/common';
 import { EducationService } from './education.service';
 import {
@@ -42,22 +42,22 @@ export class EducationController {
     );
   }
 
-  @Put(':id/accountId/:accountId')
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.educationService.findOne(Number(id));
+  }
+
+  @Patch(':id')
   update(
     @Param('id') id: number,
-    @Param('accountId') accountId: number,
     @Body(new ZodValidationPipe(updateAccountEducationSchema))
     updateEducationDto: UpdateEducationDto,
   ) {
-    return this.educationService.update(
-      Number(id),
-      Number(accountId),
-      updateEducationDto,
-    );
+    return this.educationService.update(Number(id), updateEducationDto);
   }
 
-  @Delete(':id/accountId/:accountId')
-  remove(@Param('id') id: number, @Param('accountId') accountId: number) {
-    return this.educationService.remove(id, accountId);
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.educationService.remove(id);
   }
 }
