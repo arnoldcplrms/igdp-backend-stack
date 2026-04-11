@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { EducationLevel, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -41,30 +41,6 @@ async function main() {
     enrolledStudentCount: number;
     alumniStudentCount: number;
   };
-
-  function generateCounts(type: 'university' | 'college' | 'highschool') {
-    if (type === 'university') {
-      const enrolled = Math.floor(Math.random() * 50000) + 15000;
-      return {
-        enrolledStudentCount: enrolled,
-        alumniStudentCount: enrolled * (Math.floor(Math.random() * 8) + 5),
-      };
-    }
-
-    if (type === 'college') {
-      const enrolled = Math.floor(Math.random() * 20000) + 3000;
-      return {
-        enrolledStudentCount: enrolled,
-        alumniStudentCount: enrolled * (Math.floor(Math.random() * 6) + 3),
-      };
-    }
-
-    const enrolled = Math.floor(Math.random() * 5000) + 500;
-    return {
-      enrolledStudentCount: enrolled,
-      alumniStudentCount: enrolled * (Math.floor(Math.random() * 10) + 10),
-    };
-  }
 
   const baseSchools: Array<{
     name: string;
@@ -298,14 +274,12 @@ async function main() {
   ];
 
   const schoolData: SchoolSeed[] = baseSchools.map((school) => {
-    const counts = generateCounts(school.type);
-
     return {
       name: school.name,
       address: school.address,
       acronym: school.acronym,
-      enrolledStudentCount: counts.enrolledStudentCount,
-      alumniStudentCount: counts.alumniStudentCount,
+      enrolledStudentCount: 0,
+      alumniStudentCount: 0,
     };
   });
 
@@ -356,98 +330,79 @@ async function main() {
   console.log(`Created ${companies.length} companies`);
 
   console.log('Creating Accounts...');
-  const accounts = await Promise.all([
-    prisma.account.create({
-      data: {
-        firstName: 'John',
-        middleName: 'Michael',
-        lastName: 'Doe',
-        nickname: 'JD',
-        facebookLink: 'https://facebook.com/johndoe',
-        contactNumber: '+639171234567',
-        email: 'john.doe@example.com',
-        gender: 'Male',
-        birthDate: new Date('1990-01-15'),
-        userType: 'Admin',
-        emergencyContactName: 'Jane Doe',
-        emergencyContactNumber: '+639171234568',
-      },
-    }),
-    prisma.account.create({
-      data: {
-        firstName: 'Maria',
-        middleName: 'Clara',
-        lastName: 'Santos',
-        nickname: 'MC',
-        facebookLink: 'https://facebook.com/mariasantos',
-        contactNumber: '+639172345678',
-        email: 'maria.santos@example.com',
-        gender: 'Female',
-        birthDate: new Date('1992-05-22'),
-        userType: 'MinistryHead',
-        emergencyContactName: 'Juan Santos',
-        emergencyContactNumber: '+639172345679',
-      },
-    }),
-    prisma.account.create({
-      data: {
-        firstName: 'Carlos',
-        lastName: 'Reyes',
-        nickname: 'CRey',
-        facebookLink: 'https://facebook.com/carlosreyes',
-        contactNumber: '+639173456789',
-        email: 'carlos.reyes@example.com',
-        gender: 'Male',
-        birthDate: new Date('1988-03-10'),
-        userType: 'DGM',
-        emergencyContactName: 'Rosa Reyes',
-        emergencyContactNumber: '+639173456790',
-      },
-    }),
-    prisma.account.create({
-      data: {
-        firstName: 'Ana',
-        middleName: 'Luz',
-        lastName: 'Garcia',
-        nickname: 'Ana',
-        facebookLink: 'https://facebook.com/anagarcia',
-        contactNumber: '+639174567890',
-        email: 'ana.garcia@example.com',
-        gender: 'Female',
-        birthDate: new Date('1995-07-18'),
-        userType: 'Member',
-        emergencyContactName: 'Pedro Garcia',
-        emergencyContactNumber: '+639174567891',
-      },
-    }),
-    prisma.account.create({
-      data: {
-        firstName: 'Manuel',
-        lastName: 'Fernandez',
-        facebookLink: 'https://facebook.com/manuelfernandez',
-        contactNumber: '+639175678901',
-        email: 'manuel.fernandez@example.com',
-        gender: 'Male',
-        birthDate: new Date('1991-11-25'),
-        userType: 'Member',
-        emergencyContactName: 'Sofia Fernandez',
-        emergencyContactNumber: '+639175678902',
-      },
-    }),
-    prisma.account.create({
-      data: {
-        firstName: 'Patricia',
-        middleName: 'Anne',
-        lastName: 'Molina',
-        facebookLink: 'https://facebook.com/patriciamolina',
-        contactNumber: '+639176789012',
-        email: 'patricia.molina@example.com',
-        gender: 'Female',
-        birthDate: new Date('1994-09-30'),
-        userType: 'Member',
-      },
-    }),
-  ]);
+  const firstNames = [
+    'John',
+    'Maria',
+    'Carlos',
+    'Ana',
+    'Manuel',
+    'Patricia',
+    'Luis',
+    'Mark',
+    'Angela',
+    'Joseph',
+    'Miguel',
+    'Rosa',
+    'Daniel',
+    'Sophia',
+    'James',
+    'Paolo',
+    'Grace',
+    'Andrea',
+  ];
+
+  const lastNames = [
+    'Doe',
+    'Santos',
+    'Reyes',
+    'Garcia',
+    'Fernandez',
+    'Molina',
+    'Cruz',
+    'Ramos',
+    'Torres',
+    'Villanueva',
+  ];
+
+  function randomPhone(index: number) {
+    return `+63917${String(1000000 + index).slice(1)}`;
+  }
+
+  async function seedAccounts() {
+    const accounts = await Promise.all(
+      Array.from({ length: 200 }).map((_, i) => {
+        const firstName = randomItem(firstNames);
+        const lastName = randomItem(lastNames);
+        const gender = Math.random() > 0.5 ? 'Male' : 'Female';
+
+        const hasMiddleName = Math.random() > 0.3;
+        const middleName = hasMiddleName ? randomItem(firstNames) : null;
+
+        const fullName = `${firstName}.${lastName}.${i}`; // ensure unique email
+
+        return prisma.account.create({
+          data: {
+            firstName,
+            middleName,
+            lastName,
+            nickname: firstName.slice(0, 2),
+            facebookLink: `https://facebook.com/${fullName.toLowerCase()}`,
+            contactNumber: randomPhone(i),
+            email: `${fullName.toLowerCase()}@example.com`,
+            gender,
+            birthDate: randomDate(),
+            userType: 'Member',
+            emergencyContactName: `${randomItem(firstNames)} ${lastName}`,
+            emergencyContactNumber: randomPhone(i + 100),
+          },
+        });
+      }),
+    );
+
+    return accounts;
+  }
+
+  const accounts = await seedAccounts();
   console.log(`Created ${accounts.length} accounts`);
 
   // Link dGroupLeader for some accounts
@@ -462,59 +417,112 @@ async function main() {
   });
 
   console.log('Creating Education records...');
-  const educations = await Promise.all([
-    prisma.education.create({
-      data: {
-        schoolId: schools[0].id,
-        accountId: accounts[0].id,
-        educationLevel: 'College',
-        course: 'Bachelor of Science in Computer Science',
-        startDate: new Date('2008-06-01'),
-        endDate: new Date('2012-05-31'),
+  const educationLevels = [
+    EducationLevel.JuniorHigh,
+    EducationLevel.SeniorHigh,
+    EducationLevel.College,
+    EducationLevel.Masteral,
+    EducationLevel.Doctoral,
+  ];
+
+  function randomItem<T>(arr: T[]) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function randomDate(startYear = 2000, endYear = 2025) {
+    const start = new Date(startYear, 0, 1).getTime();
+    const end = new Date(endYear, 11, 31).getTime();
+    return new Date(start + Math.random() * (end - start));
+  }
+
+  function maybeNullDate(date: Date) {
+    return Math.random() < 0.3 ? null : date;
+  }
+
+  function generateCourse(level: EducationLevel) {
+    if (level === EducationLevel.JuniorHigh) return null;
+
+    const courses = [
+      'Bachelor of Science in Computer Science',
+      'Bachelor of Science in Business Administration',
+      'Bachelor of Science in Engineering',
+      'Bachelor of Arts in English',
+      'Bachelor of Science in Information Technology',
+      'Master in Business Administration',
+      'Doctor of Philosophy in Education',
+    ];
+
+    return randomItem(courses);
+  }
+
+  const TARGET_PER_SCHOOL = 50;
+
+  const educations = [];
+
+  for (const school of schools) {
+    for (let i = 0; i < TARGET_PER_SCHOOL; i++) {
+      const level = randomItem(educationLevels);
+
+      const startDate = randomDate(2000, 2022);
+      const endDate = randomDate(
+        startDate.getFullYear(),
+        startDate.getFullYear() + 6,
+      );
+
+      educations.push(
+        prisma.education.create({
+          data: {
+            schoolId: school.id,
+            accountId: randomItem(accounts).id,
+            educationLevel: level,
+            course: generateCourse(level),
+            startDate,
+            endDate: maybeNullDate(endDate),
+          },
+        }),
+      );
+    }
+  }
+
+  const latestEducations = await Promise.all(educations);
+  async function syncSchoolStudentCounts() {
+    const educations = await prisma.education.findMany({
+      select: {
+        schoolId: true,
+        endDate: true,
       },
-    }),
-    prisma.education.create({
-      data: {
-        schoolId: schools[1].id,
-        accountId: accounts[1].id,
-        educationLevel: 'College',
-        course: 'Bachelor of Science in Business Administration',
-        startDate: new Date('2010-08-01'),
-        endDate: new Date('2014-05-31'),
-      },
-    }),
-    prisma.education.create({
-      data: {
-        schoolId: schools[2].id,
-        accountId: accounts[2].id,
-        educationLevel: 'College',
-        course: 'Bachelor of Science in Engineering',
-        startDate: new Date('2006-06-01'),
-        endDate: new Date('2010-05-31'),
-      },
-    }),
-    prisma.education.create({
-      data: {
-        schoolId: schools[3].id,
-        accountId: accounts[3].id,
-        educationLevel: 'JuniorHigh',
-        course: null,
-        startDate: new Date('2012-06-01'),
-        endDate: new Date('2014-03-31'),
-      },
-    }),
-    prisma.education.create({
-      data: {
-        schoolId: schools[4].id,
-        accountId: accounts[4].id,
-        educationLevel: 'College',
-        course: 'Bachelor of Arts in English',
-        startDate: new Date('2022-08-01'),
-        endDate: null,
-      },
-    }),
-  ]);
-  console.log(`Created ${educations.length} education records`);
+    });
+
+    const map = new Map<number, { enrolled: number; alumni: number }>();
+
+    for (const edu of educations) {
+      if (!map.has(edu.schoolId)) {
+        map.set(edu.schoolId, { enrolled: 0, alumni: 0 });
+      }
+
+      const record = map.get(edu.schoolId)!;
+
+      if (edu.endDate === null) {
+        record.enrolled++;
+      } else {
+        record.alumni++;
+      }
+    }
+
+    await Promise.all(
+      Array.from(map.entries()).map(([schoolId, counts]) =>
+        prisma.school.update({
+          where: { id: schoolId },
+          data: {
+            enrolledStudentCount: counts.enrolled,
+            alumniStudentCount: counts.alumni,
+          },
+        }),
+      ),
+    );
+  }
+  await syncSchoolStudentCounts();
+  console.log(`Created ${latestEducations.length} education records`);
 
   console.log('Creating Employment records...');
   const employments = await Promise.all([
