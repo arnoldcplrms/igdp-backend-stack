@@ -4,14 +4,17 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Clear existing data
-  await prisma.event.deleteMany();
-  await prisma.series.deleteMany();
-  await prisma.employment.deleteMany();
-  await prisma.education.deleteMany();
-  await prisma.account.deleteMany({});
-  await prisma.company.deleteMany();
-  await prisma.school.deleteMany();
-  await prisma.church.deleteMany();
+  await prisma.$transaction([
+    prisma.eventSpeakers.deleteMany(),
+    prisma.event.deleteMany(),
+    prisma.series.deleteMany(),
+    prisma.employment.deleteMany(),
+    prisma.education.deleteMany(),
+    prisma.account.deleteMany(),
+    prisma.company.deleteMany(),
+    prisma.school.deleteMany(),
+    prisma.church.deleteMany(),
+  ]);
 
   console.log('Creating Church...');
   const church = await Promise.all([
@@ -31,38 +34,202 @@ async function main() {
   console.log(`Created ${church.length} churchs`);
 
   console.log('Creating Schools...');
-  const schools = await Promise.all([
-    prisma.school.create({
-      data: {
-        name: 'University of the Philippines',
-        address: '1101 Diliman, Quezon City',
-      },
-    }),
-    prisma.school.create({
-      data: {
-        name: 'Ateneo de Manila University',
-        address: 'Katipunan Avenue, Quezon City',
-      },
-    }),
-    prisma.school.create({
-      data: {
-        name: 'De La Salle University',
-        address: 'Taft Avenue, Manila',
-      },
-    }),
-    prisma.school.create({
-      data: {
-        name: 'Philippine Science High School',
-        address: 'UP Campus, Diliman, Quezon City',
-      },
-    }),
-    prisma.school.create({
-      data: {
-        name: 'Miriam College',
-        address: 'Katipunan Avenue, Quezon City',
-      },
-    }),
-  ]);
+
+  type SchoolSeed = {
+    name: string;
+    address: string;
+    enrolledStudentCount: number;
+    alumniStudentCount: number;
+  };
+
+  function generateCounts(type: 'university' | 'college' | 'highschool') {
+    if (type === 'university') {
+      const enrolled = Math.floor(Math.random() * 50000) + 15000;
+      return {
+        enrolledStudentCount: enrolled,
+        alumniStudentCount: enrolled * (Math.floor(Math.random() * 8) + 5),
+      };
+    }
+
+    if (type === 'college') {
+      const enrolled = Math.floor(Math.random() * 20000) + 3000;
+      return {
+        enrolledStudentCount: enrolled,
+        alumniStudentCount: enrolled * (Math.floor(Math.random() * 6) + 3),
+      };
+    }
+
+    // highschool
+    const enrolled = Math.floor(Math.random() * 5000) + 500;
+    return {
+      enrolledStudentCount: enrolled,
+      alumniStudentCount: enrolled * (Math.floor(Math.random() * 10) + 10),
+    };
+  }
+
+  const baseSchools: Array<{
+    name: string;
+    address: string;
+    type: 'university' | 'college' | 'highschool';
+  }> = [
+    // NCR
+    {
+      name: 'University of the Philippines',
+      address: 'Diliman, Quezon City',
+      type: 'university',
+    },
+    {
+      name: 'Ateneo de Manila University',
+      address: 'Katipunan Avenue, Quezon City',
+      type: 'university',
+    },
+    {
+      name: 'De La Salle University',
+      address: 'Taft Avenue, Manila',
+      type: 'university',
+    },
+    {
+      name: 'University of Santo Tomas',
+      address: 'España, Manila',
+      type: 'university',
+    },
+    {
+      name: 'Polytechnic University of the Philippines',
+      address: 'Sta. Mesa, Manila',
+      type: 'university',
+    },
+    { name: 'Far Eastern University', address: 'Manila', type: 'university' },
+    { name: 'University of the East', address: 'Manila', type: 'university' },
+    {
+      name: 'Mapúa University',
+      address: 'Intramuros, Manila',
+      type: 'university',
+    },
+    { name: 'Adamson University', address: 'Manila', type: 'university' },
+    { name: 'National University', address: 'Manila', type: 'university' },
+
+    // Colleges
+    {
+      name: 'De La Salle–College of Saint Benilde',
+      address: 'Manila',
+      type: 'college',
+    },
+    { name: 'San Beda University', address: 'Manila', type: 'college' },
+    { name: 'Arellano University', address: 'Manila', type: 'college' },
+    { name: 'Centro Escolar University', address: 'Manila', type: 'college' },
+    { name: 'Jose Rizal University', address: 'Mandaluyong', type: 'college' },
+    { name: 'Asia Pacific College', address: 'Makati', type: 'college' },
+    { name: 'University of Makati', address: 'Makati', type: 'college' },
+    {
+      name: 'Pamantasan ng Lungsod ng Maynila',
+      address: 'Intramuros, Manila',
+      type: 'college',
+    },
+    { name: 'Taguig City University', address: 'Taguig', type: 'college' },
+    {
+      name: 'Rizal Technological University',
+      address: 'Mandaluyong',
+      type: 'college',
+    },
+
+    // Visayas / Mindanao Universities
+    {
+      name: 'University of San Carlos',
+      address: 'Cebu City',
+      type: 'university',
+    },
+    {
+      name: 'University of San Jose–Recoletos',
+      address: 'Cebu City',
+      type: 'university',
+    },
+    {
+      name: 'Cebu Institute of Technology – University',
+      address: 'Cebu City',
+      type: 'university',
+    },
+    {
+      name: 'Silliman University',
+      address: 'Dumaguete City',
+      type: 'university',
+    },
+    {
+      name: 'Central Philippine University',
+      address: 'Iloilo City',
+      type: 'university',
+    },
+    {
+      name: 'West Visayas State University',
+      address: 'Iloilo City',
+      type: 'university',
+    },
+    {
+      name: 'University of St. La Salle',
+      address: 'Bacolod City',
+      type: 'university',
+    },
+    {
+      name: 'Xavier University – Ateneo de Cagayan',
+      address: 'Cagayan de Oro',
+      type: 'university',
+    },
+    {
+      name: 'Ateneo de Davao University',
+      address: 'Davao City',
+      type: 'university',
+    },
+    {
+      name: 'University of Mindanao',
+      address: 'Davao City',
+      type: 'university',
+    },
+
+    // More schools (highschools + colleges mixed)
+    {
+      name: 'Philippine Science High School',
+      address: 'Quezon City',
+      type: 'highschool',
+    },
+    { name: 'Miriam College', address: 'Quezon City', type: 'college' },
+    { name: 'Holy Angel University', address: 'Pampanga', type: 'university' },
+    { name: 'San Pedro College', address: 'Davao City', type: 'college' },
+    {
+      name: 'Benguet State University',
+      address: 'La Trinidad, Benguet',
+      type: 'university',
+    },
+    {
+      name: 'Saint Louis University',
+      address: 'Baguio City',
+      type: 'university',
+    },
+    {
+      name: 'University of Baguio',
+      address: 'Baguio City',
+      type: 'university',
+    },
+  ];
+
+  const schoolData: SchoolSeed[] = baseSchools.map((school) => {
+    const counts = generateCounts(school.type);
+
+    return {
+      name: school.name,
+      address: school.address,
+      enrolledStudentCount: counts.enrolledStudentCount,
+      alumniStudentCount: counts.alumniStudentCount,
+    };
+  });
+
+  const schools = await prisma.$transaction(
+    schoolData.map((school) =>
+      prisma.school.upsert({
+        where: { name: school.name },
+        update: {},
+        create: school,
+      }),
+    ),
+  );
   console.log(`Created ${schools.length} schools`);
 
   console.log('Creating Companies...');
