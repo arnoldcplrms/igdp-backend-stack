@@ -11,6 +11,24 @@ async function main() {
   await prisma.account.deleteMany({});
   await prisma.company.deleteMany();
   await prisma.school.deleteMany();
+  await prisma.church.deleteMany();
+
+  console.log('Creating Church...');
+  const church = await Promise.all([
+    prisma.church.create({
+      data: {
+        name: 'Tandang Sora',
+        address: 'Crossroad Mall',
+      },
+    }),
+    prisma.church.create({
+      data: {
+        name: 'Commonwealth',
+        address: 'Ever Gotesco Mall',
+      },
+    }),
+  ]);
+  console.log(`Created ${church.length} churchs`);
 
   console.log('Creating Schools...');
   const schools = await Promise.all([
