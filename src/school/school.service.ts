@@ -14,7 +14,7 @@ import { AccountDTO } from 'src/account/account.dto';
 export class SchoolService {
   constructor(private schoolRepo: SchoolRepository) {}
 
-  create(createSchoolDto: CreateSchoolDto): Promise<SchoolListDTO> {
+  create(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
     return this.schoolRepo.createSchool(createSchoolDto);
   }
 

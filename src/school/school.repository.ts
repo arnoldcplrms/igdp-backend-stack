@@ -15,7 +15,7 @@ import { Prisma } from '@prisma/client';
 export class SchoolRepository {
   constructor(private prisma: PrismaService) {}
 
-  createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolListDTO> {
+  async createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
     const data: any = {
       name: createSchoolDto.name,
       address: createSchoolDto.address,
@@ -25,9 +25,8 @@ export class SchoolRepository {
       data.acronym = createSchoolDto.acronym;
     }
 
-    return this.prisma.school.create({
-      data,
-    });
+    const school = await this.prisma.school.create({ data });
+    return { ...school, updatedAt: school.updatedAt ?? undefined };
   }
 
   async findSchools(filters: FilterSchoolDto) {
@@ -101,7 +100,7 @@ export class SchoolRepository {
       throw new NotFoundException('School not found');
     }
 
-    return school;
+    return { ...school, updatedAt: school.updatedAt ?? undefined };
   }
 
   async findStudentBySchoolId(

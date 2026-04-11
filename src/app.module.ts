@@ -19,6 +19,7 @@ import { AccountMinistryModule } from './account-ministry/account-ministry.modul
 import { DGroupModule } from './dgroup/dgroup.module';
 import { DGroupMembershipModule } from './dgroup-membership/dgroup-membership.module';
 import { EventMinistryModule } from './event-ministry/event-ministry.module';
+import { ChurchModule } from './church/church.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { EventMinistryModule } from './event-ministry/event-ministry.module';
     DGroupModule,
     DGroupMembershipModule,
     EventMinistryModule,
+    ChurchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
