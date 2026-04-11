@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import {
   AccountDTO,
   AccountQueryDto,
@@ -83,6 +83,13 @@ export class AccountRepository {
 
         return account;
       } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
+            const target = error.meta?.target;
+
+            throw new ConflictException(`${target} already exists`);
+          }
+        }
         Logger.error('Error creating account:', error);
         throw error;
       }
