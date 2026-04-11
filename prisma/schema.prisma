@@ -7,6 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Church {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(150)
+  address   String
+  createdAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+  updatedAt DateTime @default(dbgenerated("timezone('Asia/Manila'::text, now())")) @db.Timestamp(6)
+
+  // Relations
+  accounts   Account[]
+  ministries Ministry[]
+  events     Event[]
+  dGroups    DGroup[]
+  series     Series[]
+}
+
 model School {
   id        Int      @id @default(autoincrement())
   name      String
@@ -35,6 +50,7 @@ model Ministry {
   id             Int      @id @default(autoincrement())
   name           String   @db.VarChar(100)
   parentMinistry Int?
+  churchId       Int?
   mission        String?  @db.Text
   vision         String?  @db.Text
   description    String?  @db.Text
@@ -43,6 +59,7 @@ model Ministry {
 
   parent          Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
   children        Ministry[]        @relation("MinistryHierarchy")
+  church          Church?           @relation(fields: [churchId], references: [id])
   roles           MinistryRole[]
   accounts        AccountMinistry[]
   series          Series[]
@@ -69,9 +86,12 @@ enum DGroupMembershipRole {
 model DGroup {
   id          Int                @id @default(autoincrement())
   name        String             @db.VarChar(100)
+  churchId    Int?
+  memberships DGroupMembership[]
   createdAt   DateTime           @default(now()) @db.Timestamp(6)
   updatedAt   DateTime           @updatedAt @db.Timestamp(6)
-  memberships DGroupMembership[]
+  // Relations
+  church      Church?            @relation(fields: [churchId], references: [id])
 }
 
 model DGroupMembership {
@@ -124,15 +144,17 @@ model Account {
   userType               UserType
   dGroupLeaderId         Int?
   spouseId               Int?     @unique
-  createdAt              DateTime @default(now()) @db.Timestamp(6)
-  updatedAt              DateTime @updatedAt @db.Timestamp(6)
+  churchId               Int?
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
+  createdAt              DateTime @default(now()) @db.Timestamp(6)
+  updatedAt              DateTime @updatedAt @db.Timestamp(6)
 
   dGroupLeader      Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
   dGroupMembers     Account[]          @relation("dGroupLeader")
   spouse            Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
   spouseOf          Account[]          @relation("AccountSpouse")
+  church            Church?            @relation(fields: [churchId], references: [id])
   education         Education[]
   employment        Employment[]
   ministries        AccountMinistry[]
@@ -207,11 +229,13 @@ model Series {
   id         Int      @id @default(autoincrement())
   name       String   @db.VarChar(100)
   ministryId Int?
+  churchId   Int?
   createdAt  DateTime @default(now()) @db.Timestamp(6)
   updatedAt  DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   ministry Ministry? @relation(fields: [ministryId], references: [id])
+  church   Church?   @relation(fields: [churchId], references: [id])
   events   Event[]
 }
 
@@ -222,12 +246,14 @@ model Event {
   location   String   @db.VarChar(100)
   seriesId   Int?
   ministryId Int?
+  churchId   Int?
   createdAt  DateTime @default(now()) @db.Timestamp(6)
   updatedAt  DateTime @updatedAt @db.Timestamp(6)
 
   // Relations
   series          Series?         @relation(fields: [seriesId], references: [id])
   ministry        Ministry?       @relation(fields: [ministryId], references: [id])
+  church          Church?         @relation(fields: [churchId], references: [id])
   attendances     Attendance[]
   eventSpeakers   EventSpeakers[]
   eventMinistries EventMinistry[]
