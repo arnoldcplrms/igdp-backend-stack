@@ -47,6 +47,7 @@ export class SchoolRepository {
       skip,
       take: toOverfetchTake(take),
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
+      distinct: ['name'],
       orderBy: [
         { enrolledStudentCount: 'desc' },
         { alumniStudentCount: 'desc' },
