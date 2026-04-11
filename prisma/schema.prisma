@@ -141,7 +141,7 @@ model Account {
   email                  String   @unique @db.VarChar(100)
   gender                 Gender
   birthDate              DateTime @db.Date
-  userType               UserType
+  userType               UserType @default(Member)
   dGroupLeaderId         Int?
   spouseId               Int?     @unique
   churchId               Int?
