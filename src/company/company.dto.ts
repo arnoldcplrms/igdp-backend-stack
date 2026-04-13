@@ -22,10 +22,15 @@ export const filterCompanySchema = z.object({
 
 export class CreateCompanyDto extends ZodClass(createCompanySchema) {}
 
-export class CompanyDTO extends ZodClass(updateCompanySchema) {
+export class CompanyDTO extends ZodClass(createCompanySchema) {
   id: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export class CompaniesDTO extends CompanyDTO {
+  employedCount: number;
+  formerEmployeeCount: number;
 }
 
 export class UpdateCompanyDto extends ZodClass(updateCompanySchema) {}
