@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompanyDto, UpdateCompanyDto } from './company.dto';
-import { PrismaService } from 'src/common/database/prisma.service';
+import {
+  CreateCompanyDto,
+  FilterCompanyDto,
+  UpdateCompanyDto,
+} from './company.dto';
 import { CompanyRepository } from './company.repository';
 
 @Injectable()
@@ -15,8 +18,8 @@ export class CompanyService {
     return this.companyRepo.findCompanyByName(name, skip, take);
   }
 
-  findMany(search?: string, skip?: number, take?: number) {
-    return this.companyRepo.findCompanyMany(search, skip, take);
+  async findMany(filters: FilterCompanyDto) {
+    return this.companyRepo.findCompanies(filters);
   }
 
   update(id: number, updateCompanyDto: UpdateCompanyDto) {

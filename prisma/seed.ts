@@ -1,4 +1,5 @@
 import { EducationLevel, PrismaClient } from '@prisma/client';
+import { companyData } from './company.seed';
 
 const prisma = new PrismaClient();
 
@@ -286,7 +287,12 @@ async function main() {
   const schools = await prisma.$transaction(
     schoolData.map((school) =>
       prisma.school.upsert({
-        where: { name: school.name },
+        where: {
+          name_address: {
+            name: school.name,
+            address: school.address,
+          },
+        },
         update: {},
         create: school,
       }),
@@ -295,38 +301,21 @@ async function main() {
   console.log(`Created ${schools.length} schools`);
 
   console.log('Creating Companies...');
-  const companies = await Promise.all([
-    prisma.company.create({
-      data: {
-        name: 'Google Philippines',
-        address: 'Bonifacio Global City, Taguig',
-      },
-    }),
-    prisma.company.create({
-      data: {
-        name: 'Microsoft Asia',
-        address: 'Makati Avenue, Makati City',
-      },
-    }),
-    prisma.company.create({
-      data: {
-        name: 'Facebook/Meta Philippines',
-        address: 'Bonifacio Global City, Taguig',
-      },
-    }),
-    prisma.company.create({
-      data: {
-        name: 'Amazon Philippines',
-        address: 'Fort Bonifacio, Taguig',
-      },
-    }),
-    prisma.company.create({
-      data: {
-        name: 'Oracle Philippines',
-        address: 'The Enterprise Center, Makati City',
-      },
-    }),
-  ]);
+  const companies = await prisma.$transaction(
+    companyData.map((company) =>
+      prisma.company.upsert({
+        where: {
+          name_address: {
+            name: company.name,
+            address: company.address,
+          },
+        },
+        update: {},
+        create: company,
+      }),
+    ),
+  );
+
   console.log(`Created ${companies.length} companies`);
 
   console.log('Creating Accounts...');

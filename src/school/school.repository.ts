@@ -1,10 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import type {
   CreateSchoolDto,
   FilterSchoolDto,
   SchoolDTO,
-  SchoolListDTO,
   UpdateSchoolDto,
 } from './school.dto';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
@@ -47,7 +51,7 @@ export class SchoolRepository {
       skip,
       take: toOverfetchTake(take),
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
-      distinct: ['name'],
+      distinct: ['name', 'address'],
       orderBy: [
         { enrolledStudentCount: 'desc' },
         { alumniStudentCount: 'desc' },

@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompanyDto, UpdateCompanyDto } from './company.dto';
+import {
+  CreateCompanyDto,
+  FilterCompanyDto,
+  UpdateCompanyDto,
+} from './company.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
@@ -30,21 +34,26 @@ export class CompanyRepository {
     });
   }
 
-  findCompanyMany(search?: string, skip?: number, take?: number) {
-    return this.prisma.company.findMany({
+  async findCompanies(filters: FilterCompanyDto) {
+    const { search, skip, take } = filters;
+    const andConditions: any[] = [];
+
+    if (search) {
+      andConditions.push({
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { acronym: { contains: search, mode: 'insensitive' } },
+          { address: { contains: search, mode: 'insensitive' } },
+        ],
+      });
+    }
+
+    return await this.prisma.company.findMany({
       skip,
-      where: search
-        ? {
-            OR: [
-              { name: { contains: search, mode: 'insensitive' } },
-              { acronym: { contains: search, mode: 'insensitive' } },
-            ],
-          }
-        : undefined,
-      orderBy: {
-        createdAt: 'desc',
-      },
       take: toOverfetchTake(take),
+      where: andConditions.length > 0 ? { AND: andConditions } : undefined,
+      distinct: ['name', 'address'],
+      orderBy: [{ employedCount: 'desc' }, { formerEmployeeCount: 'desc' }],
     });
   }
 
