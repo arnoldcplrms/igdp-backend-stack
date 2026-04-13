@@ -54,15 +54,6 @@ export class CompanyRepository {
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
       distinct: ['name', 'address'],
       orderBy: [{ employedCount: 'desc' }, { formerEmployeeCount: 'desc' }],
-      select: {
-        id: true,
-        name: true,
-        acronym: true,
-        address: true,
-        createdAt: true,
-        employedCount: true,
-        formerEmployeeCount: true,
-      },
     });
   }
 
