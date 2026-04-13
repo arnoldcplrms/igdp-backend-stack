@@ -20,27 +20,17 @@ export class SchoolRepository {
   constructor(private prisma: PrismaService) {}
 
   async createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
-    try {
-      const data: any = {
-        name: createSchoolDto.name,
-        address: createSchoolDto.address,
-      };
+    const data: any = {
+      name: createSchoolDto.name,
+      address: createSchoolDto.address,
+    };
 
-      if (createSchoolDto.acronym !== undefined) {
-        data.acronym = createSchoolDto.acronym;
-      }
-
-      const school = await this.prisma.school.create({ data });
-      return { ...school, updatedAt: school.updatedAt ?? undefined };
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException(`School already exists`);
-        }
-      }
-      Logger.error('Error creating account:', error);
-      throw error;
+    if (createSchoolDto.acronym !== undefined) {
+      data.acronym = createSchoolDto.acronym;
     }
+
+    const school = await this.prisma.school.create({ data });
+    return { ...school, updatedAt: school.updatedAt ?? undefined };
   }
 
   async findSchools(filters: FilterSchoolDto) {
