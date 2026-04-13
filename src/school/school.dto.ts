@@ -32,8 +32,8 @@ export class SchoolDTO {
 }
 
 export class SchoolListDTO extends SchoolDTO {
-  activeEducationCount: number;
-  completedEducationCount: number;
+  enrolledStudentCount: number;
+  alumniStudentCount: number;
 }
 
 export class UpdateSchoolDto extends ZodClass(updateSchoolSchema) {}

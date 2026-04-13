@@ -1,3 +1,4 @@
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
 
@@ -13,6 +14,12 @@ export const updateCompanySchema = z.object({
   address: z.string().min(1).optional(),
 });
 
+export const filterCompanySchema = z.object({
+  search: z.string().min(1).optional(),
+  skip: z.coerce.number().int().min(0).optional(),
+  take: z.coerce.number().int().positive().max(PAGE_SIZE_COUNT).optional(),
+});
+
 export class CreateCompanyDto extends ZodClass(createCompanySchema) {}
 
 export class CompanyDTO extends ZodClass(updateCompanySchema) {
@@ -22,3 +29,5 @@ export class CompanyDTO extends ZodClass(updateCompanySchema) {
 }
 
 export class UpdateCompanyDto extends ZodClass(updateCompanySchema) {}
+
+export class FilterCompanyDto extends ZodClass(filterCompanySchema) {}

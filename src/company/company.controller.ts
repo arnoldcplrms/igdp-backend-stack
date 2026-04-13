@@ -11,6 +11,8 @@ import {
 import { CompanyService } from './company.service';
 import {
   createCompanySchema,
+  FilterCompanyDto,
+  filterCompanySchema,
   updateCompanySchema,
   type CreateCompanyDto,
   type UpdateCompanyDto,
@@ -31,15 +33,10 @@ export class CompanyController {
 
   @Get()
   findMany(
-    @Query('search') search?: string,
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
+    @Query(new ZodValidationPipe(filterCompanySchema))
+    filters: FilterCompanyDto,
   ) {
-    return this.companyService.findMany(
-      search,
-      skip ? parseInt(skip) : undefined,
-      take ? parseInt(take) : undefined,
-    );
+    return this.companyService.findMany(filters);
   }
 
   @Put(':id')

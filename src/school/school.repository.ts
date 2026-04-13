@@ -1,10 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import type {
   CreateSchoolDto,
   FilterSchoolDto,
   SchoolDTO,
-  SchoolListDTO,
   UpdateSchoolDto,
 } from './school.dto';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
@@ -16,17 +20,27 @@ export class SchoolRepository {
   constructor(private prisma: PrismaService) {}
 
   async createSchool(createSchoolDto: CreateSchoolDto): Promise<SchoolDTO> {
-    const data: any = {
-      name: createSchoolDto.name,
-      address: createSchoolDto.address,
-    };
+    try {
+      const data: any = {
+        name: createSchoolDto.name,
+        address: createSchoolDto.address,
+      };
 
-    if (createSchoolDto.acronym !== undefined) {
-      data.acronym = createSchoolDto.acronym;
+      if (createSchoolDto.acronym !== undefined) {
+        data.acronym = createSchoolDto.acronym;
+      }
+
+      const school = await this.prisma.school.create({ data });
+      return { ...school, updatedAt: school.updatedAt ?? undefined };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException(`School already exists`);
+        }
+      }
+      Logger.error('Error creating account:', error);
+      throw error;
     }
-
-    const school = await this.prisma.school.create({ data });
-    return { ...school, updatedAt: school.updatedAt ?? undefined };
   }
 
   async findSchools(filters: FilterSchoolDto) {
@@ -47,7 +61,7 @@ export class SchoolRepository {
       skip,
       take: toOverfetchTake(take),
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
-      distinct: ['name'],
+      distinct: ['name', 'address'],
       orderBy: [
         { enrolledStudentCount: 'desc' },
         { alumniStudentCount: 'desc' },

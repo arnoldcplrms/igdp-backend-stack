@@ -24,7 +24,7 @@ model Church {
 
 model School {
   id        Int      @id @default(autoincrement())
-  name      String   @unique
+  name      String
   acronym   String?  @db.VarChar(20)
   address   String
   createdAt DateTime @default(now()) @db.Timestamp(6)
@@ -34,16 +34,24 @@ model School {
   alumniStudentCount   Int @default(0)
 
   education Education[]
+
+  @@unique([name, address])
 }
 
 model Company {
-  id         Int          @id @default(autoincrement())
-  name       String
-  acronym    String?      @db.VarChar(20)
-  address    String
-  createdAt  DateTime     @default(now()) @db.Timestamp(6)
-  updatedAt  DateTime     @updatedAt @db.Timestamp(6)
+  id        Int      @id @default(autoincrement())
+  name      String
+  acronym   String?  @db.VarChar(20)
+  address   String
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+
+  employedCount       Int @default(0)
+  formerEmployeeCount Int @default(0)
+
   Employment Employment[]
+
+  @@unique([name, address])
 }
 
 model Ministry {
