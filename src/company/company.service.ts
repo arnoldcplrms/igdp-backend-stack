@@ -30,7 +30,7 @@ export class CompanyService {
     return this.companyRepo.removeCompany(id);
   }
 
-  findById(id: number) {
+  async findById(id: number) {
     return this.companyRepo.findCompanyById(id);
   }
 }

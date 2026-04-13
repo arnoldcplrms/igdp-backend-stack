@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   CreateCompanyDto,
   FilterCompanyDto,
@@ -70,9 +70,15 @@ export class CompanyRepository {
     });
   }
 
-  findCompanyById(id: number) {
-    return this.prisma.company.findUnique({
+  async findCompanyById(id: number) {
+    const company = await this.prisma.company.findUnique({
       where: { id },
     });
+
+    if (!company) {
+      throw new NotFoundException(`Company not found`);
+    }
+
+    return company;
   }
 }
