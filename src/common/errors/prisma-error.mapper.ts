@@ -1,3 +1,5 @@
+import { formatMessage } from '../utils/error.utils';
+
 type PrismaErrorResult = {
   status: number;
   message: string;
@@ -13,7 +15,7 @@ export const mapPrismaError = (exception: any): PrismaErrorResult | null => {
       status: 409,
       message:
         fields.length > 0
-          ? `${fields.join(', ')} already exists`
+          ? `${formatMessage(fields)} already exists`
           : 'Duplicate field value',
       error: 'Conflict',
     };
