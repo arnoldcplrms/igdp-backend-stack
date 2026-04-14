@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { EmploymentService } from './employment.service';
 import {
@@ -28,9 +29,17 @@ export class EmploymentController {
     return this.employmentService.create(createEmploymentDto);
   }
 
-  @Get()
-  findAll() {
-    return this.employmentService.findAll();
+  @Get('accountId/:accountId')
+  findByAccountId(
+    @Param('accountId') accountId: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.employmentService.findByAccountId(
+      +accountId,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
+    );
   }
 
   @Get(':id')
