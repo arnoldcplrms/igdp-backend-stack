@@ -1,5 +1,6 @@
 import { EducationLevel, PrismaClient } from '@prisma/client';
 import { companyData } from './company.seed';
+import { seedEmployment } from './education.seed';
 
 const prisma = new PrismaClient();
 
@@ -514,54 +515,8 @@ async function main() {
   console.log(`Created ${latestEducations.length} education records`);
 
   console.log('Creating Employment records...');
-  const employments = await Promise.all([
-    prisma.employment.create({
-      data: {
-        companyId: companies[0].id,
-        accountId: accounts[0].id,
-        position: 'Senior Software Engineer',
-        startDate: new Date('2018-03-01'),
-        endDate: null,
-      },
-    }),
-    prisma.employment.create({
-      data: {
-        companyId: companies[1].id,
-        accountId: accounts[1].id,
-        position: 'Product Manager',
-        startDate: new Date('2016-07-01'),
-        endDate: null,
-      },
-    }),
-    prisma.employment.create({
-      data: {
-        companyId: companies[2].id,
-        accountId: accounts[2].id,
-        position: 'Business Development Manager',
-        startDate: new Date('2019-01-15'),
-        endDate: null,
-      },
-    }),
-    prisma.employment.create({
-      data: {
-        companyId: companies[3].id,
-        accountId: accounts[3].id,
-        position: 'Junior Developer',
-        startDate: new Date('2021-06-01'),
-        endDate: null,
-      },
-    }),
-    prisma.employment.create({
-      data: {
-        companyId: companies[4].id,
-        accountId: accounts[4].id,
-        position: 'Quality Assurance Engineer',
-        startDate: new Date('2020-09-01'),
-        endDate: new Date('2023-08-31'),
-      },
-    }),
-  ]);
-  console.log(`Created ${employments.length} employment records`);
+  const employments = await seedEmployment();
+  console.log(`Created ${employments.count} employment records`);
 
   console.log('Creating Series...');
   const series = await Promise.all([
