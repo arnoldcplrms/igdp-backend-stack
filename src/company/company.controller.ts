@@ -57,4 +57,22 @@ export class CompanyController {
   findById(@Param('id') id: string) {
     return this.companyService.findById(+id);
   }
+
+  @Get('/employed/:id')
+  findEmployedInCompany(
+    @Param('id') id: string,
+    @Query(new ZodValidationPipe(filterCompanySchema))
+    filters: FilterCompanyDto,
+  ) {
+    return this.companyService.findEmployeesInCompany(+id, filters);
+  }
+
+  @Get('/former/:id')
+  findFormerInCompany(
+    @Param('id') id: string,
+    @Query(new ZodValidationPipe(filterCompanySchema))
+    filters: FilterCompanyDto,
+  ) {
+    return this.companyService.findFormerInCompany(+id, filters);
+  }
 }

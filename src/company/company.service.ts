@@ -5,6 +5,7 @@ import {
   UpdateCompanyDto,
 } from './company.dto';
 import { CompanyRepository } from './company.repository';
+import { AccountDTO } from 'src/account/account.dto';
 
 @Injectable()
 export class CompanyService {
@@ -32,5 +33,19 @@ export class CompanyService {
 
   async findById(id: number) {
     return this.companyRepo.findCompanyById(id);
+  }
+
+  findEmployeesInCompany(
+    companyId: number,
+    filters: FilterCompanyDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    return this.companyRepo.findEmployeesByCompanyId(companyId, filters);
+  }
+
+  findFormerInCompany(
+    companyId: number,
+    filters: FilterCompanyDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    return this.companyRepo.findFormerByCompanyId(companyId, filters);
   }
 }

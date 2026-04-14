@@ -6,6 +6,8 @@ import {
 } from './company.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
+import { AccountDTO } from 'src/account/account.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CompanyRepository {
@@ -80,5 +82,91 @@ export class CompanyRepository {
     }
 
     return company;
+  }
+
+  async findEmployeesByCompanyId(
+    companyId: number,
+    filters: FilterCompanyDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    const { search, skip, take } = filters;
+    const andConditions: Prisma.AccountWhereInput[] = [];
+
+    if (search) {
+      andConditions.push({
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { middleName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+        ],
+      });
+    }
+
+    const where: Prisma.AccountWhereInput = {
+      employment: {
+        some: {
+          companyId,
+          endDate: null,
+        },
+      },
+      AND: andConditions.length > 0 ? andConditions : undefined,
+    };
+
+    return this.prisma.account.findMany({
+      skip,
+      take: toOverfetchTake(take),
+      orderBy: {
+        lastName: 'desc',
+      },
+      where,
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        profilePicture: true,
+      },
+    });
+  }
+
+  async findFormerByCompanyId(
+    companyId: number,
+    filters: FilterCompanyDto,
+  ): Promise<Partial<AccountDTO>[]> {
+    const { search, skip, take } = filters;
+
+    const andConditions: Prisma.AccountWhereInput[] = [];
+
+    if (search) {
+      andConditions.push({
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { middleName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+        ],
+      });
+    }
+
+    const where: Prisma.AccountWhereInput = {
+      employment: {
+        some: {
+          companyId,
+          NOT: { endDate: null },
+        },
+      },
+      AND: andConditions.length > 0 ? andConditions : undefined,
+    };
+
+    return this.prisma.account.findMany({
+      skip,
+      take: toOverfetchTake(take),
+      where,
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        profilePicture: true,
+      },
+    });
   }
 }
