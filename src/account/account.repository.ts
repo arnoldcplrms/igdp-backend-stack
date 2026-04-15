@@ -118,6 +118,7 @@ export class AccountRepository {
     const result = await this.prisma.account.findMany({
       skip,
       take: toOverfetchTake(pageSize),
+      distinct: ['id'],
       orderBy,
       ...this.selectObject,
     });
@@ -168,6 +169,7 @@ export class AccountRepository {
         },
         employment: {
           select: {
+            id: true,
             position: true,
             startDate: true,
             endDate: true,
