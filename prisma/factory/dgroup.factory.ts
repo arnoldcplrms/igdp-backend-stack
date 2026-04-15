@@ -14,31 +14,58 @@ export async function buildDGroups() {
 
     if (churchAccounts.length < 2) continue;
 
-    const shuffled = shuffles(churchAccounts);
+    const used = new Set<number>();
 
-    const groupCount = Math.max(3, Math.ceil(shuffled.length / 8));
-    const groups = chunkArray(
-      shuffled,
-      Math.ceil(shuffled.length / groupCount),
-    );
+    // 🧠 Step 1: Build units (couples or single)
+    const units: any[] = [];
 
-    for (const members of groups) {
-      const leader1 = members.shift();
-      if (!leader1) continue;
+    for (const acc of churchAccounts) {
+      if (used.has(acc.id)) continue;
 
-      const leaders: any[] = [leader1];
+      if (acc.spouseId) {
+        const spouse = churchAccounts.find((a) => a.id === acc.spouseId);
 
-      const spouseIndex = members.findIndex((m) => m.id === leader1.spouseId);
-
-      if (spouseIndex !== -1) {
-        const spouse = members.splice(spouseIndex, 1)[0];
-        leaders.push(spouse);
+        if (spouse && !used.has(spouse.id)) {
+          units.push([acc, spouse]);
+          used.add(acc.id);
+          used.add(spouse.id);
+          continue;
+        }
       }
 
+      // fallback: single
+      units.push([acc]);
+      used.add(acc.id);
+    }
+
+    // 🔀 shuffle units (not individuals!)
+    const shuffledUnits = shuffles(units);
+
+    // 📊 determine group count
+    const groupCount = Math.max(3, Math.ceil(churchAccounts.length / 8));
+
+    const groupedUnits = chunkArray(
+      shuffledUnits,
+      Math.ceil(shuffledUnits.length / groupCount),
+    );
+
+    // 🏗️ build groups
+    for (const unitGroup of groupedUnits) {
+      const flatMembers = unitGroup.flat();
+
+      if (flatMembers.length === 0) continue;
+
+      // 👑 leaders = first unit
+      const leaderUnit = unitGroup[0];
+      const leaders = [...leaderUnit];
+
+      // 👥 remaining members
+      const members = unitGroup.slice(1).flat();
+
       const name =
-        leaders.length === 1
-          ? `${getFullName(leaders[0])} DGroup`
-          : `${getFullName(leaders[0])} & ${getFullName(leaders[1])} DGroup`;
+        leaders.length === 2
+          ? `${getFullName(leaders[0])} & ${getFullName(leaders[1])} DGroup`
+          : `${getFullName(leaders[0])} DGroup`;
 
       result.push({
         churchId: church.id,

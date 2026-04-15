@@ -17,6 +17,8 @@ async function main() {
     prisma.series.deleteMany(),
     prisma.employment.deleteMany(),
     prisma.education.deleteMany(),
+    prisma.dGroupMembership.deleteMany(),
+    prisma.dGroup.deleteMany(),
     prisma.account.deleteMany(),
     prisma.company.deleteMany(),
     prisma.school.deleteMany(),
@@ -31,12 +33,6 @@ async function main() {
       data: {
         name: 'Tandang Sora',
         address: 'Crossroad Mall',
-      },
-    }),
-    prisma.church.create({
-      data: {
-        name: 'Commonwealth',
-        address: 'Ever Gotesco Mall',
       },
     }),
   ]);

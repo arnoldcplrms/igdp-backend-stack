@@ -53,7 +53,7 @@ export class DGroupRepository {
               {
                 memberships: {
                   some: {
-                    role: 'Leader', // adjust if enum
+                    role: 'Leader',
                     account: {
                       OR: [
                         {
