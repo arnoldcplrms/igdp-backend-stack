@@ -1,6 +1,8 @@
 import { EducationLevel, PrismaClient } from '@prisma/client';
-import { companyData } from './company.seed';
-import { seedEmployment } from './education.seed';
+import { companyData, syncCompanyEmployeeCounts } from './company.seed';
+import { seedSchools, syncSchoolStudentCounts } from './school.seed';
+import { seedSchoolEducation } from './education.seed';
+import { seedEmployment } from './employment.seed';
 
 const prisma = new PrismaClient();
 
@@ -17,6 +19,16 @@ async function main() {
     prisma.school.deleteMany(),
     prisma.church.deleteMany(),
   ]);
+
+  function randomItem<T>(arr: T[]) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function randomDate(startYear = 2000, endYear = 2025) {
+    const start = new Date(startYear, 0, 1).getTime();
+    const end = new Date(endYear, 11, 31).getTime();
+    return new Date(start + Math.random() * (end - start));
+  }
 
   console.log('Creating Church...');
   const church = await Promise.all([
@@ -36,270 +48,8 @@ async function main() {
   console.log(`Created ${church.length} churchs`);
 
   console.log('Creating Schools...');
-  type SchoolSeed = {
-    name: string;
-    address: string;
-    acronym?: string;
-    enrolledStudentCount: number;
-    alumniStudentCount: number;
-  };
-
-  const baseSchools: Array<{
-    name: string;
-    address: string;
-    type: 'university' | 'college' | 'highschool';
-    acronym?: string;
-  }> = [
-    {
-      name: 'University of the Philippines',
-      address: 'Diliman, Quezon City',
-      type: 'university',
-      acronym: 'UP',
-    },
-    {
-      name: 'Ateneo de Manila University',
-      address: 'Quezon City',
-      type: 'university',
-      acronym: 'ADMU',
-    },
-    {
-      name: 'De La Salle University',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'DLSU',
-    },
-    {
-      name: 'University of Santo Tomas',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'UST',
-    },
-    {
-      name: 'Polytechnic University of the Philippines',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'PUP',
-    },
-
-    {
-      name: 'Far Eastern University',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'FEU',
-    },
-    {
-      name: 'University of the East',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'UE',
-    },
-    {
-      name: 'Mapúa University',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'MAPUA',
-    },
-    {
-      name: 'Adamson University',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'AdU',
-    },
-    {
-      name: 'National University',
-      address: 'Manila',
-      type: 'university',
-      acronym: 'NU',
-    },
-
-    {
-      name: 'De La Salle–College of Saint Benilde',
-      address: 'Manila',
-      type: 'college',
-      acronym: 'DLS-CSB',
-    },
-    {
-      name: 'San Beda University',
-      address: 'Manila',
-      type: 'college',
-      acronym: 'SBU',
-    },
-    {
-      name: 'Arellano University',
-      address: 'Manila',
-      type: 'college',
-      acronym: 'AU',
-    },
-    {
-      name: 'Centro Escolar University',
-      address: 'Manila',
-      type: 'college',
-      acronym: 'CEU',
-    },
-    {
-      name: 'Jose Rizal University',
-      address: 'Mandaluyong',
-      type: 'college',
-      acronym: 'JRU',
-    },
-
-    {
-      name: 'Asia Pacific College',
-      address: 'Makati',
-      type: 'college',
-      acronym: 'APC',
-    },
-    {
-      name: 'University of Makati',
-      address: 'Makati',
-      type: 'college',
-      acronym: 'UMak',
-    },
-    {
-      name: 'Pamantasan ng Lungsod ng Maynila',
-      address: 'Manila',
-      type: 'college',
-      acronym: 'PLM',
-    },
-    {
-      name: 'Taguig City University',
-      address: 'Taguig',
-      type: 'college',
-      acronym: 'TCU',
-    },
-    {
-      name: 'Rizal Technological University',
-      address: 'Mandaluyong',
-      type: 'college',
-      acronym: 'RTU',
-    },
-
-    {
-      name: 'University of San Carlos',
-      address: 'Cebu City',
-      type: 'university',
-      acronym: 'USC',
-    },
-    {
-      name: 'University of San Jose–Recoletos',
-      address: 'Cebu City',
-      type: 'university',
-      acronym: 'USJ-R',
-    },
-    {
-      name: 'Cebu Institute of Technology – University',
-      address: 'Cebu City',
-      type: 'university',
-      acronym: 'CIT-U',
-    },
-    {
-      name: 'Silliman University',
-      address: 'Dumaguete City',
-      type: 'university',
-      acronym: 'SU',
-    },
-    {
-      name: 'Central Philippine University',
-      address: 'Iloilo City',
-      type: 'university',
-      acronym: 'CPU',
-    },
-
-    {
-      name: 'West Visayas State University',
-      address: 'Iloilo City',
-      type: 'university',
-      acronym: 'WVSU',
-    },
-    {
-      name: 'University of St. La Salle',
-      address: 'Bacolod City',
-      type: 'university',
-      acronym: 'USLS',
-    },
-    {
-      name: 'Xavier University – Ateneo de Cagayan',
-      address: 'Cagayan de Oro',
-      type: 'university',
-      acronym: 'XU',
-    },
-    {
-      name: 'Ateneo de Davao University',
-      address: 'Davao City',
-      type: 'university',
-      acronym: 'ADDU',
-    },
-    {
-      name: 'University of Mindanao',
-      address: 'Davao City',
-      type: 'university',
-      acronym: 'UM',
-    },
-
-    {
-      name: 'Philippine Science High School',
-      address: 'Quezon City',
-      type: 'highschool',
-      acronym: 'PSHS',
-    },
-    { name: 'Miriam College', address: 'Quezon City', type: 'college' }, // no official acronym commonly used
-    {
-      name: 'Holy Angel University',
-      address: 'Pampanga',
-      type: 'university',
-      acronym: 'HAU',
-    },
-    {
-      name: 'San Pedro College',
-      address: 'Davao City',
-      type: 'college',
-      acronym: 'SPC',
-    },
-    {
-      name: 'Benguet State University',
-      address: 'La Trinidad, Benguet',
-      type: 'university',
-      acronym: 'BSU',
-    },
-    {
-      name: 'Saint Louis University',
-      address: 'Baguio City',
-      type: 'university',
-      acronym: 'SLU',
-    },
-    {
-      name: 'University of Baguio',
-      address: 'Baguio City',
-      type: 'university',
-      acronym: 'UB',
-    },
-  ];
-
-  const schoolData: SchoolSeed[] = baseSchools.map((school) => {
-    return {
-      name: school.name,
-      address: school.address,
-      acronym: school.acronym,
-      enrolledStudentCount: 0,
-      alumniStudentCount: 0,
-    };
-  });
-
-  const schools = await prisma.$transaction(
-    schoolData.map((school) =>
-      prisma.school.upsert({
-        where: {
-          name_address: {
-            name: school.name,
-            address: school.address,
-          },
-        },
-        update: {},
-        create: school,
-      }),
-    ),
-  );
-  console.log(`Created ${schools.length} schools`);
+  const schools = await seedSchools();
+  console.log(`Created ${schools.count} schools`);
 
   console.log('Creating Companies...');
   const companies = await prisma.$transaction(
@@ -407,115 +157,13 @@ async function main() {
   });
 
   console.log('Creating Education records...');
-  const educationLevels = [
-    EducationLevel.JuniorHigh,
-    EducationLevel.SeniorHigh,
-    EducationLevel.College,
-    EducationLevel.Masteral,
-    EducationLevel.Doctoral,
-  ];
-
-  function randomItem<T>(arr: T[]) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function randomDate(startYear = 2000, endYear = 2025) {
-    const start = new Date(startYear, 0, 1).getTime();
-    const end = new Date(endYear, 11, 31).getTime();
-    return new Date(start + Math.random() * (end - start));
-  }
-
-  function maybeNullDate(date: Date) {
-    return Math.random() < 0.3 ? null : date;
-  }
-
-  function generateCourse(level: EducationLevel) {
-    if (level === EducationLevel.JuniorHigh) return null;
-
-    const courses = [
-      'Bachelor of Science in Computer Science',
-      'Bachelor of Science in Business Administration',
-      'Bachelor of Science in Engineering',
-      'Bachelor of Arts in English',
-      'Bachelor of Science in Information Technology',
-      'Master in Business Administration',
-      'Doctor of Philosophy in Education',
-    ];
-
-    return randomItem(courses);
-  }
-
-  const TARGET_PER_SCHOOL = 50;
-
-  const educations = [];
-
-  for (const school of schools) {
-    for (let i = 0; i < TARGET_PER_SCHOOL; i++) {
-      const level = randomItem(educationLevels);
-
-      const startDate = randomDate(2000, 2022);
-      const endDate = randomDate(
-        startDate.getFullYear(),
-        startDate.getFullYear() + 6,
-      );
-
-      educations.push(
-        prisma.education.create({
-          data: {
-            schoolId: school.id,
-            accountId: randomItem(accounts).id,
-            educationLevel: level,
-            course: generateCourse(level),
-            startDate,
-            endDate: maybeNullDate(endDate),
-          },
-        }),
-      );
-    }
-  }
-
-  const latestEducations = await Promise.all(educations);
-  async function syncSchoolStudentCounts() {
-    const educations = await prisma.education.findMany({
-      select: {
-        schoolId: true,
-        endDate: true,
-      },
-    });
-
-    const map = new Map<number, { enrolled: number; alumni: number }>();
-
-    for (const edu of educations) {
-      if (!map.has(edu.schoolId)) {
-        map.set(edu.schoolId, { enrolled: 0, alumni: 0 });
-      }
-
-      const record = map.get(edu.schoolId)!;
-
-      if (edu.endDate === null) {
-        record.enrolled++;
-      } else {
-        record.alumni++;
-      }
-    }
-
-    await Promise.all(
-      Array.from(map.entries()).map(([schoolId, counts]) =>
-        prisma.school.update({
-          where: { id: schoolId },
-          data: {
-            enrolledStudentCount: counts.enrolled,
-            alumniStudentCount: counts.alumni,
-          },
-        }),
-      ),
-    );
-  }
+  const latestEducations = await seedSchoolEducation();
   await syncSchoolStudentCounts();
-  console.log(`Created ${latestEducations.length} education records`);
+  console.log(`Created ${latestEducations.count} education records`);
 
   console.log('Creating Employment records...');
   const employments = await seedEmployment();
+  await syncCompanyEmployeeCounts();
   console.log(`Created ${employments.count} employment records`);
 
   console.log('Creating Series...');

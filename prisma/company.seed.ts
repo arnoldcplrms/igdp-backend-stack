@@ -1,3 +1,7 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 type CompanySeedData = {
   name: string;
   address: string;
@@ -100,3 +104,42 @@ export const companyData: CompanySeedData[] = baseCompanies
       formerEmployeeCount: rand(100, 120000),
     };
   });
+
+export async function syncCompanyEmployeeCounts() {
+  const employments = await prisma.employment.findMany({
+    select: {
+      companyId: true,
+      endDate: true,
+    },
+  });
+
+  const map = new Map<number, { active: number; former: number }>();
+
+  for (const emp of employments) {
+    if (!map.has(emp.companyId)) {
+      map.set(emp.companyId, { active: 0, former: 0 });
+    }
+
+    const record = map.get(emp.companyId)!;
+
+    if (emp.endDate === null) {
+      record.active++;
+    } else {
+      record.former++;
+    }
+  }
+
+  await Promise.all(
+    Array.from(map.entries()).map(([companyId, counts]) =>
+      prisma.company.update({
+        where: { id: companyId },
+        data: {
+          employedCount: counts.active,
+          formerEmployeeCount: counts.former,
+        },
+      }),
+    ),
+  );
+
+  console.log('✅ Company employee counts synced');
+}
