@@ -4,6 +4,8 @@ import { seedSchools, syncSchoolStudentCounts } from './school.seed';
 import { seedSchoolEducation } from './education.seed';
 import { seedEmployment } from './employment.seed';
 import { seedMinistries } from './ministry.seed';
+import { seedAccounts } from './account.seed';
+import { seedDgroup } from './dgroup.seed';
 
 const prisma = new PrismaClient();
 
@@ -22,16 +24,6 @@ async function main() {
     prisma.ministry.deleteMany(),
     prisma.church.deleteMany(),
   ]);
-
-  function randomItem<T>(arr: T[]) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function randomDate(startYear = 2000, endYear = 2025) {
-    const start = new Date(startYear, 0, 1).getTime();
-    const end = new Date(endYear, 11, 31).getTime();
-    return new Date(start + Math.random() * (end - start));
-  }
 
   console.log('Creating Church...');
   const church = await Promise.all([
@@ -74,92 +66,13 @@ async function main() {
 
   console.log(`Created ${companies.length} companies`);
 
-  console.log('Creating Accounts...');
-  const firstNames = [
-    'John',
-    'Maria',
-    'Carlos',
-    'Ana',
-    'Manuel',
-    'Patricia',
-    'Luis',
-    'Mark',
-    'Angela',
-    'Joseph',
-    'Miguel',
-    'Rosa',
-    'Daniel',
-    'Sophia',
-    'James',
-    'Paolo',
-    'Grace',
-    'Andrea',
-  ];
+  console.log('🌱 Seeding accounts...');
+  await seedAccounts();
+  console.log('✅ Done seeding accounts');
 
-  const lastNames = [
-    'Doe',
-    'Santos',
-    'Reyes',
-    'Garcia',
-    'Fernandez',
-    'Molina',
-    'Cruz',
-    'Ramos',
-    'Torres',
-    'Villanueva',
-  ];
-
-  function randomPhone(index: number) {
-    return `+63917${String(1000000 + index).slice(1)}`;
-  }
-
-  async function seedAccounts() {
-    const accounts = await Promise.all(
-      Array.from({ length: 200 }).map((_, i) => {
-        const firstName = randomItem(firstNames);
-        const lastName = randomItem(lastNames);
-        const gender = Math.random() > 0.5 ? 'Male' : 'Female';
-
-        const hasMiddleName = Math.random() > 0.3;
-        const middleName = hasMiddleName ? randomItem(firstNames) : null;
-
-        const fullName = `${firstName}.${lastName}.${i}`; // ensure unique email
-
-        return prisma.account.create({
-          data: {
-            firstName,
-            middleName,
-            lastName,
-            nickname: firstName.slice(0, 2),
-            facebookLink: `https://facebook.com/${fullName.toLowerCase()}`,
-            contactNumber: randomPhone(i),
-            email: `${fullName.toLowerCase()}@example.com`,
-            gender,
-            birthDate: randomDate(),
-            userType: 'Member',
-            emergencyContactName: `${randomItem(firstNames)} ${lastName}`,
-            emergencyContactNumber: randomPhone(i + 100),
-          },
-        });
-      }),
-    );
-
-    return accounts;
-  }
-
-  const accounts = await seedAccounts();
-  console.log(`Created ${accounts.length} accounts`);
-
-  // Link dGroupLeader for some accounts
-  await prisma.account.update({
-    where: { id: accounts[3].id },
-    data: { dGroupLeaderId: accounts[0].id },
-  });
-
-  await prisma.account.update({
-    where: { id: accounts[4].id },
-    data: { dGroupLeaderId: accounts[1].id },
-  });
+  console.log('🌱 Seeding dgroups...');
+  await seedDgroup();
+  console.log('✅ Done seeding dgroups');
 
   console.log('Creating Education records...');
   const latestEducations = await seedSchoolEducation();
@@ -201,45 +114,45 @@ async function main() {
   ]);
   console.log(`Created ${series.length} series`);
 
-  console.log('Creating Speakers...');
-  const speakers = await Promise.all([
-    prisma.speaker.create({
-      data: {
-        name: `${accounts[0].firstName} ${accounts[0].lastName}`,
-        accountId: accounts[0].id,
-        updatedBy: accounts[0].id,
-      },
-    }),
-    prisma.speaker.create({
-      data: {
-        name: `${accounts[1].firstName} ${accounts[1].lastName}`,
-        accountId: accounts[1].id,
-        updatedBy: accounts[1].id,
-      },
-    }),
-    prisma.speaker.create({
-      data: {
-        name: `${accounts[2].firstName} ${accounts[2].lastName}`,
-        accountId: accounts[2].id,
-        updatedBy: accounts[2].id,
-      },
-    }),
-    prisma.speaker.create({
-      data: {
-        name: `${accounts[3].firstName} ${accounts[3].lastName}`,
-        accountId: accounts[3].id,
-        updatedBy: accounts[3].id,
-      },
-    }),
-    prisma.speaker.create({
-      data: {
-        name: `${accounts[4].firstName} ${accounts[4].lastName}`,
-        accountId: accounts[4].id,
-        updatedBy: accounts[4].id,
-      },
-    }),
-  ]);
-  console.log(`Created ${speakers.length} speakers`);
+  // console.log('Creating Speakers...');
+  // const speakers = await Promise.all([
+  //   prisma.speaker.create({
+  //     data: {
+  //       name: `${accounts[0].firstName} ${accounts[0].lastName}`,
+  //       accountId: accounts[0].id,
+  //       updatedBy: accounts[0].id,
+  //     },
+  //   }),
+  //   prisma.speaker.create({
+  //     data: {
+  //       name: `${accounts[1].firstName} ${accounts[1].lastName}`,
+  //       accountId: accounts[1].id,
+  //       updatedBy: accounts[1].id,
+  //     },
+  //   }),
+  //   prisma.speaker.create({
+  //     data: {
+  //       name: `${accounts[2].firstName} ${accounts[2].lastName}`,
+  //       accountId: accounts[2].id,
+  //       updatedBy: accounts[2].id,
+  //     },
+  //   }),
+  //   prisma.speaker.create({
+  //     data: {
+  //       name: `${accounts[3].firstName} ${accounts[3].lastName}`,
+  //       accountId: accounts[3].id,
+  //       updatedBy: accounts[3].id,
+  //     },
+  //   }),
+  //   prisma.speaker.create({
+  //     data: {
+  //       name: `${accounts[4].firstName} ${accounts[4].lastName}`,
+  //       accountId: accounts[4].id,
+  //       updatedBy: accounts[4].id,
+  //     },
+  //   }),
+  // ]);
+  // console.log(`Created ${speakers.length} speakers`);
 
   console.log('Creating Events...');
   const events = await Promise.all([
@@ -286,40 +199,40 @@ async function main() {
   ]);
   console.log(`Created ${events.length} events`);
 
-  console.log('Creating EventSpeakers...');
-  const eventSpeakers = await Promise.all([
-    prisma.eventSpeakers.create({
-      data: {
-        speakerId: speakers[0].id,
-        eventId: events[0].id,
-      },
-    }),
-    prisma.eventSpeakers.create({
-      data: {
-        speakerId: speakers[1].id,
-        eventId: events[1].id,
-      },
-    }),
-    prisma.eventSpeakers.create({
-      data: {
-        speakerId: speakers[2].id,
-        eventId: events[2].id,
-      },
-    }),
-    prisma.eventSpeakers.create({
-      data: {
-        speakerId: speakers[3].id,
-        eventId: events[3].id,
-      },
-    }),
-    prisma.eventSpeakers.create({
-      data: {
-        speakerId: speakers[4].id,
-        eventId: events[4].id,
-      },
-    }),
-  ]);
-  console.log(`Created ${eventSpeakers.length} event-speaker relations`);
+  // console.log('Creating EventSpeakers...');
+  // const eventSpeakers = await Promise.all([
+  //   prisma.eventSpeakers.create({
+  //     data: {
+  //       speakerId: speakers[0].id,
+  //       eventId: events[0].id,
+  //     },
+  //   }),
+  //   prisma.eventSpeakers.create({
+  //     data: {
+  //       speakerId: speakers[1].id,
+  //       eventId: events[1].id,
+  //     },
+  //   }),
+  //   prisma.eventSpeakers.create({
+  //     data: {
+  //       speakerId: speakers[2].id,
+  //       eventId: events[2].id,
+  //     },
+  //   }),
+  //   prisma.eventSpeakers.create({
+  //     data: {
+  //       speakerId: speakers[3].id,
+  //       eventId: events[3].id,
+  //     },
+  //   }),
+  //   prisma.eventSpeakers.create({
+  //     data: {
+  //       speakerId: speakers[4].id,
+  //       eventId: events[4].id,
+  //     },
+  //   }),
+  // ]);
+  // console.log(`Created ${eventSpeakers.length} event-speaker relations`);
 
   console.log('✅ Seed data created successfully!');
 }

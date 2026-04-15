@@ -37,6 +37,7 @@ export class DGroupRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      distinct: ['id'],
     });
   }
 

@@ -1,0 +1,33 @@
+export const firstNames = [
+  'John',
+  'Maria',
+  'Carlos',
+  'Ana',
+  'Manuel',
+  'Patricia',
+  'Luis',
+  'Mark',
+  'Angela',
+  'Joseph',
+  'Miguel',
+  'Rosa',
+  'Daniel',
+  'Sophia',
+  'James',
+  'Paolo',
+  'Grace',
+  'Andrea',
+];
+
+export const lastNames = [
+  'Doe',
+  'Santos',
+  'Reyes',
+  'Garcia',
+  'Fernandez',
+  'Molina',
+  'Cruz',
+  'Ramos',
+  'Torres',
+  'Villanueva',
+];

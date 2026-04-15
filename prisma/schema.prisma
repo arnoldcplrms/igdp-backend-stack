@@ -96,12 +96,12 @@ enum DGroupMembershipRole {
 model DGroup {
   id          Int                @id @default(autoincrement())
   name        String             @db.VarChar(100)
-  churchId    Int?
+  churchId    Int
   memberships DGroupMembership[]
   createdAt   DateTime           @default(now()) @db.Timestamp(6)
   updatedAt   DateTime           @updatedAt @db.Timestamp(6)
   // Relations
-  church      Church?            @relation(fields: [churchId], references: [id])
+  church      Church             @relation(fields: [churchId], references: [id])
 }
 
 model DGroupMembership {
@@ -154,7 +154,7 @@ model Account {
   userType               UserType @default(Member)
   dGroupLeaderId         Int?
   spouseId               Int?     @unique
-  churchId               Int?
+  churchId               Int
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
   createdAt              DateTime @default(now()) @db.Timestamp(6)
@@ -164,7 +164,7 @@ model Account {
   dGroupMembers     Account[]          @relation("dGroupLeader")
   spouse            Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
   spouseOf          Account[]          @relation("AccountSpouse")
-  church            Church?            @relation(fields: [churchId], references: [id])
+  church            Church             @relation(fields: [churchId], references: [id])
   education         Education[]
   employment        Employment[]
   ministries        AccountMinistry[]
