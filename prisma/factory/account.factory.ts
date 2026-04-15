@@ -33,7 +33,6 @@ export function generateAccount(params: {
 
     contactNumber: `+63917${String(1000000 + index).slice(1)}`,
 
-    // ✅ FIXED UNIQUE EMAIL
     email: `${emailBase}@example.com`,
 
     gender,

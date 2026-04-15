@@ -1,3 +1,4 @@
+import { Gender, LifeStage } from '@prisma/client';
 import { PAGE_SIZE_COUNT } from 'src/common/constants';
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
@@ -25,6 +26,13 @@ export class FilterDGroupDto extends ZodClass(filterDGroupSchema) {}
 export class DGroupDTO {
   id: number;
   name: string;
-  createdAt: Date;
-  updatedAt: Date | null;
+  members: number;
+  leaders: {
+    id: number;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    gender: Gender;
+  }[];
+  lifestage: LifeStage[];
 }

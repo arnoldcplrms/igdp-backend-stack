@@ -88,6 +88,12 @@ model MinistryRole {
   @@unique([ministryId, roleName])
 }
 
+enum LifeStage {
+  Couples
+  B1G
+  Elevate
+}
+
 enum DGroupMembershipRole {
   Member
   Leader
