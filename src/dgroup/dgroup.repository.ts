@@ -13,11 +13,38 @@ import { LifeStage } from '@prisma/client';
 export class DGroupRepository {
   constructor(private prisma: PrismaService) {}
 
-  createDGroup(createDGroupDto: CreateDGroupDto): Promise<DGroupDTO> {
-    return this.prisma.dGroup.create({
-      data: {
-        name: createDGroupDto.name,
-      },
+  async createDGroup(createDGroupDto: CreateDGroupDto): Promise<DGroupDTO> {
+    const { name, churchId, dleaders, members } = createDGroupDto;
+
+    return this.prisma.$transaction(async (prisma) => {
+      // 1. Create DGroup
+      const dGroup = await prisma.dGroup.create({
+        data: {
+          name,
+          churchId,
+        },
+      });
+
+      // 2. Build membership records
+      const leaderMemberships = dleaders.map((accountId) => ({
+        accountId,
+        dGroupId: dGroup.id,
+        role: 'Leader',
+      }));
+
+      const memberMemberships = (members ?? []).map((accountId) => ({
+        accountId,
+        dGroupId: dGroup.id,
+        role: 'Member',
+      }));
+
+      // 3. Create memberships in bulk
+      await prisma.dGroupMembership.createMany({
+        data: [...leaderMemberships, ...memberMemberships],
+      });
+
+      // 4. Return created group
+      return dGroup;
     });
   }
 

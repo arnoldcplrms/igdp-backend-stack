@@ -4,7 +4,12 @@ import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
 
 export const createDGroupSchema = z.object({
-  name: z.string().min(1).max(100),
+  name: z.string().min(1).max(100).optional(),
+  dleaders: z
+    .array(z.number().int().positive())
+    .min(1, 'At least one leader is required'),
+  members: z.array(z.number().int().positive()).optional().default([]),
+  churchId: z.number().int().positive(),
 });
 
 export const updateDGroupSchema = z.object({
