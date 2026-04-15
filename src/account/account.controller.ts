@@ -16,6 +16,8 @@ import {
   updateAccountSchema,
   FetchDGroupLeadersDto,
   fetchDGroupLeadersSchema,
+  filterAccountSchema,
+  FilterAccountDto,
 } from './account.dto';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 import { PAGE_SIZE_COUNT } from 'src/common/constants';
@@ -34,19 +36,10 @@ export class AccountController {
 
   @Get('all')
   findSorted(
-    @Query('page') page = '1',
-    @Query('pageSize') pageSize = String(PAGE_SIZE_COUNT),
-    @Query('sortOrder') sort: 'asc' | 'desc' = 'asc',
-    @Query('sortBy') sortBy: string = 'lastName',
-    @Query('name') name?: string,
+    @Query(new ZodValidationPipe(filterAccountSchema))
+    filters: FilterAccountDto,
   ) {
-    return this.accountService.findSorted(
-      parseInt(page),
-      parseInt(pageSize),
-      sort,
-      sortBy,
-      name,
-    );
+    return this.accountService.findSorted(filters);
   }
 
   @Post('dgroup-leaders')

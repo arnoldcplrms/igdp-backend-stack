@@ -1,20 +1,14 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import {
-  AccountDTO,
-  AccountQueryDto,
   AccountDetailDto,
   CreateAccountDto,
   UpdateAccountDto,
-  EventDTO,
+  FilterAccountDto,
 } from './account.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { Gender, Prisma } from '@prisma/client';
 import { AccountMapper } from './account.mapper';
-import {
-  clampPaginationLimit,
-  toOverfetchTake,
-} from 'src/common/utils/pagination.util';
-import { PAGE_SIZE_COUNT } from 'src/common/constants';
+import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class AccountRepository {
@@ -96,46 +90,35 @@ export class AccountRepository {
     });
   }
 
-  async findAccountsSorted(
-    page: number = 1,
-    pageSize: number = PAGE_SIZE_COUNT,
-    sort: 'asc' | 'desc' = 'asc',
-    sortBy: string = 'lastName',
-    name?: string,
-  ): Promise<AccountDTO[]> {
-    const normalizedLimit = clampPaginationLimit(pageSize);
-    const normalizedPage = Math.max(page, 1);
-    const skip = (normalizedPage - 1) * normalizedLimit;
+  async findAccountsSorted(filterDto: FilterAccountDto) {
+    const { search, sortOrder, sortBy, skip = 0, take = 10 } = filterDto;
 
-    if (name) {
-      return this.findAccountsByName(name, skip, pageSize);
+    const andConditions: any[] = [];
+
+    if (search) {
+      andConditions.push({
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+          { middleName: { contains: search, mode: 'insensitive' } },
+        ],
+      });
     }
 
     const orderBy: Prisma.AccountOrderByWithRelationInput = {
-      [sortBy]: sort,
+      [sortBy ?? 'createdAt']: sortOrder ?? 'desc',
     };
 
-    const result = await this.prisma.account.findMany({
+    const accounts = await this.prisma.account.findMany({
       skip,
-      take: toOverfetchTake(pageSize),
+      take: toOverfetchTake(take),
       distinct: ['id'],
+      where: andConditions.length > 0 ? { AND: andConditions } : undefined,
       orderBy,
       ...this.selectObject,
     });
 
-    const event = await this.prisma.event.findMany({
-      skip,
-      take: toOverfetchTake(pageSize),
-      select: {
-        id: true,
-        eventDate: true,
-      },
-    });
-
-    return AccountMapper.toAccountDto(
-      result as AccountQueryDto[],
-      event as EventDTO[],
-    );
+    return accounts;
   }
 
   async findAccountById(id: number): Promise<AccountDetailDto> {

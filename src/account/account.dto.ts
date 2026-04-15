@@ -9,6 +9,7 @@ import {
   CreateEmploymentDto,
   createEmploymentSchema,
 } from 'src/employment/employment.dto';
+import { PAGE_SIZE_COUNT } from 'src/common/constants';
 
 export const createAccountSchema = z.object({
   basicInfo: z.object({
@@ -157,3 +158,13 @@ export const fetchDGroupLeadersSchema = z.object({
 });
 
 export class FetchDGroupLeadersDto extends ZodClass(fetchDGroupLeadersSchema) {}
+
+export const filterAccountSchema = z.object({
+  search: z.string().min(1).optional(),
+  sortOrder: z.string().min(1).optional(),
+  sortBy: z.string().min(1).optional(),
+  skip: z.coerce.number().int().min(0).optional(),
+  take: z.coerce.number().int().positive().max(PAGE_SIZE_COUNT).optional(),
+});
+
+export class FilterAccountDto extends ZodClass(filterAccountSchema) {}
