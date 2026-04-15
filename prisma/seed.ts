@@ -1,8 +1,9 @@
-import { EducationLevel, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { companyData, syncCompanyEmployeeCounts } from './company.seed';
 import { seedSchools, syncSchoolStudentCounts } from './school.seed';
 import { seedSchoolEducation } from './education.seed';
 import { seedEmployment } from './employment.seed';
+import { seedMinistries } from './ministry.seed';
 
 const prisma = new PrismaClient();
 
@@ -17,6 +18,8 @@ async function main() {
     prisma.account.deleteMany(),
     prisma.company.deleteMany(),
     prisma.school.deleteMany(),
+    prisma.ministryRole.deleteMany(),
+    prisma.ministry.deleteMany(),
     prisma.church.deleteMany(),
   ]);
 
@@ -46,6 +49,8 @@ async function main() {
     }),
   ]);
   console.log(`Created ${church.length} churchs`);
+
+  await seedMinistries();
 
   console.log('Creating Schools...');
   const schools = await seedSchools();

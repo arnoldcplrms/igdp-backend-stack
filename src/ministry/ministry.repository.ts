@@ -38,8 +38,8 @@ export class MinistryRepository {
         mission: createMinistryDto.mission,
         vision: createMinistryDto.vision,
         description: createMinistryDto.description,
+        churchId: createMinistryDto.churchId,
       },
-      include: this.getNestedInclude(),
     });
   }
 

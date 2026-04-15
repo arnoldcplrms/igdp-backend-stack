@@ -58,7 +58,7 @@ model Ministry {
   id             Int      @id @default(autoincrement())
   name           String   @db.VarChar(100)
   parentMinistry Int?
-  churchId       Int?
+  churchId       Int
   mission        String?  @db.Text
   vision         String?  @db.Text
   description    String?  @db.Text
@@ -67,12 +67,14 @@ model Ministry {
 
   parent          Ministry?         @relation("MinistryHierarchy", fields: [parentMinistry], references: [id])
   children        Ministry[]        @relation("MinistryHierarchy")
-  church          Church?           @relation(fields: [churchId], references: [id])
+  church          Church            @relation(fields: [churchId], references: [id])
   roles           MinistryRole[]
   accounts        AccountMinistry[]
   series          Series[]
   events          Event[]
   eventMinistries EventMinistry[]
+
+  @@unique([name, parentMinistry, churchId])
 }
 
 model MinistryRole {
@@ -83,7 +85,7 @@ model MinistryRole {
   ministry        Ministry          @relation(fields: [ministryId], references: [id])
   accountMinistry AccountMinistry[]
 
-  @@unique([id, ministryId])
+  @@unique([ministryId, roleName])
 }
 
 enum DGroupMembershipRole {
@@ -184,7 +186,7 @@ model AccountMinistry {
 
   account      Account      @relation(fields: [accountId], references: [id])
   ministry     Ministry     @relation(fields: [ministryId], references: [id])
-  ministryRole MinistryRole @relation(fields: [ministryRoleId, ministryId], references: [id, ministryId])
+  ministryRole MinistryRole @relation(fields: [ministryRoleId], references: [id])
 
   @@unique([accountId, ministryId])
 }

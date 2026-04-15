@@ -7,6 +7,7 @@ export const createMinistrySchema = z.object({
   mission: z.string().optional().nullable(),
   vision: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  churchId: z.number().int().positive(),
 });
 
 export const updateMinistrySchema = z.object({
