@@ -9,6 +9,9 @@ import type {
 } from './dgroup.dto';
 import { LifeStage } from '@prisma/client';
 
+const NUMBER_OF_COUPLE_LEADERS = 2;
+const NUMBER_OF_SINGLE_LEADER = 1;
+
 @Injectable()
 export class DGroupRepository {
   constructor(private prisma: PrismaService) {}
@@ -147,13 +150,13 @@ export class DGroupRepository {
 
       const lifestage: LifeStage[] = [];
 
-      if (leaders.length === 2) {
+      if (leaders.length === NUMBER_OF_COUPLE_LEADERS) {
         lifestage.push('Couples');
 
         return {
           id: dgroup.id,
           name: dgroup.name,
-          members: dgroup._count.memberships,
+          members: dgroup._count.memberships - NUMBER_OF_COUPLE_LEADERS,
           leaders: leaders.map((leader) => ({
             id: leader.id,
             firstName: leader.firstName,
@@ -184,7 +187,7 @@ export class DGroupRepository {
       return {
         id: dgroup.id,
         name: dgroup.name,
-        members: dgroup._count.memberships,
+        members: dgroup._count.memberships - NUMBER_OF_SINGLE_LEADER,
         leaders: leaders.map((leader) => ({
           id: leader.id,
           firstName: leader.firstName,
