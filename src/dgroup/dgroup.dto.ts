@@ -8,7 +8,7 @@ export const createDGroupSchema = z.object({
   dleaders: z
     .array(z.number().int().positive())
     .min(1, 'At least one leader is required'),
-  members: z.array(z.number().int().positive()).optional().default([]),
+  dmembers: z.array(z.number().int().positive()).optional().default([]),
   churchId: z.number().int().positive(),
 });
 

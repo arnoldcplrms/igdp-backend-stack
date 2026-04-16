@@ -17,7 +17,7 @@ export class DGroupRepository {
   constructor(private prisma: PrismaService) {}
 
   async createDGroup(createDGroupDto: CreateDGroupDto): Promise<DGroupDTO> {
-    const { name, churchId, dleaders, members } = createDGroupDto;
+    const { name, churchId, dleaders, dmembers } = createDGroupDto;
 
     return this.prisma.$transaction(async (prisma) => {
       // 1. Create DGroup
@@ -35,7 +35,7 @@ export class DGroupRepository {
         role: 'Leader',
       }));
 
-      const memberMemberships = (members ?? []).map((accountId) => ({
+      const memberMemberships = (dmembers ?? []).map((accountId) => ({
         accountId,
         dGroupId: dGroup.id,
         role: 'Member',
