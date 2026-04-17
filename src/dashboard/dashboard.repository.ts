@@ -8,38 +8,45 @@ export class DashboardRepository {
 
   async getDashboardMetrics(): Promise<DashboardMetricsDto> {
     // Get total accounts and dGroupLeaders
-    const [totalAccounts, dGroupLeaders] = await Promise.all([
-      this.prisma.account.count(),
-      this.prisma.account.findMany({
-        where: {
-          dGroupMembers: {
-            some: {},
+
+    const dGroups = await this.prisma.dGroup.findMany({
+      include: {
+        memberships: {
+          include: {
+            account: true,
           },
         },
-        select: {
-          id: true,
-          _count: {
-            select: {
-              dGroupMembers: true,
-            },
-          },
-        },
-      }),
-    ]);
+      },
+    });
 
-    // Separate facilitators (2 or fewer members) and dLeaders (3 or more members)
-    let facilitators = 0;
-    let dLeaders = 0;
+    const facilitators = dGroups.filter((dg) => {
+      let leaderCount = 0;
+      let memberCount = 0;
 
-    for (const leader of dGroupLeaders) {
-      const memberCount = leader._count.dGroupMembers;
-      memberCount <= 2 ? facilitators++ : dLeaders++;
-    }
+      for (const m of dg.memberships) {
+        if (m.role === 'Leader') leaderCount++;
+        if (m.role === 'Member') memberCount++;
+      }
+
+      return leaderCount === 2 ? memberCount / 2 <= 2 : memberCount <= 2;
+    }).length;
+
+    const dLeaders = dGroups.filter((dg) => {
+      let leaderCount = 0;
+      let memberCount = 0;
+
+      for (const m of dg.memberships) {
+        if (m.role === 'Leader') leaderCount++;
+        if (m.role === 'Member') memberCount++;
+      }
+
+      return leaderCount === 1 ? memberCount / 2 > 2 : memberCount > 2;
+    }).length;
 
     return {
-      totalAccounts,
-      facilitators,
-      dLeaders,
+      totalAccounts: await this.prisma.account.count(),
+      facilitators: facilitators,
+      dLeaders: dLeaders,
     };
   }
 }

@@ -59,7 +59,7 @@ export class AccountMapper {
     );
   }
 
-  public static toAccountDetailDto(result: any): AccountDetailDto {
+  public static toAccountDetailDto(result: AccountDetailDto): AccountDetailDto {
     return {
       id: result.id,
       firstName: result.firstName,
@@ -71,7 +71,6 @@ export class AccountMapper {
       email: result.email,
       contactNumber: result.contactNumber,
       userType: result.userType,
-      dGroupLeaderId: result.dGroupLeaderId,
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
       emergencyContactName: result.emergencyContactName,
@@ -82,8 +81,9 @@ export class AccountMapper {
       employment: result.employment,
       latestAttendance:
         result.attendances && result.attendances.length > 0
-          ? result.attendances[0].createdAt
+          ? new Date(result.attendances[0].createdAt)
           : null,
+      spouse: result.spouse,
     };
   }
 }

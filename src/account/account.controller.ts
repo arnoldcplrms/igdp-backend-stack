@@ -20,7 +20,6 @@ import {
   FilterAccountDto,
 } from './account.dto';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
-import { PAGE_SIZE_COUNT } from 'src/common/constants';
 
 @Controller('account')
 export class AccountController {

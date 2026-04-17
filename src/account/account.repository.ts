@@ -25,14 +25,6 @@ export class AccountRepository {
       gender: true,
       profilePicture: true,
       email: true,
-      dGroupLeader: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          middleName: true,
-        },
-      },
       attendances: {
         select: {
           eventId: true,
@@ -125,8 +117,7 @@ export class AccountRepository {
     const result = await this.prisma.account.findUnique({
       where: { id },
       include: {
-        dGroupMembers: true,
-        dGroupLeader: {
+        spouse: {
           select: {
             id: true,
             firstName: true,
@@ -178,7 +169,39 @@ export class AccountRepository {
       },
     });
 
-    return AccountMapper.toAccountDetailDto(result);
+    const dgroup = await this.prisma.dGroupMembership.findFirst({
+      where: {
+        accountId: result?.id,
+        account: {
+          gender: result?.gender,
+        },
+      },
+      include: {
+        account: true,
+      },
+    });
+
+    const leader = await this.prisma.dGroupMembership.findFirst({
+      where: {
+        dGroupId: dgroup?.dGroupId,
+        account: {
+          gender: result?.gender,
+        },
+      },
+      include: {
+        account: true,
+      },
+    });
+
+    return AccountMapper.toAccountDetailDto({
+      ...result,
+      dGroupLeader: {
+        id: leader?.account.id,
+        firstName: leader?.account.firstName,
+        lastName: leader?.account.lastName,
+        middleName: leader?.account.middleName,
+      },
+    });
   }
 
   updateAccount(id: number, updateAccountDto: UpdateAccountDto) {

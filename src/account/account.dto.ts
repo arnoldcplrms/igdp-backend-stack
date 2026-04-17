@@ -113,7 +113,6 @@ export class AccountDetailDto {
   email: string;
   contactNumber: string;
   userType: string;
-  dGroupLeaderId?: number | null;
   createdAt: Date;
   updatedAt: Date;
   emergencyContactName?: string | null;
@@ -148,6 +147,12 @@ export class AccountDetailDto {
     };
   }>;
   latestAttendance?: Date | null;
+  spouse?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    middleName?: string | null;
+  } | null;
 }
 
 export class UpdateAccountDto extends ZodClass(updateAccountSchema) {}

@@ -158,7 +158,6 @@ model Account {
   gender                 Gender
   birthDate              DateTime @db.Date
   userType               UserType @default(Member)
-  dGroupLeaderId         Int?
   spouseId               Int?     @unique
   churchId               Int
   emergencyContactName   String?  @db.VarChar(100)
@@ -166,8 +165,6 @@ model Account {
   createdAt              DateTime @default(now()) @db.Timestamp(6)
   updatedAt              DateTime @updatedAt @db.Timestamp(6)
 
-  dGroupLeader      Account?           @relation("dGroupLeader", fields: [dGroupLeaderId], references: [id])
-  dGroupMembers     Account[]          @relation("dGroupLeader")
   spouse            Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
   spouseOf          Account[]          @relation("AccountSpouse")
   church            Church             @relation(fields: [churchId], references: [id])
