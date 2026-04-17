@@ -7,46 +7,45 @@ export class DashboardRepository {
   constructor(private prisma: PrismaService) {}
 
   async getDashboardMetrics(): Promise<DashboardMetricsDto> {
-    // Get total accounts and dGroupLeaders
-
-    const dGroups = await this.prisma.dGroup.findMany({
-      include: {
-        memberships: {
-          include: {
-            account: true,
+    const [dGroups, totalAccounts] = await Promise.all([
+      this.prisma.dGroup.findMany({
+        select: {
+          memberships: {
+            select: {
+              role: true,
+            },
           },
         },
-      },
-    });
+      }),
+      this.prisma.account.count(),
+    ]);
 
-    const facilitators = dGroups.filter((dg) => {
+    let facilitators = 0;
+    let dLeaders = 0;
+
+    for (const dg of dGroups) {
       let leaderCount = 0;
       let memberCount = 0;
 
       for (const m of dg.memberships) {
         if (m.role === 'Leader') leaderCount++;
-        if (m.role === 'Member') memberCount++;
+        else if (m.role === 'Member') memberCount++;
       }
 
-      return leaderCount === 2 ? memberCount / 2 <= 2 : memberCount <= 2;
-    }).length;
+      const isFacilitator =
+        leaderCount === 2 ? memberCount / 2 <= 2 : memberCount <= 2;
 
-    const dLeaders = dGroups.filter((dg) => {
-      let leaderCount = 0;
-      let memberCount = 0;
-
-      for (const m of dg.memberships) {
-        if (m.role === 'Leader') leaderCount++;
-        if (m.role === 'Member') memberCount++;
+      if (isFacilitator) {
+        facilitators++;
+      } else {
+        dLeaders++;
       }
-
-      return leaderCount === 1 ? memberCount / 2 > 2 : memberCount > 2;
-    }).length;
+    }
 
     return {
-      totalAccounts: await this.prisma.account.count(),
-      facilitators: facilitators,
-      dLeaders: dLeaders,
+      totalAccounts,
+      facilitators,
+      dLeaders,
     };
   }
 }
