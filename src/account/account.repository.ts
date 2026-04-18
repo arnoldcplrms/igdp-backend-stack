@@ -6,7 +6,7 @@ import {
   FilterAccountDto,
 } from './account.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { Gender, Prisma } from '@prisma/client';
+import { DGroupStatus, Gender, Prisma } from '@prisma/client';
 import { AccountMapper } from './account.mapper';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
@@ -82,6 +82,50 @@ export class AccountRepository {
     });
   }
 
+  private getDGroupStatus(account: any): DGroupStatus {
+    if (!account?.dGroupMemberships?.length) {
+      return 'Pending';
+    }
+
+    const membership = account.dGroupMemberships[0];
+
+    if (membership.role === 'Member') {
+      return 'DMember';
+    }
+
+    const dGroup = membership.dGroup;
+
+    const members = dGroup.memberships.filter((m) => m.role === 'Member');
+
+    const memberCount = members.length;
+
+    // ⚠️ Replace this later with isCoupleGroup field
+    const isCoupleGroup = memberCount % 2 === 0 && memberCount > 0;
+
+    const adjustedMemberCount = isCoupleGroup ? memberCount / 2 : memberCount;
+
+    // 🔥 D12
+    const hasLeaderMemberWhoIsAlsoLeader = members.some((m) =>
+      m.account.dGroupMemberships.some((dm) => dm.role === 'Leader'),
+    );
+
+    if (hasLeaderMemberWhoIsAlsoLeader) {
+      return 'D12';
+    }
+
+    // 🔥 DLeader
+    if (adjustedMemberCount >= 3) {
+      return 'Dleader';
+    }
+
+    // 🔥 Facilitator
+    if (adjustedMemberCount >= 1 && adjustedMemberCount <= 2) {
+      return 'Facilitator';
+    }
+
+    return 'Pending';
+  }
+
   async findAccountsSorted(filterDto: FilterAccountDto) {
     const { search, sortOrder, sortBy, skip = 0, take = 10 } = filterDto;
 
@@ -107,10 +151,44 @@ export class AccountRepository {
       distinct: ['id'],
       where: andConditions.length > 0 ? { AND: andConditions } : undefined,
       orderBy,
-      ...this.selectObject,
+      include: {
+        ...this.selectObject?.include,
+
+        // 🔥 Only for internal computation
+        dGroupMemberships: {
+          include: {
+            dGroup: {
+              include: {
+                memberships: {
+                  include: {
+                    account: {
+                      select: {
+                        id: true,
+                        dGroupMemberships: {
+                          select: { role: true },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
 
-    return accounts;
+    return accounts.map((account) => {
+      const status = this.getDGroupStatus(account);
+
+      // ❌ remove heavy relation before returning
+      const { dGroupMemberships, ...cleanAccount } = account;
+
+      return {
+        ...cleanAccount,
+        dGroupStatus: status,
+      };
+    });
   }
 
   async findAccountById(id: number): Promise<AccountDetailDto> {

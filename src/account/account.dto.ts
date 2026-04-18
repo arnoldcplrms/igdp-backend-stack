@@ -29,6 +29,7 @@ export const createAccountSchema = z.object({
     emergencyContactNumber: z.string().max(20).optional().nullable(),
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional().nullable(),
+    churchId: z.number().int(),
   }),
   education: z.array(createEducationTxSchema).optional().nullable(),
   employment: z.array(createEmploymentSchema).optional().nullable(),
