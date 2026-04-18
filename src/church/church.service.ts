@@ -18,6 +18,10 @@ export class ChurchService {
     return this.churchRepo.findChurchById(id);
   }
 
+  findLatest() {
+    return this.churchRepo.findLatestChurch();
+  }
+
   update(id: number, updateChurchDto: UpdateChurchDto) {
     return this.churchRepo.updateChurch(id, updateChurchDto);
   }

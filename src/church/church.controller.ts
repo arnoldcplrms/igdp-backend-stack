@@ -42,6 +42,11 @@ export class ChurchController {
     );
   }
 
+  @Get('latest')
+  findLatest() {
+    return this.churchService.findLatest();
+  }
+
   @Get(':id')
   findById(@Param('id') id: string) {
     return this.churchService.findById(+id);

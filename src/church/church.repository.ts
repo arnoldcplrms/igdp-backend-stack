@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChurchDto, UpdateChurchDto } from './church.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
+import { ChurchMapper } from './church.mapper';
 
 @Injectable()
 export class ChurchRepository {
@@ -32,6 +33,18 @@ export class ChurchRepository {
       },
       take: toOverfetchTake(take),
     });
+  }
+
+  async findLatestChurch() {
+    const church = await this.prisma.church.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!church) throw new NotFoundException(`No church record found`);
+
+    return ChurchMapper.toDto(church);
   }
 
   findChurchById(id: number) {

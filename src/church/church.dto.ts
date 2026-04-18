@@ -20,3 +20,9 @@ export class ChurchDto extends ZodClass(updateChurchSchema) {
 }
 
 export class UpdateChurchDto extends ZodClass(updateChurchSchema) {}
+
+export type ChurchResponseDTO = {
+  id: number;
+  name: string;
+  address: string;
+};
