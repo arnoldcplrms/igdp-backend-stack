@@ -4,6 +4,7 @@ import {
   CreateAccountDto,
   UpdateAccountDto,
   FilterAccountDto,
+  FetchDGroupLeadersDto,
 } from './account.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { DGroupStatus, Gender, Prisma } from '@prisma/client';
@@ -295,18 +296,62 @@ export class AccountRepository {
     });
   }
 
-  async fetchDGroupLeaders(exemptedAccountId: number, gender: Gender) {
+  async fetchDGroupLeaders(
+    dto: FetchDGroupLeadersDto,
+    skip?: number,
+    take?: number,
+  ) {
     const result = await this.prisma.account.findMany({
       where: {
-        gender: gender,
+        gender: dto.gender,
         id: {
-          not: exemptedAccountId,
+          not: dto.exemptedAccountId,
+        },
+        ...(dto.type === 'Singles' && {
+          spouseId: null,
+        }),
+        ...(dto.type === 'Couples' && {
+          spouseId: { not: null },
+        }),
+      },
+      skip,
+      take: toOverfetchTake(take),
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        gender: true,
+        spouse: {
+          select: {
+            id: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            gender: true,
+          },
         },
       },
-      take: toOverfetchTake(),
-      ...this.selectObject,
     });
 
-    return result;
+    return result.map((acc) => {
+      if (dto.type === 'Couples' && acc.spouse) {
+        const isMale = acc.gender === 'Male';
+
+        return {
+          husbandId: isMale ? acc.id : acc.spouse.id,
+          husbandFirstName: isMale ? acc.firstName : acc.spouse.firstName,
+          husbandMiddleName: isMale ? acc.middleName : acc.spouse.middleName,
+          husbandLastName: isMale ? acc.lastName : acc.spouse.lastName,
+
+          wifeId: isMale ? acc.spouse.id : acc.id,
+          wifeFirstName: isMale ? acc.spouse.firstName : acc.firstName,
+          wifeMiddleName: isMale ? acc.spouse.middleName : acc.middleName,
+          wifeLastName: isMale ? acc.spouse.lastName : acc.lastName,
+        };
+      }
+
+      return acc;
+    });
   }
 }

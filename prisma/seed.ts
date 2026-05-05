@@ -5,7 +5,7 @@ import { seedSchoolEducation } from './education.seed';
 import { seedEmployment } from './employment.seed';
 import { seedMinistries } from './ministry.seed';
 import { seedAccounts } from './account.seed';
-import { seedDgroup } from './dgroup.seed';
+import { seedAll } from './dgroup.seed';
 
 const prisma = new PrismaClient();
 
@@ -19,6 +19,7 @@ async function main() {
     prisma.education.deleteMany(),
     prisma.dGroupMembership.deleteMany(),
     prisma.dGroup.deleteMany(),
+    prisma.couple.deleteMany(),
     prisma.account.deleteMany(),
     prisma.company.deleteMany(),
     prisma.school.deleteMany(),
@@ -67,7 +68,7 @@ async function main() {
   console.log('✅ Done seeding accounts');
 
   console.log('🌱 Seeding dgroups...');
-  await seedDgroup();
+  await seedAll();
   console.log('✅ Done seeding dgroups');
 
   console.log('Creating Education records...');

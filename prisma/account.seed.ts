@@ -61,26 +61,5 @@ export async function seedAccounts() {
     ),
   );
 
-  const createdByIndex = new Map<number, any>();
-  created.forEach((acc, i) => createdByIndex.set(i, acc));
-
-  // 4. Link spouses (1-to-1)
-  for (const pair of spousePairs) {
-    const male = createdByIndex.get(pair.male.index);
-    const female = createdByIndex.get(pair.female.index);
-
-    if (!male || !female) continue;
-
-    await prisma.account.update({
-      where: { id: male.id },
-      data: { spouseId: female.id },
-    });
-
-    await prisma.account.update({
-      where: { id: female.id },
-      data: { spouseId: male.id },
-    });
-  }
-
   return created;
 }

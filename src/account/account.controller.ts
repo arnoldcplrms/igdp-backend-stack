@@ -41,14 +41,17 @@ export class AccountController {
     return this.accountService.findSorted(filters);
   }
 
-  @Post('dgroup-leaders')
+  @Get('dgroup-leaders')
   fetchDGroupLeaders(
     @Body(new ZodValidationPipe(fetchDGroupLeadersSchema))
     fetchDGroupLeadersDto: FetchDGroupLeadersDto,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
     return this.accountService.fetchDGroupLeaders(
-      fetchDGroupLeadersDto.exemptedAccountId,
-      fetchDGroupLeadersDto.gender,
+      fetchDGroupLeadersDto,
+      skip ? parseInt(skip) : undefined,
+      take ? parseInt(take) : undefined,
     );
   }
 

@@ -96,6 +96,11 @@ enum DGroupStatus {
   Pending
 }
 
+enum DGroupType {
+  Singles
+  Couples
+}
+
 enum LifeStage {
   Couples
   B1G
@@ -111,6 +116,7 @@ model DGroup {
   id          Int                @id @default(autoincrement())
   name        String             @db.VarChar(100)
   churchId    Int
+  type        DGroupType
   memberships DGroupMembership[]
   createdAt   DateTime           @default(now()) @db.Timestamp(6)
   updatedAt   DateTime           @updatedAt @db.Timestamp(6)
@@ -119,18 +125,23 @@ model DGroup {
 }
 
 model DGroupMembership {
-  id        Int                  @id @default(autoincrement())
-  dGroupId  Int
-  accountId Int
-  role      DGroupMembershipRole
-  createdAt DateTime             @default(now()) @db.Timestamp(6)
-  updatedAt DateTime             @updatedAt @db.Timestamp(6)
+  id Int @id @default(autoincrement())
 
-  // Relations
-  dGroup  DGroup  @relation(fields: [dGroupId], references: [id])
-  account Account @relation(fields: [accountId], references: [id])
+  dgroupId Int
+  dgroup   DGroup @relation(fields: [dgroupId], references: [id])
 
-  @@unique([dGroupId, accountId])
+  role DGroupMembershipRole @default(Member)
+
+  createdAt DateTime @default(now())
+
+  // 👇 polymorphic-style relation (IMPORTANT PART)
+  accountId Int?
+  account   Account? @relation(fields: [accountId], references: [id])
+
+  coupleId Int?
+  couple   Couple? @relation(fields: [coupleId], references: [id])
+
+  @@index([dgroupId])
 }
 
 enum Gender {
@@ -166,15 +177,12 @@ model Account {
   gender                 Gender
   birthDate              DateTime @db.Date
   userType               UserType @default(Member)
-  spouseId               Int?     @unique
   churchId               Int
   emergencyContactName   String?  @db.VarChar(100)
   emergencyContactNumber String?  @db.VarChar(20)
   createdAt              DateTime @default(now()) @db.Timestamp(6)
   updatedAt              DateTime @updatedAt @db.Timestamp(6)
 
-  spouse            Account?           @relation("AccountSpouse", fields: [spouseId], references: [id])
-  spouseOf          Account[]          @relation("AccountSpouse")
   church            Church             @relation(fields: [churchId], references: [id])
   education         Education[]
   employment        Employment[]
@@ -183,6 +191,25 @@ model Account {
   speakerAccount    Speaker[]          @relation("SpeakerAccount")
   speakerUpdatedBy  Speaker[]          @relation("SpeakerUpdatedBy")
   dGroupMemberships DGroupMembership[]
+  couple            Couple?            @relation(fields: [coupleId], references: [id])
+  coupleId          Int?
+  husbandCouple     Couple?            @relation("HusbandRelation")
+  wifeCouple        Couple?            @relation("WifeRelation")
+}
+
+model Couple {
+  id Int @id @default(autoincrement())
+
+  husbandId Int @unique
+  wifeId    Int @unique
+
+  createdAt         DateTime           @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime           @updatedAt @db.Timestamp(6)
+  accounts          Account[]
+  dgroupMemberships DGroupMembership[]
+
+  husband Account @relation("HusbandRelation", fields: [husbandId], references: [id])
+  wife    Account @relation("WifeRelation", fields: [wifeId], references: [id])
 }
 
 model AccountMinistry {
