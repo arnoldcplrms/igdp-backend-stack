@@ -35,6 +35,10 @@ export const createAccountSchema = z.object({
   employment: z.array(createEmploymentSchema).optional().nullable(),
 });
 
+export const loginAccountSchema = z.object({
+  email: z.string().email().min(1).max(100),
+});
+
 export const updateAccountSchema = z
   .object({
     firstName: z.string().min(1).max(50).optional(),
@@ -155,6 +159,8 @@ export class AccountDetailDto {
     middleName?: string | null;
   } | null;
 }
+
+export class LoginAccountDto extends ZodClass(loginAccountSchema) {}
 
 export class UpdateAccountDto extends ZodClass(updateAccountSchema) {}
 

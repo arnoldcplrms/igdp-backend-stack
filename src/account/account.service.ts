@@ -4,12 +4,17 @@ import {
   CreateAccountDto,
   FetchDGroupLeadersDto,
   FilterAccountDto,
+  LoginAccountDto,
   UpdateAccountDto,
 } from './account.dto';
 
 @Injectable()
 export class AccountService {
   constructor(private accountRepo: AccountRepository) {}
+
+  login(loginAccountDto: LoginAccountDto) {
+    return this.accountRepo.loginAccount(loginAccountDto);
+  }
 
   create(createAccountDto: CreateAccountDto) {
     return this.accountRepo.createAccount(createAccountDto);

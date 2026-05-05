@@ -5,9 +5,10 @@ import {
   UpdateAccountDto,
   FilterAccountDto,
   FetchDGroupLeadersDto,
+  LoginAccountDto,
 } from './account.dto';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { DGroupStatus, Gender, Prisma } from '@prisma/client';
+import { DGroupStatus, Prisma } from '@prisma/client';
 import { AccountMapper } from './account.mapper';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
 
@@ -158,7 +159,7 @@ export class AccountRepository {
         // 🔥 Only for internal computation
         dGroupMemberships: {
           include: {
-            dGroup: {
+            dgroup: {
               include: {
                 memberships: {
                   include: {
@@ -262,7 +263,7 @@ export class AccountRepository {
 
     const leader = await this.prisma.dGroupMembership.findFirst({
       where: {
-        dGroupId: dgroup?.dGroupId,
+        dgroupId: dgroup?.dgroupId,
         account: {
           gender: result?.gender,
         },
@@ -281,6 +282,23 @@ export class AccountRepository {
         middleName: leader?.account.middleName,
       },
     });
+  }
+
+  async loginAccount(loginAccountDto: LoginAccountDto) {
+    const account = await this.prisma.account.findFirst({
+      where: {
+        email: {
+          equals: loginAccountDto.email,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    if (!account) {
+      throw new Error('Invalid email or password');
+    }
+
+    return account;
   }
 
   updateAccount(id: number, updateAccountDto: UpdateAccountDto) {

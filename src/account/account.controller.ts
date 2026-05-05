@@ -18,6 +18,8 @@ import {
   fetchDGroupLeadersSchema,
   filterAccountSchema,
   FilterAccountDto,
+  loginAccountSchema,
+  LoginAccountDto,
 } from './account.dto';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validations.pipe';
 
@@ -53,6 +55,14 @@ export class AccountController {
       skip ? parseInt(skip) : undefined,
       take ? parseInt(take) : undefined,
     );
+  }
+
+  @Post('login')
+  findAccount(
+    @Body(new ZodValidationPipe(loginAccountSchema))
+    login: LoginAccountDto,
+  ) {
+    return this.accountService.login(login);
   }
 
   @Get(':id')
