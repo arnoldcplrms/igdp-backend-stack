@@ -1,6 +1,6 @@
 import { ZodClass } from 'src/common/utils/zod-to-class.util';
 import { z } from 'zod';
-import { Gender, UserType } from '@prisma/client';
+import { DGroupType, Gender, UserType } from '@prisma/client';
 import {
   createEducationTxSchema,
   CreateUserWithEducationDto,
@@ -164,15 +164,11 @@ export class LoginAccountDto extends ZodClass(loginAccountSchema) {}
 
 export class UpdateAccountDto extends ZodClass(updateAccountSchema) {}
 
-const DGROUP_TYPES = ['Singles', 'Couples'] as const;
-
-export type DGroupType = (typeof DGROUP_TYPES)[number];
-
 export const fetchDGroupLeadersSchema = z
   .object({
     exemptedAccountId: z.number().int(),
     gender: z.enum(Gender).optional(),
-    type: z.enum(DGROUP_TYPES),
+    type: z.enum(DGroupType),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'Singles' && !data.gender) {

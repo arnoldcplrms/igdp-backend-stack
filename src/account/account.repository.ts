@@ -319,28 +319,44 @@ export class AccountRepository {
     skip?: number,
     take?: number,
   ) {
-    const result = await this.prisma.account.findMany({
-      where: {
-        gender: dto.gender,
-        id: {
-          not: dto.exemptedAccountId,
+    // =========================
+    // SINGLES LEADERS (ACCOUNT-BASED)
+    // =========================
+    if (dto.type === 'Singles') {
+      return this.prisma.account.findMany({
+        where: {
+          gender: dto.gender,
+          id: { not: dto.exemptedAccountId },
         },
-        ...(dto.type === 'Singles' && {
-          spouseId: null,
-        }),
-        ...(dto.type === 'Couples' && {
-          spouseId: { not: null },
-        }),
-      },
+        skip,
+        take: toOverfetchTake(take),
+        select: {
+          id: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          gender: true,
+        },
+      });
+    }
+
+    // =========================
+    // COUPLES LEADERS (COUPLE TABLE - SOURCE OF TRUTH)
+    // =========================
+    const couples = await this.prisma.couple.findMany({
       skip,
       take: toOverfetchTake(take),
-      select: {
-        id: true,
-        firstName: true,
-        middleName: true,
-        lastName: true,
-        gender: true,
-        spouse: {
+      include: {
+        husband: {
+          select: {
+            id: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            gender: true,
+          },
+        },
+        wife: {
           select: {
             id: true,
             firstName: true,
@@ -352,24 +368,18 @@ export class AccountRepository {
       },
     });
 
-    return result.map((acc) => {
-      if (dto.type === 'Couples' && acc.spouse) {
-        const isMale = acc.gender === 'Male';
+    return couples.map((c) => {
+      return {
+        husbandId: c.husband.id,
+        husbandFirstName: c.husband.firstName,
+        husbandMiddleName: c.husband.middleName,
+        husbandLastName: c.husband.lastName,
 
-        return {
-          husbandId: isMale ? acc.id : acc.spouse.id,
-          husbandFirstName: isMale ? acc.firstName : acc.spouse.firstName,
-          husbandMiddleName: isMale ? acc.middleName : acc.spouse.middleName,
-          husbandLastName: isMale ? acc.lastName : acc.spouse.lastName,
-
-          wifeId: isMale ? acc.spouse.id : acc.id,
-          wifeFirstName: isMale ? acc.spouse.firstName : acc.firstName,
-          wifeMiddleName: isMale ? acc.spouse.middleName : acc.middleName,
-          wifeLastName: isMale ? acc.spouse.lastName : acc.lastName,
-        };
-      }
-
-      return acc;
+        wifeId: c.wife.id,
+        wifeFirstName: c.wife.firstName,
+        wifeMiddleName: c.wife.middleName,
+        wifeLastName: c.wife.lastName,
+      };
     });
   }
 }
