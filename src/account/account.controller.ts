@@ -43,7 +43,7 @@ export class AccountController {
     return this.accountService.findSorted(filters);
   }
 
-  @Get('dgroup-leaders')
+  @Post('dgroup-leaders')
   fetchDGroupLeaders(
     @Body(new ZodValidationPipe(fetchDGroupLeadersSchema))
     fetchDGroupLeadersDto: FetchDGroupLeadersDto,
