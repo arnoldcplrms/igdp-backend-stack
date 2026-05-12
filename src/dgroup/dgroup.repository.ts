@@ -58,9 +58,11 @@ export class DGroupRepository {
       if (!birthDate) return null;
 
       const today = new Date();
+
       let age = today.getFullYear() - birthDate.getFullYear();
 
       const m = today.getMonth() - birthDate.getMonth();
+
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
@@ -84,28 +86,70 @@ export class DGroupRepository {
                 memberships: {
                   some: {
                     role: 'Leader',
-                    account: {
-                      OR: [
-                        {
-                          firstName: {
-                            contains: search,
-                            mode: 'insensitive',
-                          },
+                    OR: [
+                      {
+                        account: {
+                          OR: [
+                            {
+                              firstName: {
+                                contains: search,
+                                mode: 'insensitive',
+                              },
+                            },
+                            {
+                              lastName: {
+                                contains: search,
+                                mode: 'insensitive',
+                              },
+                            },
+                            {
+                              middleName: {
+                                contains: search,
+                                mode: 'insensitive',
+                              },
+                            },
+                          ],
                         },
-                        {
-                          lastName: {
-                            contains: search,
-                            mode: 'insensitive',
-                          },
+                      },
+                      {
+                        couple: {
+                          OR: [
+                            {
+                              husband: {
+                                firstName: {
+                                  contains: search,
+                                  mode: 'insensitive',
+                                },
+                              },
+                            },
+                            {
+                              husband: {
+                                lastName: {
+                                  contains: search,
+                                  mode: 'insensitive',
+                                },
+                              },
+                            },
+                            {
+                              wife: {
+                                firstName: {
+                                  contains: search,
+                                  mode: 'insensitive',
+                                },
+                              },
+                            },
+                            {
+                              wife: {
+                                lastName: {
+                                  contains: search,
+                                  mode: 'insensitive',
+                                },
+                              },
+                            },
+                          ],
                         },
-                        {
-                          middleName: {
-                            contains: search,
-                            mode: 'insensitive',
-                          },
-                        },
-                      ],
-                    },
+                      },
+                    ],
                   },
                 },
               },
@@ -129,6 +173,30 @@ export class DGroupRepository {
                 gender: true,
               },
             },
+            couple: {
+              include: {
+                husband: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    middleName: true,
+                    lastName: true,
+                    birthDate: true,
+                    gender: true,
+                  },
+                },
+                wife: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    middleName: true,
+                    lastName: true,
+                    birthDate: true,
+                    gender: true,
+                  },
+                },
+              },
+            },
           },
         },
         _count: {
@@ -140,54 +208,71 @@ export class DGroupRepository {
     });
 
     const result: DGroupDTO[] = dGroups.map((dgroup) => {
-      const leaders = dgroup.memberships
-        .filter((m) => m.role === 'Leader')
-        .map((m) => m.account);
+      const leaders = dgroup.memberships.flatMap((m) => {
+        if (m.role !== 'Leader') return [];
 
-      const members = dgroup.memberships
-        .filter((m) => m.role === 'Member')
-        .map((m) => m.account);
+        // Singles
+        if (m.account) {
+          return [m.account];
+        }
+
+        // Couples
+        if (m.couple) {
+          return [m.couple.husband, m.couple.wife];
+        }
+
+        return [];
+      });
+
+      const members = dgroup.memberships.flatMap((m) => {
+        if (m.role !== 'Member') return [];
+
+        // Singles
+        if (m.account) {
+          return [m.account];
+        }
+
+        // Couples
+        if (m.couple) {
+          return [m.couple.husband, m.couple.wife];
+        }
+
+        return [];
+      });
 
       const lifestage: LifeStage[] = [];
 
-      if (leaders.length === NUMBER_OF_COUPLE_LEADERS) {
-        lifestage.push('Couples');
-
-        return {
-          id: dgroup.id,
-          name: dgroup.name,
-          members: dgroup._count.memberships - NUMBER_OF_COUPLE_LEADERS,
-          leaders: leaders.map((leader) => ({
-            id: leader.id,
-            firstName: leader.firstName,
-            middleName: leader.middleName,
-            lastName: leader.lastName,
-            gender: leader.gender,
-          })),
-          lifestage,
-        };
-      }
+      const isCouples = dgroup.memberships.some((m) => m.coupleId !== null);
 
       let hasBelow22 = false;
       let hasAbove23 = false;
 
       for (const member of members) {
-        const age = getAge(member.birthDate);
+        const age = getAge(member?.birthDate ?? null);
+
         if (age === null) continue;
 
         if (age <= 22) hasBelow22 = true;
+
         if (age >= 23) hasAbove23 = true;
 
         if (hasBelow22 && hasAbove23) break;
       }
 
-      if (hasBelow22) lifestage.push('Elevate');
-      if (hasAbove23) lifestage.push('B1G');
+      if (isCouples) {
+        lifestage.unshift('Couples');
+      } else {
+        if (hasBelow22) lifestage.push('Elevate');
+
+        if (hasAbove23) lifestage.push('B1G');
+      }
 
       return {
         id: dgroup.id,
         name: dgroup.name,
-        members: dgroup._count.memberships - NUMBER_OF_SINGLE_LEADER,
+        members:
+          members.length -
+          (isCouples ? NUMBER_OF_COUPLE_LEADERS : NUMBER_OF_SINGLE_LEADER),
         leaders: leaders.map((leader) => ({
           id: leader.id,
           firstName: leader.firstName,

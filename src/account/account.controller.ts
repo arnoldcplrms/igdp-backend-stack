@@ -49,11 +49,13 @@ export class AccountController {
     fetchDGroupLeadersDto: FetchDGroupLeadersDto,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
+    @Query('search') search?: string,
   ) {
     return this.accountService.fetchDGroupLeaders(
       fetchDGroupLeadersDto,
       skip ? parseInt(skip) : undefined,
       take ? parseInt(take) : undefined,
+      search,
     );
   }
 

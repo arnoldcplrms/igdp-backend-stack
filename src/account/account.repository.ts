@@ -318,6 +318,7 @@ export class AccountRepository {
     dto: FetchDGroupLeadersDto,
     skip?: number,
     take?: number,
+    search?: string,
   ) {
     // =========================
     // SINGLES LEADERS (ACCOUNT-BASED)
@@ -327,9 +328,28 @@ export class AccountRepository {
         where: {
           gender: dto.gender,
           id: { not: dto.exemptedAccountId },
+
+          ...(search && {
+            OR: [
+              {
+                firstName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          }),
         },
+
         skip,
         take: toOverfetchTake(take),
+
         select: {
           id: true,
           firstName: true,
@@ -344,8 +364,48 @@ export class AccountRepository {
     // COUPLES LEADERS (COUPLE TABLE - SOURCE OF TRUTH)
     // =========================
     const couples = await this.prisma.couple.findMany({
+      where: {
+        ...(search && {
+          OR: [
+            {
+              husband: {
+                firstName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            },
+            {
+              husband: {
+                lastName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            },
+            {
+              wife: {
+                firstName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            },
+            {
+              wife: {
+                lastName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            },
+          ],
+        }),
+      },
+
       skip,
       take: toOverfetchTake(take),
+
       include: {
         husband: {
           select: {
@@ -356,6 +416,7 @@ export class AccountRepository {
             gender: true,
           },
         },
+
         wife: {
           select: {
             id: true,

@@ -36,7 +36,12 @@ export class AccountService {
     return this.accountRepo.removeAccount(id);
   }
 
-  fetchDGroupLeaders(dto: FetchDGroupLeadersDto, skip?: number, take?: number) {
-    return this.accountRepo.fetchDGroupLeaders(dto, skip, take);
+  fetchDGroupLeaders(
+    dto: FetchDGroupLeadersDto,
+    skip?: number,
+    take?: number,
+    search?: string,
+  ) {
+    return this.accountRepo.fetchDGroupLeaders(dto, skip, take, search);
   }
 }
