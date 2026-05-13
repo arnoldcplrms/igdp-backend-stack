@@ -5,10 +5,9 @@ import { z } from 'zod';
 
 export const createDGroupSchema = z.object({
   name: z.string().min(1).max(100).optional(),
-  dleaders: z
-    .array(z.number().int().positive())
-    .min(1, 'At least one leader is required'),
+  dleaders: z.number().int().positive(),
   dmembers: z.array(z.number().int().positive()).optional().default([]),
+  type: z.enum(['Couples', 'Singles']),
   churchId: z.number().int().positive(),
 });
 

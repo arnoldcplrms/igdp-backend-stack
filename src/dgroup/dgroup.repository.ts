@@ -17,36 +17,51 @@ export class DGroupRepository {
   constructor(private prisma: PrismaService) {}
 
   async createDGroup(createDGroupDto: CreateDGroupDto): Promise<DGroupDTO> {
-    const { name, churchId, dleaders, dmembers } = createDGroupDto;
+    const { name, churchId, dleaders, dmembers, type } = createDGroupDto;
 
     return this.prisma.$transaction(async (prisma) => {
       // 1. Create DGroup
       const dGroup = await prisma.dGroup.create({
         data: {
           name,
+          type,
           churchId,
         },
       });
 
-      // 2. Build membership records
-      const leaderMemberships = dleaders.map((accountId) => ({
-        accountId,
-        dGroupId: dGroup.id,
-        role: 'Leader',
-      }));
+      // 2. Build memberships
+      const leaderMemberships =
+        type === 'Couples'
+          ? dleaders.map((coupleId) => ({
+              coupleId,
+              dgroupId: dGroup.id,
+              role: 'Leader' as const,
+            }))
+          : dleaders.map((accountId) => ({
+              accountId,
+              dgroupId: dGroup.id,
+              role: 'Leader' as const,
+            }));
 
-      const memberMemberships = (dmembers ?? []).map((accountId) => ({
-        accountId,
-        dGroupId: dGroup.id,
-        role: 'Member',
-      }));
+      const memberMemberships =
+        type === 'Couples'
+          ? (dmembers ?? []).map((coupleId) => ({
+              coupleId,
+              dgroupId: dGroup.id,
+              role: 'Member' as const,
+            }))
+          : (dmembers ?? []).map((accountId) => ({
+              accountId,
+              dgroupId: dGroup.id,
+              role: 'Member' as const,
+            }));
 
-      // 3. Create memberships in bulk
+      // 3. Save memberships
       await prisma.dGroupMembership.createMany({
         data: [...leaderMemberships, ...memberMemberships],
       });
 
-      // 4. Return created group
+      // 4. Return group
       return dGroup;
     });
   }
@@ -270,9 +285,7 @@ export class DGroupRepository {
       return {
         id: dgroup.id,
         name: dgroup.name,
-        members:
-          members.length -
-          (isCouples ? NUMBER_OF_COUPLE_LEADERS : NUMBER_OF_SINGLE_LEADER),
+        members: members.length,
         leaders: leaders.map((leader) => ({
           id: leader.id,
           firstName: leader.firstName,

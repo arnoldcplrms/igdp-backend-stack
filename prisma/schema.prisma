@@ -140,8 +140,6 @@ model DGroupMembership {
 
   coupleId Int?
   couple   Couple? @relation(fields: [coupleId], references: [id])
-
-  @@index([dgroupId])
 }
 
 enum Gender {
