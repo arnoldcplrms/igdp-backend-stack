@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { toOverfetchTake } from 'src/common/utils/pagination.util';
 import type {
@@ -20,6 +20,19 @@ export class DGroupRepository {
     const { name, churchId, dleaders, dmembers, type } = createDGroupDto;
 
     return this.prisma.$transaction(async (prisma) => {
+      const existingDGroup = await prisma.dGroup.findFirst({
+        where: {
+          name: {
+            equals: name,
+            mode: 'insensitive', // case-insensitive check
+          },
+        },
+      });
+
+      if (existingDGroup) {
+        throw new BadRequestException('DGroup name already exists');
+      }
+
       // 1. Create DGroup
       const dGroup = await prisma.dGroup.create({
         data: {
@@ -285,7 +298,9 @@ export class DGroupRepository {
       return {
         id: dgroup.id,
         name: dgroup.name,
-        members: members.length,
+        members: isCouples
+          ? members.length / NUMBER_OF_COUPLE_LEADERS
+          : members.length,
         leaders: leaders.map((leader) => ({
           id: leader.id,
           firstName: leader.firstName,

@@ -329,6 +329,12 @@ export class AccountRepository {
           gender: dto.gender,
           id: { not: dto.exemptedAccountId },
 
+          dGroupMemberships: {
+            none: {
+              role: 'Leader',
+            },
+          },
+
           ...(search && {
             OR: [
               {
@@ -365,6 +371,12 @@ export class AccountRepository {
     // =========================
     const couples = await this.prisma.couple.findMany({
       where: {
+        dgroupMemberships: {
+          none: {
+            role: 'Leader',
+          },
+        },
+
         ...(search && {
           OR: [
             {
