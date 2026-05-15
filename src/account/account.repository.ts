@@ -443,6 +443,8 @@ export class AccountRepository {
 
     return couples.map((c) => {
       return {
+        id: c.id,
+
         husbandId: c.husband.id,
         husbandFirstName: c.husband.firstName,
         husbandMiddleName: c.husband.middleName,

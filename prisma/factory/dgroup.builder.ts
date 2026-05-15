@@ -46,7 +46,7 @@ export async function buildDGroups() {
       result.push({
         churchId: church.id,
         type: DGroupType.Couples,
-        name: 'Couples DGroup',
+        name: 'Couples DGroup for ' + group[0].id,
 
         // 👑 leader couple
         leaders: [
@@ -98,7 +98,7 @@ export async function buildDGroups() {
       result.push({
         churchId: church.id,
         type: DGroupType.Singles,
-        name: 'Singles DGroup',
+        name: 'Singles DGroup for ' + group[0].id,
 
         leaders: [
           {

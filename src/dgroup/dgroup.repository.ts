@@ -20,19 +20,6 @@ export class DGroupRepository {
     const { name, churchId, dleaders, dmembers, type } = createDGroupDto;
 
     return this.prisma.$transaction(async (prisma) => {
-      const existingDGroup = await prisma.dGroup.findFirst({
-        where: {
-          name: {
-            equals: name,
-            mode: 'insensitive', // case-insensitive check
-          },
-        },
-      });
-
-      if (existingDGroup) {
-        throw new BadRequestException('DGroup name already exists');
-      }
-
       // 1. Create DGroup
       const dGroup = await prisma.dGroup.create({
         data: {
@@ -45,16 +32,16 @@ export class DGroupRepository {
       // 2. Build memberships
       const leaderMemberships =
         type === 'Couples'
-          ? dleaders.map((coupleId) => ({
-              coupleId,
+          ? {
+              coupleId: dleaders,
               dgroupId: dGroup.id,
               role: 'Leader' as const,
-            }))
-          : dleaders.map((accountId) => ({
-              accountId,
+            }
+          : {
+              accountId: dleaders,
               dgroupId: dGroup.id,
               role: 'Leader' as const,
-            }));
+            };
 
       const memberMemberships =
         type === 'Couples'
@@ -69,13 +56,38 @@ export class DGroupRepository {
               role: 'Member' as const,
             }));
 
+      const memberships = [leaderMemberships, ...memberMemberships];
+
       // 3. Save memberships
-      await prisma.dGroupMembership.createMany({
-        data: [...leaderMemberships, ...memberMemberships],
+      const createdMemberships = await prisma.dGroupMembership.createMany({
+        data: memberships,
       });
 
-      // 4. Return group
-      return dGroup;
+      // 4. Validate insertion
+      if (createdMemberships.count !== memberships.length) {
+        throw new Error('Failed to create all DGroup memberships');
+      }
+
+      // 5. (Optional) Fetch inserted memberships
+      const insertedMemberships = await prisma.dGroupMembership.findMany({
+        where: {
+          dgroupId: dGroup.id,
+        },
+      });
+
+      if (!insertedMemberships.length) {
+        throw new Error('No memberships were created');
+      }
+
+      // 6. Return full group with memberships
+      return prisma.dGroup.findUniqueOrThrow({
+        where: {
+          id: dGroup.id,
+        },
+        include: {
+          memberships: true,
+        },
+      });
     });
   }
 

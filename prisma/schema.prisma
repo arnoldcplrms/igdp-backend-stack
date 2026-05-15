@@ -122,6 +122,8 @@ model DGroup {
   updatedAt   DateTime           @updatedAt @db.Timestamp(6)
   // Relations
   church      Church             @relation(fields: [churchId], references: [id])
+
+  @@unique([name])
 }
 
 model DGroupMembership {
