@@ -197,14 +197,6 @@ export class AccountRepository {
     const result = await this.prisma.account.findUnique({
       where: { id },
       include: {
-        spouse: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            middleName: true,
-          },
-        },
         education: {
           select: {
             id: true,
