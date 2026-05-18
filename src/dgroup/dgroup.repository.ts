@@ -343,9 +343,59 @@ export class DGroupRepository {
     });
   }
 
-  findDGroupById(id: number): Promise<DGroupDTO | null> {
-    return this.prisma.dGroup.findUnique({
+  async findDGroupById(id: number): Promise<DGroupDTO | null> {
+    const dgroup = await this.prisma.dGroup.findUnique({
       where: { id },
+      include: {
+        memberships: {
+          where: {
+            role: 'Leader',
+          },
+          select: {
+            id: true,
+            role: true,
+
+            // for single leaders
+            account: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+
+            // for couple leaders
+            couple: {
+              select: {
+                id: true,
+                husband: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
+                wife: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
+
+    if (!dgroup) return null;
+
+    return {
+      id: dgroup.id,
+      name: dgroup.name,
+      type: dgroup.type,
+      leader: dgroup.memberships[0].account ?? dgroup.memberships[0].couple,
+    };
   }
 }

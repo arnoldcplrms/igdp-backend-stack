@@ -95,7 +95,7 @@ export class AccountRepository {
       return 'DMember';
     }
 
-    const dGroup = membership.dGroup;
+    const dGroup = membership.dgroup;
 
     const members = dGroup.memberships.filter((m) => m.role === 'Member');
 
@@ -184,7 +184,7 @@ export class AccountRepository {
       const status = this.getDGroupStatus(account);
 
       // ❌ remove heavy relation before returning
-      const { dGroupMemberships, ...cleanAccount } = account;
+      const { ...cleanAccount } = account;
 
       return {
         ...cleanAccount,
